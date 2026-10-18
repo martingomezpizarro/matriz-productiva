@@ -536,6 +536,8 @@ def main():
     ap.add_argument("pasos", nargs="*", help=f"pasos sueltos: {', '.join(PASOS)}")
     ap.add_argument("--grupo", choices=["nube", "energia", "todo"], default="nube")
     a = ap.parse_args()
+    if set(a.pasos) - set(PASOS):
+        ap.error(f"pasos desconocidos: {', '.join(set(a.pasos) - set(PASOS))}")
     elegidos = a.pasos or [p for p, (g, _) in PASOS.items() if a.grupo in (g, "todo")]
     E = Estado()
     fallas = 0

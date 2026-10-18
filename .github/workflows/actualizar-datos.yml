@@ -30,7 +30,9 @@ jobs:
           cache-dependency-path: scripts/requirements.txt
       - run: pip install -r scripts/requirements.txt
       - name: Bajar fuentes y regenerar data/auto
-        run: python scripts/actualizar.py ${{ github.event.inputs.pasos || '--grupo nube' }}
+        env:
+          PASOS: ${{ github.event.inputs.pasos }}
+        run: python scripts/actualizar.py ${PASOS:---grupo nube}
       - name: Guardar cambios en el repo
         run: |
           git config user.name "github-actions[bot]"
