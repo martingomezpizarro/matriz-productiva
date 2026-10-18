@@ -1,0 +1,19 @@
+name: Probar acceso a portales
+on: [workflow_dispatch, push]
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consultar portales
+        run: |
+          for u in \
+            "http://datos.energia.gob.ar/api/3/action/package_show?id=produccion-de-petroleo-y-gas-por-pozo" \
+            "https://datos.gob.ar/api/3/action/package_search?q=litio&rows=1" \
+            "https://datos.magyp.gob.ar/api/3/action/package_search?q=estimaciones&rows=1" \
+            "https://datos.produccion.gob.ar/api/3/action/package_search?q=mineria&rows=1" \
+            "https://apis.datos.gob.ar/series/api/series/?ids=143.3_NO_PR_2004_A_21&limit=2" \
+            "https://query1.finance.yahoo.com/v8/finance/chart/YPF?range=5d&interval=1d" \
+            "https://infra.datos.gob.ar/catalog/sspm/dataset/350/distribution/350.1/download/exportaciones-provincia-rubro.csv"; do
+            code=$(curl -s -o /tmp/r -w "%{http_code} %{time_total}s %{size_download}B" -m 60 -A "Mozilla/5.0 matriz-productiva" "$u" || echo "FALLO")
+            echo "$code  $u"
+          done
