@@ -1,2 +1,2 @@
-// GENERADO por scripts/actualizar.py — fecha de cada actualización automática.
-const META = {"actualizado": "2026-10-18", "fuentes": {}};
+// GENERADO por scripts/actualizar.py — fecha y resultado de cada paso automático.
+const META = {"actualizado":"2026-10-18","fuentes":{},"pasos":{"siacam":{"fecha":"2026-10-18","ok":true,"detalle":"235 proyectos (+0)"},"mercado":{"fecha":"2026-10-18","ok":true,"detalle":"13/13 cotizaciones"},"precios":{"fecha":"2026-10-18","ok":true,"detalle":"Brent a 2026-09, granos a 2026-09, acciones a 2026-09"},"comercio":{"ok":false,"error":"ValueError: Serie trimestral demasiado corta","intento":"2026-10-18"},"emae":{"fecha":"2026-10-18","ok":true,"detalle":"2017–2025"},"faena":{"fecha":"2026-10-18","ok":true,"detalle":"hasta 2025"},"provincias":{"fecha":"2026-10-18","ok":true,"detalle":"año 2024"},"agricola":{"fecha":"2026-10-18","ok":true,"detalle":"campaña 2024/2025, 314 departamentos"}}};
