@@ -35,7 +35,7 @@ import requests
 ROOT = Path(__file__).resolve().parents[1]
 AUTO = ROOT / "data" / "auto"
 GEO = ROOT / "data" / "geo"
-UA = {"User-Agent": "Mozilla/5.0 (matriz-productiva; +https://matriz.martingomezpizarro.com.ar)"}
+UA = {"User-Agent": "Mozilla/5.0 (matriz-productiva; +https://matrizproductiva.martingomezpizarro.com.ar)"}
 HOY = dt.date.today()
 MES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
