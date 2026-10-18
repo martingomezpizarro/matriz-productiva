@@ -266,15 +266,22 @@ def serie(ids, desde="2015-01-01"):
 
 
 def paso_comercio(E: Estado):
-    ids = "74.3_IECE_0_M_35,74.3_IICL_0_M_42"
-    df = serie(ids, "2018-01-01").dropna()
-    q = df.groupby(df.index.to_period("Q")).agg(["sum", "count"])
-    filas = []
-    for p, f in q.iterrows():
-        if f[(ids.split(",")[0], "count")] == 3 and f[(ids.split(",")[1], "count")] == 3:
-            filas.append([f"{p.year}-Q{p.quarter}", r1(f[(ids.split(',')[0], 'sum')]), r1(f[(ids.split(',')[1], 'sum')])])
+    # Serie trimestral oficial; si no trae datos, se arma sumando la mensual.
+    trim, mens = "74.2_IECE_0_T_35,74.2_IICL_0_T_42", "74.3_IECE_0_M_35,74.3_IICL_0_M_42"
+    filas, ids = [], trim
+    df = serie(trim, "2018-01-01")
+    print(f"   trimestral: {len(df)} filas, no nulas {df.notna().sum().to_dict()}")
+    for f, r in df.dropna().iterrows():
+        filas.append([f"{f.year}-Q{(f.month - 1) // 3 + 1}", r1(r.iloc[0]), r1(r.iloc[1])])
     if len(filas) < 20:
-        raise ValueError("Serie trimestral demasiado corta")
+        ids = mens
+        df = serie(mens, "2018-01-01")
+        print(f"   mensual: {len(df)} filas, no nulas {df.notna().sum().to_dict()}")
+        q = df.groupby(df.index.to_period("Q"))
+        filas = [[f"{p.year}-Q{p.quarter}", r1(g.iloc[:, 0].sum()), r1(g.iloc[:, 1].sum())]
+                 for p, g in q if g.iloc[:, 0].notna().sum() == 3 and g.iloc[:, 1].notna().sum() == 3]
+    if len(filas) < 20:
+        raise ValueError(f"Serie trimestral demasiado corta ({len(filas)} trimestres)")
     E.viz["trade"] = filas
     E.sucio.add("viz")
     E.fuente("icaQ", f"INDEC – Intercambio Comercial Argentino: exportación de combustibles y energía e importación de combustibles y lubricantes, a {filas[-1][0]} (Series de Tiempo)",

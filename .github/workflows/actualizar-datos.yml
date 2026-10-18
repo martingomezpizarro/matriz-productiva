@@ -3,7 +3,12 @@ name: Actualizar datos
 on:
   schedule:
     - cron: "0 9 1 * *"   # día 1 de cada mes, 06:00 de Argentina: cierra el mes anterior
-  workflow_dispatch: {}   # botón «Run workflow» para correrlo a mano
+  workflow_dispatch:      # botón «Run workflow» para correrlo a mano
+    inputs:
+      pasos:
+        description: "Pasos sueltos separados por espacio (vacío = todos los de la nube)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -25,7 +30,7 @@ jobs:
           cache-dependency-path: scripts/requirements.txt
       - run: pip install -r scripts/requirements.txt
       - name: Bajar fuentes y regenerar data/auto
-        run: python scripts/actualizar.py --grupo nube
+        run: python scripts/actualizar.py ${{ github.event.inputs.pasos || '--grupo nube' }}
       - name: Guardar cambios en el repo
         run: |
           git config user.name "github-actions[bot]"
