@@ -328,6 +328,65 @@ tbody tr:hover{background:var(--bg)}
 .statsec.x h2 i{background:var(--ink)}
 @media (max-width: 860px){ .vside{grid-template-columns:1fr} }
 
+/* ===== Dinámica de movimiento: cámara 3D, ficha deslizante, cascadas ===== */
+.stage{perspective:1600px;perspective-origin:50% 35%}
+.par,.sway,.cam3d{position:absolute;inset:0;transform-style:preserve-3d}
+.par{transition:transform .9s cubic-bezier(.16,1,.3,1)}
+.sway{animation:mpSway 18s ease-in-out infinite alternate}
+@keyframes mpSway{from{transform:rotateZ(-.45deg) translateY(-3px)}to{transform:rotateZ(.45deg) translateY(3px)}}
+.cam3d{transform-origin:var(--ox,50%) var(--oy,50%)}
+.pt path{transform-box:fill-box;transform-origin:center;transition:transform .35s cubic-bezier(.16,1,.3,1),filter .25s}
+.pt:hover path,.pt.hov path{transform:scale(1.45);filter:brightness(1.15)}
+.pt.sel path{transform:scale(1.35)}
+.pt .pulse{fill:none;stroke:var(--c);stroke-width:2px;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;animation:mpPulse 1.8s cubic-bezier(.2,.6,.3,1) infinite;pointer-events:none}
+@keyframes mpPulse{from{transform:scale(1);opacity:.9}to{transform:scale(3.2);opacity:0}}
+.ln.hov .ln-base{stroke-width:4.5}
+.drawer:not([hidden]){animation:mpDrIn .6s cubic-bezier(.16,1,.3,1) both}
+.drawer.out{animation:mpDrOut .3s cubic-bezier(.5,0,.75,0) both}
+@keyframes mpDrIn{from{transform:translateX(calc(100% + 70px));opacity:.4}to{transform:none;opacity:1}}
+@keyframes mpDrOut{to{transform:translateX(calc(100% + 70px));opacity:0}}
+.drawer header>*,.drawer .tabs,.dbody>*{animation:mpUp .6s cubic-bezier(.16,1,.3,1) both}
+.drawer[data-dir="fwd"] header>*,.drawer[data-dir="fwd"] .dbody>*{animation-name:mpFwd}
+.drawer[data-dir="back"] header>*,.drawer[data-dir="back"] .dbody>*{animation-name:mpBack}
+.drawer header>:nth-child(2),.drawer .tabs{animation-delay:.04s}
+.drawer header>:nth-child(3){animation-delay:.08s}
+.drawer header>:nth-child(4){animation-delay:.11s}
+.dbody>:nth-child(1){animation-delay:.12s}.dbody>:nth-child(2){animation-delay:.17s}.dbody>:nth-child(3){animation-delay:.22s}
+.dbody>:nth-child(4){animation-delay:.27s}.dbody>:nth-child(5){animation-delay:.32s}.dbody>:nth-child(n+6){animation-delay:.37s}
+@keyframes mpUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes mpFwd{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
+@keyframes mpBack{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+.prog .fill{animation:mpGrow 1.1s cubic-bezier(.16,1,.3,1) .35s both;transform-origin:left}
+.range i{transition:left 1s cubic-bezier(.16,1,.3,1)}
+@keyframes mpGrow{from{transform:scaleX(0)}to{transform:none}}
+.navbtns{position:absolute;right:44px;top:10px;display:flex;align-items:center;gap:2px;z-index:3}
+.drawer .close{z-index:3}
+.navbtns button{border:0;background:none;width:30px;height:30px;border-radius:6px;cursor:pointer;color:var(--muted);font-size:16px;line-height:1}
+.navbtns button:hover{background:var(--bg);color:var(--ink)}
+.navbtns span{font-family:var(--f-mono);font-size:11px;color:var(--faint);min-width:44px;text-align:center}
+.drawer.has-nav h2{padding-right:28px}
+.drawer.has-nav .crumb{padding-right:150px;min-height:30px}
+.tablewrap:not([hidden]),.cowrap:not([hidden]),.statwrap:not([hidden]){animation:mpFade .45s ease both}
+@keyframes mpFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.statsec{animation:mpUp .7s cubic-bezier(.16,1,.3,1) both}
+.statsec:nth-child(2){animation-delay:.05s}.statsec:nth-child(3){animation-delay:.12s}.statsec:nth-child(4){animation-delay:.19s}.statsec:nth-child(5){animation-delay:.26s}
+.bar .bf{animation:mpGrow .9s cubic-bezier(.16,1,.3,1) .2s both;transform-origin:left}
+.coprof>*{animation:mpUp .55s cubic-bezier(.16,1,.3,1) both}
+.coprof>:nth-child(2){animation-delay:.05s}.coprof>:nth-child(3){animation-delay:.1s}.coprof>:nth-child(4){animation-delay:.15s}.coprof>:nth-child(n+5){animation-delay:.2s}
+.asset-list li button{transition:background .2s,padding-left .25s cubic-bezier(.16,1,.3,1)}
+.asset-list li button:hover{padding-left:12px}
+@media (max-width: 860px){
+  .drawer:not([hidden]){animation-name:mpDrInUp}
+  .drawer.out{animation-name:mpDrOutDown}
+  @keyframes mpDrInUp{from{transform:translateY(105%)}to{transform:none}}
+  @keyframes mpDrOutDown{to{transform:translateY(105%);opacity:0}}
+  .navbtns{right:40px}
+}
+@media (prefers-reduced-motion: reduce){
+  .sway,.pt .pulse{animation:none}
+  .drawer,.drawer *,.statsec,.coprof>*,.bar .bf,.tablewrap,.cowrap,.statwrap{animation:none!important}
+  .par,.pt path{transition:none}
+}
 </style>
 
 <div class="app">
@@ -379,7 +438,9 @@ tbody tr:hover{background:var(--bg)}
   </aside>
 
   <main class="stage" id="stage">
-    <svg id="map" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid meet" aria-label="Mapa de la matriz productiva argentina"></svg>
+    <div class="par" id="par"><div class="sway"><div class="cam3d" id="cam3d">
+      <svg id="map" viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid meet" aria-label="Mapa de la matriz productiva argentina"></svg>
+    </div></div></div>
     <div class="zoom">
       <button id="zIn" aria-label="Acercar">+</button>
       <button id="zOut" aria-label="Alejar">−</button>
