@@ -143,13 +143,42 @@ ptSel.append("path").attr("d",a=>d3.symbol(SYM[etapaOf(a.s,a.e).sym], a.st==="ex
   .on("mouseleave",hideTip));
 
 let K=1;
+// Cámara 3D: inclinación (tilt) y giro (yaw) del plano del mapa. Los símbolos se
+// estiran en vertical por 1/cos(tilt) para que sigan viéndose redondos al inclinarse.
+const CAM = { tilt:0, yaw:0, uy:1, raf:0 };
+const REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cam3d = document.getElementById("cam3d");
 function sizeMarks(){
   const s = 1/Math.pow(K,.75);
-  ptSel.attr("transform",a=>`translate(${a.x},${a.y}) scale(${s})`);
+  ptSel.attr("transform",a=>`translate(${a.x},${a.y}) scale(${s},${s*CAM.uy})`);
   labs.attr("font-size", 13/Math.pow(K,.9)).attr("opacity", K>2.2?.9:.7);
 }
+function camApply(){
+  cam3d.style.transform = CAM.tilt||CAM.yaw ? `rotateX(${CAM.tilt}deg) rotateZ(${CAM.yaw}deg)` : "";
+  CAM.uy = 1/Math.cos(CAM.tilt*Math.PI/180);
+  sizeMarks();
+}
+function camTo(tilt, yaw=0, dur=1000){
+  cancelAnimationFrame(CAM.raf);
+  if(window.innerWidth<=860) tilt*=.6;              // en el teléfono, más suave
+  if(REDUCED){ CAM.tilt=tilt; CAM.yaw=yaw; camApply(); return; }
+  const t0=performance.now(), a0=CAM.tilt, y0=CAM.yaw;
+  const step = now=>{
+    const u=Math.min(1,(now-t0)/dur), e=d3.easeCubicInOut(u);
+    CAM.tilt=a0+(tilt-a0)*e; CAM.yaw=y0+(yaw-y0)*e; camApply();
+    if(u<1) CAM.raf=requestAnimationFrame(step);
+  };
+  CAM.raf=requestAnimationFrame(step);
+}
+// Punto de giro de la cámara: el centro de la zona libre del mapa (fuera de la ficha).
+function camOrigin(ox,oy){
+  cam3d.style.setProperty("--ox", `calc(50% - ${ox}px)`);
+  cam3d.style.setProperty("--oy", `calc(50% - ${oy}px)`);
+}
 const zoom = d3.zoom().scaleExtent([1,40]).translateExtent([[-400,-300],[W+400,H+300]])
-  .on("zoom",ev=>{ g.attr("transform",ev.transform); K=ev.transform.k; sizeMarks(); hideTip(); });
+  .on("zoom",ev=>{ g.attr("transform",ev.transform); K=ev.transform.k; sizeMarks(); hideTip();
+    // Si la persona arrastra o usa la rueda, el mapa vuelve a plano para que el gesto sea preciso.
+    if(ev.sourceEvent && (CAM.tilt>0.5||Math.abs(CAM.yaw)>0.3) && !CAM.flat){ CAM.flat=true; camTo(0,0,450); } });
 svg.call(zoom).on("dblclick.zoom",null);
 svg.on("click",()=>{ closeDrawer(); });
 sizeMarks();
@@ -167,12 +196,15 @@ function zoomToBox([[x0,y0],[x1,y1]], maxK=8){
   const vw = (r.width/s) - 2*ox, vh = (r.height/s) - 2*oy;
   const k = Math.min(maxK, .8/Math.max((x1-x0)/vw,(y1-y0)/vh));
   const t = d3.zoomIdentity.translate(W/2-ox,H/2-oy).scale(k).translate(-(x0+x1)/2,-(y0+y1)/2);
-  svg.transition().duration(650).call(zoom.transform,t);
+  camOrigin(ox*s, oy*s);
+  svg.transition().duration(REDUCED?0:1000).ease(d3.easeCubicInOut).call(zoom.transform,t);
 }
+// Vuelo con inclinación: el giro depende de dónde está el activo (oeste u este del país).
+function camFor(xMid, tilt){ CAM.flat=false; camTo(tilt, ((xMid/W)-.5)*-14); }
 function zoomToAsset(a){
-  if(a.kind==="pt"){ zoomToBox([[a.x-30,a.y-30],[a.x+30,a.y+30]], Math.min(Math.max(K,3.5),6)); }
+  if(a.kind==="pt"){ zoomToBox([[a.x-30,a.y-30],[a.x+30,a.y+30]], Math.min(Math.max(K,3.5),6)); camFor(a.x, 46); }
   else { const pts=a.path.map(([la,lo])=>proj([lo,la])); const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
-    zoomToBox([[d3.min(xs),d3.min(ys)],[d3.max(xs),d3.max(ys)]], 6); }
+    zoomToBox([[d3.min(xs),d3.min(ys)],[d3.max(xs),d3.max(ys)]], 6); camFor((d3.min(xs)+d3.max(xs))/2, 36); }
 }
 
 const tip = document.getElementById("tip");
@@ -191,7 +223,8 @@ function render(){
   ptSel.attr("display",a=>visible(a)?null:"none");
   lnSel.attr("display",a=>visible(a)?null:"none");
   ptSel.classed("sel",a=>a.id===st.sel); lnSel.classed("sel",a=>a.id===st.sel);
-  ptSel.selectAll(".ring").remove();
+  ptSel.selectAll(".ring,.pulse").remove();
+  ptSel.filter(a=>a.id===st.sel).append("circle").attr("class","pulse").attr("r",9);
   ptSel.filter(a=>a.id===st.sel).append("circle").attr("class","ring").attr("r",11);
   ptSel.filter(a=>a.id===st.sel).raise();
   renderKpis(); renderTree(); renderCoFilter(); if(st.view==="table") renderTable();
@@ -248,11 +281,35 @@ document.getElementById("q").addEventListener("input",ev=>{ st.q=norm(ev.target.
 
 // ---------- ficha ----------
 const drawer = document.getElementById("drawer");
-function closeDrawer(){ drawer.hidden=true; st.sel=null; provSel.classed("sel",false); render(); }
-function select(id){
+let drOut=0;
+// Cierra la ficha con su animación de salida y vuelve la cámara a plano.
+function closeDrawer(){
+  const was = !drawer.hidden;
+  st.sel=null; provSel.classed("sel",false); render();
+  if(CAM.tilt>0.5||Math.abs(CAM.yaw)>0.3) camTo(0,0,800);
+  if(!was) return;
+  if(REDUCED){ drawer.hidden=true; return; }
+  clearTimeout(drOut); drawer.classList.add("out");
+  drOut=setTimeout(()=>{ drawer.hidden=true; drawer.classList.remove("out"); },300);
+}
+// Muestra la ficha; dir indica hacia dónde entra el contenido (fwd = hacia adelante, back = volver).
+function showDrawer(dir){
+  clearTimeout(drOut); drawer.classList.remove("out");
+  const reopen = !drawer.hidden;
+  drawer.dataset.dir = reopen ? (dir||"fwd") : "";
+  drawer.hidden=false;
+}
+function select(id, dir){
   st.sel=id; const a=byId[id]; provSel.classed("sel",false);
-  render(); openAsset(a, "res");
+  render(); openAsset(a, "res", dir);
   if(st.view==="map") zoomToAsset(a);
+}
+// Orden para recorrer activos con las flechas de la ficha: los visibles, de norte a sur.
+function navList(){ return ALL.filter(a=>visible(a)&&a.kind==="pt").sort((a,b)=>a.y-b.y||a.x-b.x); }
+function stepAsset(d){
+  const xs=navList(); if(!xs.length) return;
+  const i=xs.findIndex(a=>a.id===st.sel);
+  select(xs[(i<0?0:(i+d+xs.length)%xs.length)].id, d>0?"fwd":"back");
 }
 function srcList(a){
   const list = a.src.map(k=>SRC[k]);
@@ -280,8 +337,9 @@ function coCard(k,role){
     <div class="links">${coLinks(k)}<button data-co="${k}">Ver sus ${n} activo${n>1?"s":""} en el mapa</button><button data-prof="${k}">Perfil completo →</button></div>
   </div>`;
 }
-function openAsset(a, tab){
+function openAsset(a, tab, dir){
   const e = etapaOf(a.s,a.e);
+  const nl = a.kind==="pt" ? navList() : [], ni = nl.findIndex(x=>x.id===a.id);
   const coord = a.kind==="pt" ? `${a.ll[0].toFixed(2)}°, ${a.ll[1].toFixed(2)}°` : "Trazado esquemático";
   const T = tecOf(a);
   const tabs = T ? {res:"Resumen", tec:"Cómo funciona", emp:`Empresas (${a.emp.length})`, src:"Fuentes"} : {res:"Resumen", emp:`Empresas (${a.emp.length})`, src:"Fuentes"};
@@ -306,16 +364,20 @@ function openAsset(a, tab){
   if(tab==="emp") body = a.emp.length ? a.emp.map(([k,r])=>coCard(k,r)).join("") : `<p class="note">Infraestructura pública o de uso compartido; sin operador único cargado.</p>`;
   if(tab==="src") body = `<p class="note">Fuentes que respaldan este activo y dónde actualizarlo.</p>${srcList(a)}`;
   drawer.style.setProperty("--c",cvar(a.s));
+  const nav = ni>=0 && nl.length>1 ? `<div class="navbtns"><button data-step="-1" aria-label="Activo anterior">‹</button><span>${ni+1} / ${nl.length}</span><button data-step="1" aria-label="Activo siguiente">›</button></div>` : "";
+  drawer.classList.toggle("has-nav", !!nav);
   drawer.innerHTML = `
-    <header><button class="close" aria-label="Cerrar ficha">×</button>
+    <header><button class="close" aria-label="Cerrar ficha">×</button>${nav}
       <div class="crumb">${symSvg(e.sym,a.s,12)}${SECT[a.s].n} · ${e.n}</div>
       <h2>${a.n}</h2>
       <span class="pill"><span class="dot ${a.st}" style="width:8px;height:8px;border-radius:50%"></span>${ESTADO[a.st]}</span>
     </header>
     <nav class="tabs" role="tablist">${Object.entries(tabs).map(([k,n])=>`<button role="tab" data-tab="${k}" aria-selected="${k===tab}">${n}</button>`).join("")}</nav>
     <div class="dbody">${body}</div>`;
-  drawer.hidden=false;
-  drawer.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>openAsset(a,b.dataset.tab));
+  showDrawer(dir);
+  drawer.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
+    const keys=Object.keys(tabs); openAsset(a,b.dataset.tab, keys.indexOf(b.dataset.tab)>=keys.indexOf(tab)?"fwd":"back"); });
+  drawer.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>stepAsset(+b.dataset.step));
   wireDrawer();
 }
 function numsBlock(ns){
@@ -364,7 +426,8 @@ function openCompany(k){
     <div class="dbody">${coCard(k)}
       <div><p class="eyebrow" style="margin-bottom:6px">Activos en el mapa</p>${assetList(assets)}</div>
     </div>`;
-  drawer.hidden=false; wireDrawer();
+  drawer.classList.remove("has-nav");
+  showDrawer("fwd"); wireDrawer();
 }
 function assetList(xs){
   return `<ul class="asset-list">${xs.map(a=>`<li><button data-asset="${a.id}">${symSvg(etapaOf(a.s,a.e).sym,a.s)}<span class="nm">${a.n}<small>${etapaOf(a.s,a.e).n} · ${a.prov} · ${ESTADO[a.st]}</small></span></button></li>`).join("")}</ul>`;
@@ -373,8 +436,10 @@ function openProvince(f){
   const name=f.properties.name;
   const xs=ALL.filter(a=>(a.prov||"").split(" / ").includes(name) && visible(a));
   provSel.classed("sel",d=>d===f); st.sel=null; render();
-  zoomToBox(path.bounds(f), 7);
+  const pb = path.bounds(f);
+  zoomToBox(pb, 7); camFor((pb[0][0]+pb[1][0])/2, 30);
   drawer.style.setProperty("--c","var(--ink)");
+  drawer.classList.remove("has-nav");
   const counts = Object.keys(SECT).map(s=>`<div class="kpi" style="--c:${cvar(s)}"><b>${xs.filter(a=>a.s===s).length}</b><span>${SECT[s].n}</span></div>`).join("");
   drawer.innerHTML = `
     <header><button class="close" aria-label="Cerrar ficha">×</button>
@@ -382,18 +447,19 @@ function openProvince(f){
     <div class="dbody"><div class="kpis">${counts}</div>
       ${xs.length?assetList(xs):`<p class="note">No hay activos cargados con las capas y filtros actuales. Los ductos que cruzan la provincia figuran como interprovinciales.</p>`}
     </div>`;
-  drawer.hidden=false; wireDrawer();
+  showDrawer("fwd"); wireDrawer();
 }
 function wireDrawer(){
   drawer.querySelector(".close").onclick=closeDrawer;
-  drawer.querySelectorAll("[data-asset]").forEach(b=>b.onclick=()=>select(b.dataset.asset));
+  drawer.querySelectorAll("[data-asset]").forEach(b=>b.onclick=()=>select(b.dataset.asset,"back"));
   drawer.querySelectorAll("[data-goco]").forEach(b=>b.onclick=ev=>{ev.preventDefault(); openCompany(b.dataset.goco);});
   drawer.querySelectorAll("[data-prof]").forEach(b=>b.onclick=()=>{ drawer.hidden=true; openProfile(b.dataset.prof); });
   drawer.querySelectorAll("[data-co]").forEach(b=>b.onclick=()=>{
     st.company=b.dataset.co; render(); openCompany(b.dataset.co);
     const xs=ALL.filter(a=>a.emp.some(([x])=>x===st.company));
     const pts=xs.flatMap(a=>a.kind==="pt"?[[a.x,a.y]]:a.path.map(([la,lo])=>proj([lo,la])));
-    if(pts.length && st.view==="map") zoomToBox([[d3.min(pts,p=>p[0])-20,d3.min(pts,p=>p[1])-20],[d3.max(pts,p=>p[0])+20,d3.max(pts,p=>p[1])+20]],6);
+    if(pts.length && st.view==="map"){ zoomToBox([[d3.min(pts,p=>p[0])-20,d3.min(pts,p=>p[1])-20],[d3.max(pts,p=>p[0])+20,d3.max(pts,p=>p[1])+20]],6);
+      camFor((d3.min(pts,p=>p[0])+d3.max(pts,p=>p[0]))/2, 32); }
   });
 }
 
@@ -439,6 +505,7 @@ function renderStats(){
 }
 function setView(v){
   st.view=v;
+  if(v!=="map"){ cancelAnimationFrame(CAM.raf); CAM.tilt=0; CAM.yaw=0; camApply(); document.getElementById("par").style.transform=""; }
   document.getElementById("vSt").setAttribute("aria-pressed",v==="stats");
   document.getElementById("statWrap").hidden = v!=="stats";
   if(v==="stats"){ drawer.hidden=true; renderStats(); }
@@ -1085,7 +1152,46 @@ let vizT; window.addEventListener("resize",()=>{ if(st.view!=="stats") return; c
 
 const side=document.getElementById("side"), bl=document.getElementById("btnLayers");
 bl.onclick=()=>{ const o=!side.classList.contains("open"); side.classList.toggle("open",o); bl.setAttribute("aria-expanded",o); };
-document.addEventListener("keydown",ev=>{ if(ev.key==="Escape"){ closeDrawer(); side.classList.remove("open"); } });
+document.addEventListener("keydown",ev=>{ if(ev.key==="Escape"){ closeDrawer(); side.classList.remove("open"); }
+  if(!drawer.hidden && st.sel && st.view==="map" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){
+    if(ev.key==="ArrowRight") stepAsset(1); if(ev.key==="ArrowLeft") stepAsset(-1); } });
+
+// ---------- resaltado sincronizado: pasar el mouse por una lista ilumina el activo en el mapa ----------
+let hovId=null;
+function hoverAsset(id){
+  if(id===hovId) return; hovId=id;
+  ptSel.classed("hov",a=>a.id===id); lnSel.classed("hov",a=>a.id===id);
+  if(id) ptSel.filter(a=>a.id===id).raise();
+}
+document.addEventListener("mouseover",ev=>{
+  const b=ev.target.closest&&ev.target.closest("[data-asset],[data-onmap]");
+  hoverAsset(b ? (b.dataset.asset||b.dataset.onmap) : null);
+});
+
+// ---------- profundidad: el mapa acompaña levemente al mouse ----------
+{
+  const stage=document.getElementById("stage"), par=document.getElementById("par");
+  let down=false;
+  stage.addEventListener("pointerdown",()=>{ down=true; par.style.transform=""; });
+  window.addEventListener("pointerup",()=>{ down=false; });
+  stage.addEventListener("pointermove",ev=>{
+    if(REDUCED || down || ev.pointerType!=="mouse" || st.view!=="map") return;
+    const r=stage.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width-.5, y=(ev.clientY-r.top)/r.height-.5;
+    par.style.transform=`rotateY(${(x*4).toFixed(2)}deg) rotateX(${(-y*3).toFixed(2)}deg)`;
+  });
+  stage.addEventListener("pointerleave",()=>{ par.style.transform=""; });
+  // Con el mapa inclinado queda una franja arriba que no cubre el plano. Un gesto que empiece
+  // ahí aplana la cámara al instante y se reenvía al mapa, así arrastrar y la rueda siguen andando.
+  const offMap = ev => !ev.target.closest || !ev.target.closest("#map");
+  const flatNow = ()=>{ cancelAnimationFrame(CAM.raf); CAM.tilt=0; CAM.yaw=0; CAM.flat=true; camApply(); par.style.transform=""; };
+  const svgEl = svg.node();
+  par.addEventListener("mousedown",ev=>{ if(!offMap(ev)) return; flatNow(); ev.preventDefault();
+    svgEl.dispatchEvent(new MouseEvent("mousedown",{clientX:ev.clientX,clientY:ev.clientY,screenX:ev.screenX,screenY:ev.screenY,button:ev.button,buttons:ev.buttons,bubbles:true,cancelable:true,view:window})); });
+  par.addEventListener("wheel",ev=>{ if(!offMap(ev)) return; flatNow(); ev.preventDefault();
+    svgEl.dispatchEvent(new WheelEvent("wheel",{clientX:ev.clientX,clientY:ev.clientY,deltaX:ev.deltaX,deltaY:ev.deltaY,deltaMode:ev.deltaMode,ctrlKey:ev.ctrlKey,bubbles:true,cancelable:true,view:window})); },{passive:false});
+  par.addEventListener("touchstart",ev=>{ if(offMap(ev)) flatNow(); },{passive:true});
+  par.addEventListener("click",ev=>{ if(offMap(ev)) closeDrawer(); });
+}
 
 document.getElementById("nTot").textContent = ALL.length;
 { const f=META.actualizado.split("-"); const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"]; document.getElementById("upd").textContent = `${+f[2]}-${M[+f[1]-1]}-${f[0]}`; }
