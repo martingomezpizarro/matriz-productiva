@@ -2,6 +2,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/pie.css">
 <style>
 /* Layout: tablero de una pantalla — panel de capas a la izquierda, mapa al centro, ficha deslizable sobre el mapa. */
 :root{
@@ -382,6 +383,9 @@ tbody tr:hover{background:var(--bg)}
   @keyframes mpDrOutDown{to{transform:translateY(105%);opacity:0}}
   .navbtns{right:40px}
 }
+/* Pie institucional: tercera fila del tablero */
+.app{grid-template-rows:auto minmax(0,1fr) auto}
+@media (max-width: 860px){ .app{grid-template-rows:auto minmax(0,1fr) auto} .side{bottom:calc(46px + env(safe-area-inset-bottom,0px))} }
 @media (prefers-reduced-motion: reduce){
   .sway,.pt .pulse{animation:none}
   .drawer,.drawer *,.statsec,.coprof>*,.bar .bf,.tablewrap,.cowrap,.statwrap{animation:none!important}
@@ -465,6 +469,7 @@ tbody tr:hover{background:var(--bg)}
     <div class="statwrap" id="statWrap" hidden></div>
     <div class="drawer" id="drawer" hidden></div>
   </main>
+  <footer id="pie" data-modo="compacto"></footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -483,5 +488,7 @@ tbody tr:hover{background:var(--bg)}
 <script src="data/auto/produccion.js"></script>
 <script src="data/auto/meta.js"></script>
 <script src="js/app.js"></script>
+<script src="js/sitio.config.js"></script>
+<script src="js/pie.js"></script>
 
 </body></html>
