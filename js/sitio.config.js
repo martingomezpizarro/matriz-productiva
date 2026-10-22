@@ -11,7 +11,7 @@ window.SITIO = {
   colaborar: {
     texto: "Este proyecto es gratuito e independiente. Si te resulta útil, podés colaborar voluntariamente para sostenerlo.",
     cafecito: "[COMPLETAR: link de Cafecito]",            // ej. "https://cafecito.app/usuario"
-    otra: { etiqueta: "Mercado Pago", url: "[COMPLETAR: alias o link de Mercado Pago]" },
+    otra: { etiqueta: "Alias para transferir", url: "martingomezpizarro" },  // un link (https://…) se muestra como botón; otro texto, como alias copiable
     aclaracion: "Las colaboraciones son voluntarias, no constituyen contraprestación por ningún servicio ni otorgan derechos sobre el contenido."
   },
 

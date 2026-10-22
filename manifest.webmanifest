@@ -2,7 +2,7 @@
   "name": "Matriz Productiva Argentina",
   "short_name": "MPA",
   "description": "Mapa interactivo de agro, minería y Oil & Gas en Argentina",
-  "start_url": "./",
+  "start_url": "./mapa.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#06182B",

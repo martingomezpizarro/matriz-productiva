@@ -39,6 +39,9 @@
 .pie-btn-pri{background:var(--ink,#16201E);color:var(--bg,#EDF0EF)!important;border-color:var(--ink,#16201E)}
 .pie-btn-pri:hover{opacity:.9}
 .pie-alias b{font-family:var(--f-mono,monospace);font-weight:500}
+.pie-alias{cursor:copy;font:inherit;font-size:13px;color:var(--ink,#16201E)}
+.pie-alias small{font-size:11px;color:var(--op,#2E8540);font-weight:600}
+.pie-alias small:empty{display:none}
 .pie-fine{font-size:12px;max-width:90ch}
 .pie-meta{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--faint,#8A9693)}
 @media (max-width:640px){ .pie-completo .pie-grid{grid-template-columns:1fr} }

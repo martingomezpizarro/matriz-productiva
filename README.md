@@ -9,11 +9,15 @@ Mapa interactivo de los tres grandes sectores productivos de Argentina: **Oil & 
 Es un sitio estático: no hace falta compilar nada ni tener un servidor propio. Se publica con GitHub Pages desde la rama `main`.
 
 ```
-index.html            estructura y estilos
+index.html            portada: presentación, cifras, sectores y cómo se usa
+mapa.html             el tablero: mapa, tabla, empresas y estadísticas
 terminos.html         términos y condiciones de uso, fuentes y privacidad
 js/app.js             lógica del mapa, la tabla, las empresas y los gráficos
 js/sitio.config.js    datos del autor, links de colaboración y licencia (pie y términos)
 js/pie.js             pie de página institucional (barra + ventana «Acerca de»)
+js/portada.js         mapa animado y cifras de la portada (lee los mismos datos)
+js/tour.js            recorrido guiado del mapa (botón «?», mapa.html?tour=1)
+css/tour.css          estilos del recorrido
 css/pie.css           estilos del pie
 data/
   auto/               lo regenera scripts/actualizar.py (no editar a mano)
@@ -36,6 +40,8 @@ scripts/
 ```
 
 Para verlo en local: `python -m http.server` en la carpeta del repo y abrir http://localhost:8000.
+
+Enlaces directos al tablero: `mapa.html?vista=tabla|empresas|estadisticas`, `mapa.html?activo=<id>` y `mapa.html?tour=1` (abre el recorrido guiado).
 
 ## Actualización de datos
 

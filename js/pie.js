@@ -26,7 +26,7 @@
     const b1 = pend(c.cafecito) ? marca(c.cafecito) : ext(c.cafecito, "☕ Invitame un cafecito", "pie-btn pie-btn-pri");
     const b2 = pend(c.otra && c.otra.url) ? marca(c.otra ? c.otra.url : "[COMPLETAR: segunda opción]")
       : (/^https?:/.test(c.otra.url) ? ext(c.otra.url, esc(c.otra.etiqueta), "pie-btn")
-        : `<span class="pie-btn pie-alias">${esc(c.otra.etiqueta)}: <b>${esc(c.otra.url)}</b></span>`);
+        : `<button type="button" class="pie-btn pie-alias" data-copiar="${esc(c.otra.url)}" title="Tocá para copiar">${esc(c.otra.etiqueta)}: <b>${esc(c.otra.url)}</b><small aria-live="polite"></small></button>`);
     return `<div class="pie-btns">${b1}${b2}</div>`;
   };
 
@@ -59,6 +59,13 @@
         </p>
       </section>
     </div>`;
+
+  // Copiar el alias al portapapeles (funciona en el pie en línea y en la ventana).
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-copiar]"); if (!b) return;
+    const ok = () => { const m = b.querySelector("small"); if (m) { m.textContent = "Copiado"; setTimeout(() => m.textContent = "", 1800); } };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.dataset.copiar).then(ok, () => {});
+  });
 
   if (el.dataset.modo === "completo") {
     el.className = "pie pie-completo";

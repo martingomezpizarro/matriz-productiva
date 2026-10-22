@@ -1197,5 +1197,9 @@ document.getElementById("nTot").textContent = ALL.length;
 { const f=META.actualizado.split("-"); const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"]; document.getElementById("upd").textContent = `${+f[2]}-${M[+f[1]-1]}-${f[0]}`; }
 render();
 try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="stats") setView(v); }catch(e){}
+// Enlaces directos desde la portada: mapa.html?vista=tabla|empresas|estadisticas|mapa  ·  ?activo=<id>
+{ const q=new URLSearchParams(location.search), V={mapa:"map",tabla:"table",empresas:"co",estadisticas:"stats"};
+  if(V[q.get("vista")]) setView(V[q.get("vista")]);
+  const ac=q.get("activo"); if(ac && byId[ac]){ setView("map"); setTimeout(()=>select(ac),400); } }
 if(location.hash==="#empresas") setView("co");
 if(location.hash==="#estadisticas") setView("stats");
