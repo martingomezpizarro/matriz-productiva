@@ -23,7 +23,7 @@
 
   const botones = () => {
     const c = S.colaborar;
-    const b1 = pend(c.cafecito) ? marca(c.cafecito) : ext(c.cafecito, "☕ Invitame un cafecito", "pie-btn pie-btn-pri");
+    const b1 = !c.cafecito ? "" : pend(c.cafecito) ? marca(c.cafecito) : ext(c.cafecito, "☕ Invitame un cafecito", "pie-btn pie-btn-pri");
     const b2 = pend(c.otra && c.otra.url) ? marca(c.otra ? c.otra.url : "[COMPLETAR: segunda opción]")
       : (/^https?:/.test(c.otra.url) ? ext(c.otra.url, esc(c.otra.etiqueta), "pie-btn")
         : `<button type="button" class="pie-btn pie-alias" data-copiar="${esc(c.otra.url)}" title="Tocá para copiar">${esc(c.otra.etiqueta)}: <b>${esc(c.otra.url)}</b><small aria-live="polite"></small></button>`);
