@@ -443,7 +443,8 @@ def nombre_operador(emp):
 def paso_energia(E: Estado):
     pk = get(ENERGIA, params={"id": "produccion-de-petroleo-y-gas-por-pozo"}, timeout=60).json()["result"]
     anio = HOY.year if HOY.month > 2 else HOY.year - 1  # en ene/feb todavía se completa el año anterior
-    res = next(r for r in pk["resources"] if str(anio) in (r.get("name") or "") and (r.get("format") or "").lower() == "csv")
+    res = next(r for r in pk["resources"] if str(anio) in (r.get("name") or "") and "ddjj" not in norm(r.get("name"))
+               and (r.get("format") or "").lower() == "csv")
     df = pd.read_csv(io.BytesIO(get(res["url"], timeout=900).content), low_memory=False)
     df.columns = [c.strip().lower() for c in df.columns]
     need = {"mes", "prod_pet", "prod_gas", "empresa", "areapermisoconcesion", "provincia", "tipo_de_recurso"}
