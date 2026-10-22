@@ -10,7 +10,11 @@ Es un sitio estático: no hace falta compilar nada ni tener un servidor propio. 
 
 ```
 index.html            estructura y estilos
+terminos.html         términos y condiciones de uso, fuentes y privacidad
 js/app.js             lógica del mapa, la tabla, las empresas y los gráficos
+js/sitio.config.js    datos del autor, links de colaboración y licencia (pie y términos)
+js/pie.js             pie de página institucional (barra + ventana «Acerca de»)
+css/pie.css           estilos del pie
 data/
   auto/               lo regenera scripts/actualizar.py (no editar a mano)
     siacam.js           cartera oficial de proyectos mineros

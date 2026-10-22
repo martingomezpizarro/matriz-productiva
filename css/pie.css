@@ -1,0 +1,56 @@
+/* Pie de página institucional. Usa los tokens del sitio (--panel, --ink, --muted, --line…). */
+.pie{font-family:var(--f-body,system-ui,sans-serif);color:var(--muted,#5B6865);font-size:12px;line-height:1.45}
+.pie a{color:var(--ink,#16201E);text-underline-offset:2px}
+.pie a:hover{text-decoration-thickness:2px}
+.pie-pend{display:inline-block;font-family:var(--f-mono,monospace);font-size:11px;color:var(--con,#B7791F);border:1px dashed currentColor;border-radius:6px;padding:4px 8px;background:color-mix(in srgb,var(--con,#B7791F) 10%,transparent)}
+
+/* --- Barra compacta (tablero de una pantalla) --- */
+.pie-compacto{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:0 2px;min-width:0}
+.pie-compacto .pie-autor{color:var(--ink,#16201E);white-space:nowrap}
+.pie-compacto .pie-autor a{text-decoration:none;font-weight:500}
+.pie-compacto .pie-autor a:hover{text-decoration:underline}
+.pie-ico{text-decoration:none;font-size:13px;line-height:1;margin-left:-6px}
+.pie-aviso{min-width:0}
+.pie-acc{display:inline-flex;align-items:center;gap:2px;margin-left:auto}
+.pie-acc a,.pie-acc button{border:0;background:none;font:inherit;color:var(--ink,#16201E);cursor:pointer;padding:3px 8px;border-radius:6px;text-decoration:none}
+.pie-acc a:hover,.pie-acc button:hover{background:var(--panel,#F8FAF9);box-shadow:inset 0 0 0 1px var(--line,#D2D9D6)}
+.pie-acc [data-pie="colaborar"]{font-weight:600}
+.pie-fecha{white-space:nowrap;font-family:var(--f-mono,monospace);font-size:11px;color:var(--faint,#8A9693)}
+@media (max-width:860px){
+  .pie-compacto{gap:2px 8px}
+  .pie-aviso{order:5;flex-basis:100%;font-size:11px}
+  .pie-fecha{display:none}
+  .pie-pre{display:none}
+  .pie-acc{margin-left:auto}
+  .pie-acc a,.pie-acc button{padding:4px 5px}
+}
+
+/* --- Bloque completo (ventana «Acerca de» y páginas con scroll) --- */
+.pie-completo .pie-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:20px 32px}
+.pie-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.pie-col p{margin:0}
+.pie-wide{grid-column:1/-1;border-top:1px solid var(--line,#D2D9D6);padding-top:16px}
+.pie-eye{margin:0;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted,#5B6865)}
+.pie-completo .pie-col>p:not(.pie-fine){font-size:14px;color:var(--ink,#16201E)}
+.pie-links{display:flex;flex-direction:column;gap:4px}
+.pie-btns{display:flex;flex-wrap:wrap;gap:8px}
+.pie-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line,#D2D9D6);border-radius:8px;padding:7px 12px;font-size:13px;font-weight:500;text-decoration:none;background:var(--panel,#F8FAF9)}
+.pie-btn:hover{border-color:var(--ink,#16201E)}
+.pie-btn-pri{background:var(--ink,#16201E);color:var(--bg,#EDF0EF)!important;border-color:var(--ink,#16201E)}
+.pie-btn-pri:hover{opacity:.9}
+.pie-alias b{font-family:var(--f-mono,monospace);font-weight:500}
+.pie-fine{font-size:12px;max-width:90ch}
+.pie-meta{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--faint,#8A9693)}
+@media (max-width:640px){ .pie-completo .pie-grid{grid-template-columns:1fr} }
+
+/* --- Ventana --- */
+.pie-dlg{width:min(720px,calc(100% - 32px));max-height:calc(100% - 48px);padding:0;border:1px solid var(--line,#D2D9D6);border-radius:12px;background:var(--panel,#F8FAF9);color:var(--ink,#16201E);box-shadow:var(--shadow,0 8px 28px rgba(0,0,0,.2));overflow:auto}
+.pie-dlg::backdrop{background:rgba(10,16,15,.45)}
+.pie-dlg[open]{animation:pieIn .35s cubic-bezier(.16,1,.3,1) both}
+@keyframes pieIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pie-dlg-h{position:sticky;top:0;display:flex;align-items:center;gap:12px;padding:16px 20px 12px;background:var(--panel,#F8FAF9);border-bottom:1px solid var(--line,#D2D9D6);z-index:1}
+.pie-dlg-h h2{margin:0;font-family:var(--f-display,sans-serif);font-size:24px;font-weight:600;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.pie-x{margin-left:auto;border:0;background:none;width:32px;height:32px;border-radius:6px;font-size:20px;cursor:pointer;color:var(--muted,#5B6865)}
+.pie-x:hover{background:var(--bg,#EDF0EF)}
+.pie-dlg .pie-completo{padding:18px 20px 20px}
+@media (prefers-reduced-motion:reduce){ .pie-dlg[open]{animation:none} }
