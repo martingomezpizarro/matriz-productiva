@@ -37,7 +37,34 @@ function tecOf(a){
   const g = TEC_GEN[a.s+"-"+a.e] || null;
   const t = TEC[a.id] || null;
   if(!t && !g) return null;
-  return { ...(g||{}), ...(t||{}), gen: !t || !t.met };
+  const T = { ...(g||{}), ...(t||{}), gen: !t || !t.met };
+  // Si el activo no tiene números propios, se arman con los datos oficiales que ya tiene cargados
+  if(!T.nums){ const n=numsOficiales(a); if(n.length){ T.nums=n; T.auto=true; } }
+  if(!T.hitos && a.rigi){ const h=hitosRigi(a.rigi.det); if(h.length) T.hitos=h; }
+  if(T.auto) T.src=[...new Set([...(T.src||[]), ...T.nums.map(x=>x[2]).filter(Boolean)])];
+  return T;
+}
+function numsOficiales(a){
+  const n=[];
+  if(a.pq&&a.pq.of) n.push(["Producción oficial", a.pq.of.t, a.pq.of.s]);
+  if(a.rigi){ const r=a.rigi.det, k=a.rigi.s;
+    if(r.total||r.comp) n.push(["Inversión RIGI", a.rigi.inv, k]);
+    if(r.cap) n.push(["Alcance del proyecto RIGI", r.cap, k]);
+    if(r.min2a) n.push(["Inversión comprometida en 2 años", musd(r.min2a), k]);
+    if(r.op) n.push(["Inicio de operación previsto", fechaC(r.op), k]); }
+  if(a.siac){ const o=a.siac;
+    n.push(["Etapa en la cartera oficial", o.est, "siacam"], ["Mineral principal", o.min, "siacam"]);
+    if(o.ctrl.length) n.push(["Controlantes", o.ctrl.map(([nom,pct,orig])=>`${nom}${pct!=null?` ${String(pct).replace(".",",")}%`:""}${orig?` (${orig})`:""}`).join(" · "), "siacam"]); }
+  return n;
+}
+function hitosRigi(r){
+  const h=[];
+  if(r.adh) h.push([r.adh,"Adhesión al RIGI"]);
+  if(r.bo) h.push([r.bo,`Res. ME ${r.res} en el Boletín Oficial`]);
+  if(r.obra) h.push([r.obra,"Inicio de obra"]);
+  if(r.limite) h.push([r.limite,"Plazo para la inversión mínima RIGI"]);
+  if(r.op) h.push([r.op,"Inicio de operación"]);
+  return h.sort((x,y)=>String(x[0]).localeCompare(String(y[0]))).map(([f,t])=>[fechaC(f),t]);
 }
 
 
@@ -62,7 +89,7 @@ function tecOf(a){
       prod:m.prod||`${o.min} (mineral principal)`,
       d:m.d||`Proyecto de ${o.min.toLowerCase()} en etapa de ${o.est.toLowerCase()}, según la cartera oficial.`,
       src:["siacam",...((m.src||[]).filter(x=>x!=="miCart"))],
-      prec:"Coordenadas oficiales de la Secretaría de Minería", of:true };
+      prec:"Coordenadas oficiales de la Secretaría de Minería", of:true, siac:o };
   });
   PTS.length = 0; PTS.push(...resto, ...nuevos);
   const orden = ["Producción","Construcción","Reingeniería","Factibilidad","Prefactibilidad","Evaluación Económica Preliminar","Exploración avanzada","Exploración inicial","Prospección","Cese de operaciones"];
@@ -406,7 +433,7 @@ function numsBlock(ns){
 function tecBlock(a,T){
   const srcs=[...new Set(T.src||[])].filter(k=>SRC[k]);
   return `
-    ${T.gen?`<p class="gennote">${T.nums?"El proceso que se muestra es el típico de este eslabón; los números sí son de este activo.":"Todavía no hay ficha propia de este activo: se muestra el proceso típico de su eslabón como guía. Los números se cargan cuando haya fuente."}</p>`:""}
+    ${T.gen?`<p class="gennote">${T.nums?(T.auto?"Proceso típico de este eslabón. Los números son los registros oficiales de este activo (cartera de la Secretaría de Minería, Secretaría de Energía o resolución RIGI).":"El proceso que se muestra es el típico de este eslabón; los números sí son de este activo."):"Todavía no hay ficha propia de este activo: se muestra el proceso típico de su eslabón como guía. Los números se cargan cuando haya fuente."}</p>`:""}
     <div class="proyblock"><p class="eyebrow">Método</p><p style="margin:0;font-size:13px">${T.met}</p></div>
     <div class="proyblock"><p class="eyebrow">Cómo se produce</p><ol class="flow">${(T.proc||[]).map(x=>`<li>${x}</li>`).join("")}</ol></div>
     <div class="proyblock"><p class="eyebrow">Producto y calidad</p><p style="margin:0;font-size:13px">${T.prod}</p></div>
@@ -1230,7 +1257,7 @@ try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="sta
 // Sólo muestra estado y atajos: las acciones piden el login de GitHub o de Claude.
 const REPO = "martingomezpizarro/matriz-productiva";
 const PASO_N = { siacam:"Minería – cartera SIACAM", mercado:"Cotizaciones (Yahoo Finance)", precios:"Precios internacionales", comercio:"Comercio exterior (INDEC)", emae:"Actividad (EMAE)", faena:"Faena (MAGyP)", provincias:"Producción por provincia", agricola:"Estimaciones agrícolas (MAGyP)", energia:"Energía (Secretaría de Energía)" };
-const fichaIncompleta = a => a.st!=="exp" && (!TEC[a.id] || !TEC[a.id].nums);
+const fichaIncompleta = a => a.st!=="exp" && (!TEC[a.id] || !TEC[a.id].nums);   // sin ficha propia (aunque muestre datos oficiales automáticos)
 function openAdmin(){
   try{ localStorage.setItem("mp-admin","1"); }catch(e){}
   document.getElementById("btnAdmin").hidden=false;

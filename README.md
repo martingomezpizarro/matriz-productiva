@@ -66,6 +66,14 @@ scripts\actualizar-energia.bat
 
 Hace `git pull`, corre `python scripts/actualizar.py --grupo energia` y sube los cambios. Requisitos en esa PC: Git con acceso al repo y Python con `pip install -r scripts/requirements.txt`.
 
+### RIGI
+
+Los proyectos del RIGI están en `data/manual/rigi.js`, uno por activo del mapa, con los datos de la resolución del Ministerio de Economía publicada en el Boletín Oficial (vehículo, inversión total y computable, plazos y alcance). Una tarea programada de Claude («Matriz Productiva: RIGI y fichas») corre todos los días a las 7:56: revisa resoluciones nuevas, las carga, completa hasta 5 fichas incompletas y sube los cambios a `main`.
+
+### Panel de administración
+
+Agregando `#admin` a la dirección del sitio se abre un panel con la fecha y el resultado de cada fuente, los últimos RIGI publicados, la lista de fichas incompletas y atajos para actualizar (tarea de Claude, workflow de GitHub Actions y script de Energía). El navegador lo recuerda y muestra un engranaje en la barra superior.
+
 ### Datos manuales
 
 Lo que no sale de un portal con formato estable (plantas, ductos, RIGI, fichas técnicas, cifras de informes en PDF o notas de prensa) está en `data/manual/`. Se edita a mano y cada número referencia una clave de `SRC` en `data/manual/fuentes.js`.

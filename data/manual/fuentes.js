@@ -102,3 +102,17 @@ Object.assign(SRC, {
   yfBrent: { t:"Alpha Vantage – Precio mensual del Brent (consulta del 15-oct-2026)", u:"https://www.alphavantage.co/documentation/#brent" },
   yfFut:   { t:"Alpha Vantage y Yahoo Finance – Brent, oro, cobre y soja, cierres mensuales (consulta del 15-oct-2026)", u:"https://finance.yahoo.com" }
 });
+
+// --- Fuentes de fichas completadas el 27-oct-2026 (empresas y organismos oficiales) ---
+Object.assign(SRC, {
+  tgnSis: { t:"TGN – Sistema TGN: gasoductos Norte y Centro Oeste", u:"https://www.tgn.com.ar/en/operations-and-services/tgn-system/" },
+  tgsTr:  { t:"TGS – Negocio de transporte de gas natural", u:"https://www.tgs.com.ar/Businesses/Transportation" },
+  oldDup: { t:"Oldelval – Diario Oldelval: sistema y proyecto Duplicar (feb-2024)", u:"https://www.oldelval.com/wp-content/uploads/2024/02/DIARIO-OLDELVAL.pdf" },
+  oteInv: { t:"Oiltanking Ebytem – Presentación a inversores (2024)", u:"https://www.bancoprovincia.com.ar/CDN/Get/OTE_Presentacion_Inversores_30" },
+  vntAGP: { t:"Ministerio de Economía – La Vía Navegable Troncal en Argentina", u:"https://www.argentina.gob.ar/transporte/administracion-general-puertos-se/via-navegable-troncal/la-via-navegable-troncal-en-argentina" },
+  cnrt24: { t:"CNRT – Reporte estadístico trimestral de cargas ferroviarias, 2T 2024", u:"https://argentina.gob.ar/sites/default/files/2024_-_segundo_trimestre_-_carga.pdf" },
+  ssrPuna:{ t:"SSR Mining – Puna Operations (reservas y recursos al 31-dic-2025)", u:"https://ssrmining.com/operations/production/puna/" },
+  cerrQ3: { t:"Cerrado Gold – Producción del 3T 2026 en Minera Don Nicolás (comunicado del 19-oct-2026)", u:"https://www.taiwannews.com.tw/en/news/6460759" },
+  pbb25:  { t:"Consorcio de Gestión del Puerto de Bahía Blanca – Estadísticas de tráfico, diciembre 2025", u:"https://puertobahiablanca.com/estadisticaspuerto/2025/12/trafico1225.pdf" },
+  pgCalc: { t:"Patagonia Gold – Calcatreu: fin de la suspensión y tercer despacho de doré (27-ago-2026)", u:"https://www.bnnbloomberg.ca/press-releases/2026/08/27/patagonia-gold-announces-lifting-of-temporary-suspension-at-calcatreu-and-third-dore-dispatch/" }
+});
