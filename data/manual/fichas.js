@@ -175,7 +175,7 @@ const TEC = {
     nums:[["Fase 1","20.000 t/año","tresQ"],["Fase 2","30.000 t/año","tresQ"],["Fase 3","50.000 t/año","tresQ"],["Vida útil","Hasta 2043","tresQ"]],
     src:["tresQ"]
   },
-  "mi-sdo": {
+  "mi-sal-de-oro": {
     met:"Salmuera del Salar del Hombre Muerto con pozas de evaporación. La conversión se hace en dos plantas: fosfato de litio en el salar e hidróxido en Güemes (Salta).",
     proc:["Pozos de salmuera","Pozas de evaporación","Planta de fosfato de litio (salar)","Planta de hidróxido de litio (Parque Industrial de Güemes)","Planta II: carbonato de litio"],
     prod:"Hidróxido de litio (el primero producido en el país) y carbonato de litio",
@@ -195,9 +195,9 @@ const TEC = {
     met:"Pórfido de cobre-oro-plata a cielo abierto (Josemaría y Filo del Sol), en la alta cordillera de San Juan.",
     proc:["Mina a cielo abierto (Josemaría)","Planta concentradora de sulfuros","Etapa 2: planta de óxidos de Filo del Sol (Cu, Au, Ag)","Etapa 3: ampliación del concentrador + sulfuros de Filo del Sol, planta desaladora y transporte de concentrado"],
     prod:"Concentrado de cobre con oro y plata",
-    nums:[["Producción promedio (PEA, 25 años)","395.000 t de cobre, 711.000 oz de oro y 22,2 Moz de plata por año","vicPEA"],["Procesamiento objetivo","≈ 293.000 t/día","vicPEA"],["Inversión RIGI","US$ 9.737 M (hasta US$ 18.000 M en la década)","vicRIGI"],["Etapa 1","≈ US$ 7.000 M, primera producción 2030","vicPEA"],["Vida útil","Más de 70 años","vicRIGI"]],
-    hitos:[["jun-2026","RIGI aprobado"],["fin 2026","Decisión final de inversión esperada"],["2030","Primera producción (Josemaría)"]],
-    src:["vicPEA","vicRIGI"]
+    nums:[["Producción promedio (PEA, 25 años)","395.000 t de cobre, 711.000 oz de oro y 22,2 Moz de plata por año","vicPEA"],["Procesamiento objetivo","≈ 293.000 t/día","vicPEA"],["Inversión RIGI","US$ 9.737 M totales · US$ 9.025 M computables (Res. ME 1154/2026)","bo1154_26"],["Cronograma de inversión RIGI","Etapa 1 hasta dic-2026 · etapa 2 de 2027 a 2031","bo1154_26"],["Primera producción","2030 (Josemaría, según el estudio de la empresa)","vicPEA"]],
+    hitos:[["jun-2026","Adhesión al RIGI"],["30-jul-2026","Res. ME 1154/2026 en el Boletín Oficial"],["dic-2028","Plazo para la inversión mínima RIGI"],["2030","Primera producción (Josemaría)"]],
+    src:["vicPEA","bo1154_26"]
   },
   "mi-azules": {
     met:"Pórfido de cobre a cielo abierto con lixiviación en pilas y SX-EW: produce cátodos en la mina, sin fundición ni concentrado.",
@@ -210,15 +210,16 @@ const TEC = {
   "mi-pachon": {
     met:"Pórfido de cobre-molibdeno a cielo abierto (Glencore).",
     proc:TEC_GEN["mi-cu"].proc, prod:"Concentrado de cobre y de molibdeno",
-    nums:[["Recursos","≈ 6.000 Mt con 0,43% Cu, 2,2 g/t Ag y 130 g/t Mo","glenMA"],["Inversión","US$ 9.500 M (presentado al RIGI)","glenMA"]],
-    src:["glenMA"]
+    nums:[["Recursos","≈ 6.000 Mt con 0,43% Cu, 2,2 g/t Ag y 130 g/t Mo","glenMA"],["Inversión fase 1","US$ 9.500 M (rango 8.500–10.500 M), solicitud RIGI en evaluación","glc_ago25"]],
+    src:["glenMA","glc_ago25"]
   },
   "mi-mara": {
-    met:"Pórfido de cobre-oro-molibdeno a cielo abierto (Agua Rica) que usará la planta concentradora y la logística de La Alumbrera.",
-    proc:["Mina Agua Rica","Planta concentradora de Alumbrera (flotación)","Concentrado Cu-Au y de molibdeno","Transporte a puerto"],
-    prod:"Concentrado de cobre con oro; molibdeno",
-    nums:[["Producción (primeros 10 años)","Más de 200.000 t/año de cobre en concentrado","glenMA"],["Recursos","≈ 1.200 Mt: 0,47% Cu, 0,20 g/t Au, 3,4 g/t Ag, 0,03% Mo","glenMA"],["Inversión","US$ 4.000 M (RIGI)","glenMA"],["Puente","Reapertura de Alumbrera: obras desde fines de 2026 y producción en el 1S 2028","glenMA"]],
-    src:["glenMA"]
+    met:"Pórfido de cobre-oro-plata-molibdeno a cielo abierto (Agua Rica, a unos 3.300 m s. n. m.) que usará la planta concentradora y la logística de La Alumbrera.",
+    proc:["Mina Agua Rica (cielo abierto)","Chancado y transporte a la planta de Alumbrera","Molienda y flotación","Concentrado de cobre con oro y plata + concentrado de molibdeno","Transporte a puerto y exportación"],
+    prod:"Concentrado de cobre con oro y plata; concentrado de molibdeno",
+    nums:[["Mineral a extraer","780 Mt en 23 años de vida útil","bo1854_26"],["Producción total prevista","3,46 Mt de cobre, 2,34 Moz de oro, 41,2 Moz de plata y 99.854 t de molibdeno","bo1854_26"],["Exportaciones previstas","10,8 Mt de concentrado de cobre-oro-plata y 239.455 t de concentrado de molibdeno","bo1854_26"],["Inversión RIGI","US$ 6.394 M totales · US$ 3.311 M computables (Res. ME 1854/2026)","bo1854_26"],["Compromiso de los dos primeros años","US$ 771,5 M (111,6 + 659,9)","bo1854_26"],["Proveedores locales","54% de la inversión (mínimo exigido: 20%)","bo1854_26"],["Recursos","≈ 1.200 Mt: 0,47% Cu, 0,20 g/t Au, 3,4 g/t Ag, 0,03% Mo","glenMA"]],
+    hitos:[["18-ago-2025","Solicitud de adhesión al RIGI"],["30-sep-2026","El Comité Evaluador recomienda aprobarlo (adhesión)"],["27-oct-2026","Res. ME 1854/2026 en el Boletín Oficial"],["nov-2027","Inicio de la construcción"],["dic-2028","Plazo para la inversión mínima RIGI"],["oct-2031","Inicio de la operación"]],
+    src:["bo1854_26","glenMA"]
   },
   "mi-taca": {
     met:"Pórfido de cobre-oro-molibdeno a cielo abierto en la Puna salteña (First Quantum).",
@@ -284,10 +285,10 @@ const TEC = {
     met:"Oro refractario en carbonatos profundos, mina subterránea. Requiere oxidación a presión (POX), la primera planta de ese tipo en Sudamérica.",
     proc:["Mina subterránea","Molienda","Oxidación a presión en autoclave (POX)","Lixiviación con cianuro","Barras doré"],
     prod:"Doré de oro",
-    nums:[["Reservas","2,45 Moz (recursos 3,5 Moz)","gualca"],["Inversión","Más de US$ 660 M (RIGI)","gualca"],["Vida útil","Al menos 30 años","gualca"],["Calendario","Construcción hacia fines de 2027; producción hacia fines de 2029","gualca"],["Energía","Parque solar de 50 MW","gualca"]],
+    nums:[["Reservas","2,45 Moz (recursos 3,5 Moz)","gualca"],["Inversión RIGI","US$ 520 M computables · US$ 665 M totales (Res. ME 6/2026)","bo6_26"],["Vida útil","Al menos 30 años","gualca"],["Calendario","Construcción hacia fines de 2027; producción hacia fines de 2029","gualca"],["Energía","Parque solar de 50 MW","gualca"]],
     src:["gualca"]
   },
-  "mi-diab": {
+  "mi-diablillos": {
     met:"Plata-oro a cielo abierto con lixiviación en tanques (Puna salteña-catamarqueña).",
     proc:["Mina a cielo abierto (relación estéril/mineral 5,9)","Chancado y molienda","Lixiviación en tanques: 9.000 t/día","Recuperación de plata y oro","Barras doré"],
     prod:"Doré de plata y oro",

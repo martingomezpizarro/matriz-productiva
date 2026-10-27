@@ -1,4 +1,20 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Matriz Productiva Argentina</title><meta name="description" content="Mapa interactivo de la matriz productiva argentina: Oil &amp; Gas, minería y agro, con empresas, proyectos y estadísticas oficiales."><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="theme-color" content="#06182B"><meta name="apple-mobile-web-app-title" content="MPA"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Matriz Productiva Argentina</title><meta name="description" content="Mapa interactivo de la matriz productiva argentina: Oil &amp; Gas, minería y agro, con empresas, proyectos y estadísticas oficiales."><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/favicon.svg" type="image/svg+xml"><link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="theme-color" content="#06182B"><meta name="apple-mobile-web-app-title" content="MPA"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}/* ---------- panel de administración (#admin) ---------- */
+.btn-admin{display:inline-grid;place-items:center;width:36px;height:36px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;cursor:pointer;padding:0}
+#admin{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100%;height:100%}
+#admin::backdrop{background:rgba(10,16,15,.45)}
+#admin .adm{background:var(--panel);color:var(--ink);width:min(760px,calc(100% - 32px));max-height:calc(100% - 48px);overflow:auto;margin:24px auto;border-radius:14px;box-shadow:var(--shadow);padding:22px 24px}
+#admin h2{font-family:var(--f-display);text-transform:uppercase;font-size:26px;margin:0 0 4px}
+#admin h3{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+#admin .acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+#admin .act{display:block;border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--ink);background:var(--bg)}
+#admin .act b{display:block;font-size:14px;margin-bottom:4px}#admin .act span{font-size:12px;color:var(--muted)}
+#admin .act:hover{border-color:var(--ink)}
+#admin table{width:100%;border-collapse:collapse;font-size:13px}#admin td,#admin th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+#admin th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+#admin .ok{color:var(--op)}#admin .err{color:var(--og)}#admin .x{float:right;border:0;background:none;font-size:24px;color:var(--ink);cursor:pointer;line-height:1}
+#admin .kp{display:flex;gap:22px;flex-wrap:wrap}#admin .kp div b{font:700 28px var(--f-display);display:block}#admin .kp div span{font-size:12px;color:var(--muted)}
+#admin details{font-size:13px}#admin summary{cursor:pointer;color:var(--muted)}#admin ul{margin:6px 0;padding-left:18px}
+</style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -406,6 +422,7 @@ tbody tr:hover{background:var(--bg)}
       <button id="vCo" aria-pressed="false">Empresas</button>
       <button id="vSt" aria-pressed="false">Estadísticas</button>
     </div>
+    <button class="btn-admin" id="btnAdmin" hidden aria-label="Administración" title="Administración"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     <button class="btn-layers" id="btnLayers" aria-expanded="false">Capas</button>
   </header>
 
@@ -470,6 +487,7 @@ tbody tr:hover{background:var(--bg)}
     <div class="drawer" id="drawer" hidden></div>
   </main>
   <footer id="pie" data-modo="compacto"></footer>
+  <dialog id="admin" aria-label="Administración"></dialog>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
@@ -483,6 +501,7 @@ tbody tr:hover{background:var(--bg)}
 <script src="data/auto/mercado.js"></script>
 <script src="data/manual/estadisticas.js"></script>
 <script src="data/manual/fichas.js"></script>
+<script src="data/manual/rigi.js"></script>
 <script src="data/auto/siacam.js"></script>
 <script src="data/auto/viz.js"></script>
 <script src="data/auto/produccion.js"></script>

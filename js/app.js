@@ -76,6 +76,26 @@ function tecOf(a){
   );
 })();
 
+// ---- RIGI: registro oficial (data/manual/rigi.js, resoluciones del Boletín Oficial) ----
+const RIGI_EST = { aprobado:"Aprobado", presentado:"Presentado", en_evaluacion:"En evaluación" };
+const MESC = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const fechaC = f => { if(!f) return ""; const [y,m,d]=String(f).split("-"); return d?`${+d}-${MESC[m-1]}-${y}`:m?`${MESC[m-1]}-${y}`:y; };
+const musd = n => "US$ "+Math.round(n).toLocaleString("es-AR")+" M";
+(function(){
+  Object.assign(SRC, RIGI_SRC);
+  [...PTS,...LNS].forEach(a=>{
+    delete a.rigi;
+    let r = RIGI[a.id]; if(r && r.ref) r = RIGI[r.ref];
+    if(!r) return;
+    const st = RIGI_EST[r.st] + (r.res?` · Res. ME ${r.res}`:"") + (r.bo?` (B.O. ${fechaC(r.bo)})`:"");
+    const inv = r.comp&&r.total ? `${musd(r.total)} totales · ${musd(r.comp)} en activos computables`
+      : r.comp ? `${musd(r.comp)} en activos computables`
+      : r.total ? `${musd(r.total)}${r.verif==="empresa"?" (declarado por la empresa)":""}` : "Monto a confirmar en el texto de la resolución";
+    a.rigi = { st, inv, s:(r.src&&r.src[0])||"portalRIGI", det:r, v:r.total||r.comp||null, ok:r.st==="aprobado" };
+    a.src = [...new Set([...(a.src||[]), ...(r.src||[])])];
+  });
+})();
+
 const SECT = { og:{n:"Oil & Gas"}, mi:{n:"Minería"}, ag:{n:"Agro y ganadería"} };
 const ETAPAS = {
   og:[{k:"up",n:"Yacimientos y áreas",sym:"circle"},{k:"proc",n:"Plantas de gas y petroquímica",sym:"square"},{k:"ref",n:"Refinerías",sym:"diamond"},{k:"duct",n:"Gasoductos y oleoductos",sym:"line"},{k:"exp",n:"Terminales de exportación y GNL",sym:"triangle"}],
@@ -398,7 +418,7 @@ function tecBlock(a,T){
 function srcLink(k){ const x=SRC[k]; return `<a href="${x.u}" target="_blank" rel="noopener">${x.t} ↗</a>`; }
 function rigiLine(a){
   if(!a.rigi) return "";
-  const pres = /^Presentado/.test(a.rigi.st);
+  const pres = !a.rigi.ok;
   return `<div class="rigi"><span class="tag ${pres?"pres":""}">RIGI</span><span>${a.rigi.st} · ${a.rigi.inv}</span>${srcLink(a.rigi.s).replace('↗</a>','</a>').replace('<a ','<a style="color:var(--muted)" ')}</div>`;
 }
 const fmt = n => n.toLocaleString("es-AR",{maximumFractionDigits:1});
@@ -412,9 +432,18 @@ function pqBlock(o, title="Producción"){
     ${q.act?`<dt>${q.of?"Prensa":"Hoy"}</dt><dd>${q.act.t} ${srcLink(q.act.s)}</dd>`:""}
     ${q.meta?`<dt>Objetivo</dt><dd>${q.meta.t} ${srcLink(q.meta.s)}</dd>`:""}${bar}</dl></div>`;
 }
+function rigiBlock(a){
+  if(!a.rigi) return "";
+  const r=a.rigi.det, row=(l,v)=>v?`<dt>${l}</dt><dd>${v}</dd>`:"";
+  const verif = {bo_texto:"Texto completo de la resolución", bo_extracto:"Extracto de la resolución publicada", empresa:"Comunicado de la empresa (todavía sin resolución)", pendiente:"Resolución identificada; el monto falta confirmar en el texto"}[r.verif]||"";
+  return `<div class="proyblock"><p class="eyebrow">RIGI</p>${rigiLine(a)}<dl class="pq" style="margin-top:8px">
+    ${row("Vehículo",r.vpu)}${row("Categoría",r.tipo)}${row("Alcance",r.cap)}
+    ${row("Inversión mínima en 2 años",r.min2a?musd(r.min2a):"")}${row("Adhesión",fechaC(r.adh))}${row("Inicio de obra",fechaC(r.obra))}
+    ${row("Inicio de operación",fechaC(r.op))}${row("Plazo de inversión mínima",fechaC(r.limite))}${row("Fuente",verif)}</dl></div>`;
+}
 function proyBlock(a){
   if(!a.rigi && !a.proy) return "";
-  return `<div class="proyblock"><p class="eyebrow">Proyecciones públicas</p>${rigiLine(a)}${a.proy?`<ul class="proy">${a.proy.map(p=>`<li>${p.t} ${srcLink(p.s)}</li>`).join("")}</ul>`:""}</div>`;
+  return `${rigiBlock(a)}${a.proy?`<div class="proyblock"><p class="eyebrow">Proyecciones públicas</p><ul class="proy">${a.proy.map(p=>`<li>${p.t} ${srcLink(p.s)}</li>`).join("")}</ul></div>`:""}`;
 }
 function openCompany(k){
   const c=EMP[k]; const assets=ALL.filter(a=>a.emp.some(([x])=>x===k));
@@ -579,7 +608,7 @@ function mkBlock(k){
 function openProfile(k){
   st.coSel=k; if(st.view!=="co") setView("co");
   const c=EMP[k], xs=assetsOf(k).sort((a,b)=>secOrder.indexOf(a.s)-secOrder.indexOf(b.s)||["op","con","pro"].indexOf(a.st)-["op","con","pro"].indexOf(b.st));
-  const ok=xs.filter(a=>a.rigi&&!/^Presentado/.test(a.rigi.st)).length, pr=xs.filter(a=>a.rigi&&/^Presentado/.test(a.rigi.st)).length;
+  const ok=xs.filter(a=>a.rigi&&a.rigi.ok).length, pr=xs.filter(a=>a.rigi&&!a.rigi.ok).length;
   const provs=[...new Set(xs.map(a=>a.prov).filter(p=>p!=="Interprovincial"))];
   const srcs=[...new Set(xs.flatMap(a=>[...a.src,...(a.proy||[]).map(p=>p.s),...(a.rigi?[a.rigi.s]:[]),...(a.pq?[a.pq.of,a.pq.act,a.pq.meta].filter(Boolean).map(x=>x.s):[])]).concat(c.pqo?["cap4"]:[],(c.proy||[]).map(p=>p.s),c.pq?[c.pq.act,c.pq.meta].filter(Boolean).map(x=>x.s):[],MK[k]?["yahoo"]:[]))];
   const el=document.getElementById("coProf");
@@ -600,7 +629,7 @@ function openProfile(k){
       <div class="stat"><b>${xs.length}</b><span>Activos en el mapa</span></div>
       <div class="stat"><b>${xs.filter(a=>a.st==="op").length}</b><span>En operación</span></div>
       <div class="stat"><b>${xs.filter(a=>a.st!=="op").length}</b><span>En construcción o proyecto</span></div>
-      <div class="stat"><b>${ok}<span style="font-size:18px;color:var(--muted)">${pr?` + ${pr}`:""}</span></b><span>RIGI aprobados${pr?" + presentados":""}</span></div>
+      <div class="stat"><b>${ok}<span style="font-size:18px;color:var(--muted)">${pr?` + ${pr}`:""}</span></b><span>RIGI aprobados${pr?" + en trámite":""}</span></div>
     </div>
     ${mkBlock(k)}
     ${(c.pq||c.pqo)?pqBlock({pq:{...(c.pq||{}),...(c.pqo?{of:c.pqo}:{})}},"Producción de la compañía"):""}
@@ -618,7 +647,7 @@ function openProfile(k){
       </div>`).join("")}
     </div>
     <div class="proyblock"><p class="eyebrow">Fuentes</p><ul class="src">${srcs.map(x=>`<li><a href="${SRC[x].u}" target="_blank" rel="noopener">${SRC[x].t}</a></li>`).join("")}${c.w?`<li><a href="${c.w}" target="_blank" rel="noopener">${c.n} – sitio institucional</a></li>`:""}</ul></div>
-    <p class="note">Los montos RIGI son el total de cada proyecto, no la participación de esta empresa. Cuando las fuentes difieren se muestran ambos valores.</p>`;
+    <p class="note">Los montos RIGI son los de cada resolución del Boletín Oficial para el proyecto completo, no la participación de esta empresa.</p>`;
   document.getElementById("coWrap").classList.add("has-sel");
   el.scrollTop=0; renderCoList();
   document.getElementById("coBack").onclick=()=>{ st.coSel=null; document.getElementById("coWrap").classList.remove("has-sel"); renderCoList(); };
@@ -854,15 +883,14 @@ function rigiRows(){
   const seen=new Set(), out=[];
   ALL.filter(a=>a.rigi).forEach(a=>{
     const key=a.rigi.st+"|"+a.rigi.inv; if(seen.has(key)) return; seen.add(key);
-    const m=a.rigi.inv.match(/US\$\s*([\d.]+(?:,\d+)?)\s*M/); if(!m) return;
-    const v=+m[1].replace(/\./g,"").replace(",",".");
-    out.push({n:a.n,id:a.id,s:a.s,prov:RIGI_PROV[a.prov]||a.prov,v,ok:!/^Presentado/.test(a.rigi.st)});
+    if(!a.rigi.v) return;
+    out.push({n:a.n,id:a.id,s:a.s,prov:RIGI_PROV[a.prov]||a.prov,v:a.rigi.v,ok:a.rigi.ok});
   });
   return out;
 }
 function mi4(box){
   const mode=VZ.rigi||"all";
-  box.insertAdjacentHTML("beforeend",`<div class="vchips">${[["all","Aprobados y presentados"],["ok","Sólo aprobados"]].map(([k,n])=>`<button class="chip" data-rigi="${k}" aria-pressed="${k===mode}">${n}</button>`).join("")}</div>`);
+  box.insertAdjacentHTML("beforeend",`<div class="vchips">${[["all","Aprobados y en trámite"],["ok","Sólo aprobados"]].map(([k,n])=>`<button class="chip" data-rigi="${k}" aria-pressed="${k===mode}">${n}</button>`).join("")}</div>`);
   box.querySelectorAll("[data-rigi]").forEach(b=>b.onclick=()=>{ VZ.rigi=b.dataset.rigi; box.innerHTML=""; mi4(box); });
   const rows=rigiRows().filter(r=>mode==="all"||r.ok);
   const secs=["og","mi","ag"].filter(s=>rows.some(r=>r.s===s));
@@ -874,7 +902,7 @@ function mi4(box){
   const S=d3.stack().keys(secs)(P);
   F.g.selectAll(".s").data(S).join("g").style("fill",d=>cvar(d.key)).selectAll("rect").data(d=>d.map(v=>({...v,k:d.key}))).join("rect")
     .attr("y",d=>y(d.data.p)).attr("height",y.bandwidth()).attr("x",d=>x(d[0])).attr("width",d=>Math.max(0,x(d[1])-x(d[0])-(d[1]>d[0]?1.5:0)))
-    .on("pointermove",(ev,d)=>tipOn(ev,`<b>${d.data.p}</b>${rows.filter(r=>r.prov===d.data.p&&r.s===d.k).map(r=>trow(r.n+(r.ok?"":" (presentado)"),cvar(r.s),"US$ "+nf(r.v)+" M")).join("")}`)).on("pointerleave",tipOff);
+    .on("pointermove",(ev,d)=>tipOn(ev,`<b>${d.data.p}</b>${rows.filter(r=>r.prov===d.data.p&&r.s===d.k).map(r=>trow(r.n+(r.ok?"":" (en trámite)"),cvar(r.s),"US$ "+nf(r.v)+" M")).join("")}`)).on("pointerleave",tipOff);
   F.g.selectAll(".l").data(P).join("text").attr("class","lbl mut").attr("x",-8).attr("text-anchor","end").attr("y",r=>y(r.p)+y.bandwidth()/2+4).text(r=>r.p);
   F.g.selectAll(".v").data(P).join("text").attr("class","val").attr("x",r=>x(r.t)+5).attr("y",r=>y(r.p)+y.bandwidth()/2+4).text(r=>"US$ "+nf(r.t)+" M");
 }
@@ -1123,7 +1151,7 @@ const VIZ_DEF = {
     {id:"mi1",f:mi1,t:"Embudo de proyectos por etapa y mineral",tag:"Embudo",sub:"Cantidad de proyectos de la cartera oficial (SIACAM), de producción a prospección",src:["siacam"]},
     {id:"mi2",f:mi2,t:"Exportaciones mineras por mineral",tag:"Barras apiladas",sub:"Millones de US$ por año. «Resto» sólo está publicado para 2024 y 2025",src:["caem26"]},
     {id:"mi3",f:mi3,t:"Oro: precio internacional vs. exportaciones",tag:"Índice",sub:"Índice 2019 = 100. Si las exportaciones suben menos que el precio, cayó el volumen exportado",src:["avGold","caem26"]},
-    {id:"mi4",f:mi4,t:"Inversión RIGI por provincia y sector",tag:"Barras apiladas",sub:"Millones de US$ informados por proyecto (monto total, no participación de cada empresa)",src:["rigiOk","rigiAll"]},
+    {id:"mi4",f:mi4,t:"Inversión RIGI por provincia y sector",tag:"Barras apiladas",sub:"Millones de US$ por proyecto según las resoluciones del Boletín Oficial (inversión total o, si no la informa, activos computables)",src:["portalRIGI"]},
     {id:"mi5",f:mi5,t:"Empleo minero por provincia",tag:"Coroplético",sub:"Puestos de trabajo directos, promedio 2025",src:["caem26"],wide:true}
   ],
   ag:[
@@ -1197,5 +1225,47 @@ document.getElementById("nTot").textContent = ALL.length;
 { const f=META.actualizado.split("-"); const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"]; document.getElementById("upd").textContent = `${+f[2]}-${M[+f[1]-1]}-${f[0]}`; }
 render();
 try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="stats") setView(v); }catch(e){}
+// ---------- Panel de administración ----------
+// Se abre con …/#admin (queda recordado en este navegador y aparece el botón «Admin»).
+// Sólo muestra estado y atajos: las acciones piden el login de GitHub o de Claude.
+const REPO = "martingomezpizarro/matriz-productiva";
+const PASO_N = { siacam:"Minería – cartera SIACAM", mercado:"Cotizaciones (Yahoo Finance)", precios:"Precios internacionales", comercio:"Comercio exterior (INDEC)", emae:"Actividad (EMAE)", faena:"Faena (MAGyP)", provincias:"Producción por provincia", agricola:"Estimaciones agrícolas (MAGyP)", energia:"Energía (Secretaría de Energía)" };
+const fichaIncompleta = a => a.st!=="exp" && (!TEC[a.id] || !TEC[a.id].nums);
+function openAdmin(){
+  try{ localStorage.setItem("mp-admin","1"); }catch(e){}
+  document.getElementById("btnAdmin").hidden=false;
+  const dlg=document.getElementById("admin");
+  const rg=Object.entries(RIGI).filter(([,r])=>!r.ref);
+  const ap=rg.filter(([,r])=>r.st==="aprobado"), tr=rg.filter(([,r])=>r.st!=="aprobado");
+  const tot=d3.sum(ap,([,r])=>r.total||r.comp||0);
+  const ult=[...ap].filter(([,r])=>r.bo).sort((a,b)=>String(b[1].bo).localeCompare(String(a[1].bo))).slice(0,6);
+  const inc=ALL.filter(fichaIncompleta).sort((a,b)=>(b.rigi?1:0)-(a.rigi?1:0)||["op","con","pro"].indexOf(a.st)-["op","con","pro"].indexOf(b.st));
+  const pasos=Object.entries((META&&META.pasos)||{});
+  dlg.innerHTML=`<div class="adm"><button class="x" aria-label="Cerrar">×</button>
+    <h2>Administración</h2><p style="margin:0;color:var(--muted);font-size:13px">Estado de los datos y atajos para actualizarlos.</p>
+    <h3>Actualizar</h3><div class="acts">
+      <a class="act" href="https://claude.ai/code" target="_blank" rel="noopener"><b>RIGI y fichas → Claude</b><span>Corre solo todos los días a las 7:56. Para forzarlo: Claude → tareas programadas → «Matriz Productiva: RIGI y fichas» → ejecutar ahora.</span></a>
+      <a class="act" href="https://github.com/${REPO}/actions/workflows/actualizar-datos.yml" target="_blank" rel="noopener"><b>Números → GitHub Actions</b><span>SIACAM, cotizaciones, INDEC, MAGyP. Corre el día 1 de cada mes; botón «Run workflow» para correrlo ya.</span></a>
+      <a class="act" href="https://github.com/${REPO}/blob/main/scripts/actualizar-energia.bat" target="_blank" rel="noopener"><b>Energía → tu PC</b><span>El portal de la Secretaría bloquea servidores de afuera: correr scripts/actualizar-energia.bat en una PC en Argentina.</span></a>
+      <a class="act" href="https://github.com/${REPO}/edit/main/data/manual/rigi.js" target="_blank" rel="noopener"><b>Editar RIGI a mano</b><span>Abre data/manual/rigi.js en GitHub para corregir o sumar un proyecto.</span></a>
+    </div>
+    <h3>RIGI · revisado el ${fechaC(RIGI_META.actualizado)}</h3>
+    <div class="kp"><div><b>${ap.length}</b><span>aprobados en el mapa</span></div><div><b>${tr.length}</b><span>en trámite</span></div><div><b>${musd(tot)}</b><span>inversión de los aprobados</span></div></div>
+    <table style="margin-top:10px"><tr><th>Último publicado</th><th>Resolución</th><th>Inversión</th></tr>${ult.map(([k,r])=>`<tr><td><a href="#" data-adm="${k}">${byId[k]?byId[k].n:k}</a></td><td>ME ${r.res} · ${fechaC(r.bo)}</td><td>${musd(r.total||r.comp)}</td></tr>`).join("")}</table>
+    <h3>Datos automáticos · última corrida ${fechaC(META.actualizado)}</h3>
+    <table><tr><th>Paso</th><th>Fecha</th><th>Resultado</th></tr>${pasos.map(([k,v])=>`<tr><td>${PASO_N[k]||k}</td><td>${fechaC(v.fecha)}</td><td class="${v.ok?"ok":"err"}">${v.ok?"✓ ":"✗ "}${v.detalle||v.error||""}</td></tr>`).join("")}</table>
+    <h3>Fichas incompletas · ${inc.length} de ${ALL.filter(a=>a.st!=="exp").length}</h3>
+    <p style="margin:0 0 6px;font-size:13px;color:var(--muted)">Activos visibles sin números propios. La tarea diaria completa hasta 5 por día, empezando por los que tienen RIGI.</p>
+    <details><summary>Ver la lista</summary><ul>${inc.map(a=>`<li><a href="#" data-adm="${a.id}">${a.n}</a> <small style="color:var(--muted)">${SECT[a.s].n} · ${ESTADO[a.st]}${a.rigi?" · RIGI":""}</small></li>`).join("")}</ul></details>
+  </div>`;
+  dlg.querySelector(".x").onclick=()=>dlg.close();
+  dlg.onclick=e=>{ if(e.target===dlg) dlg.close(); };
+  dlg.querySelectorAll("[data-adm]").forEach(b=>b.onclick=e=>{ e.preventDefault(); dlg.close(); setView("map"); select(b.dataset.adm); });
+  if(!dlg.open) dlg.showModal();
+}
+document.getElementById("btnAdmin").onclick=openAdmin;
+try{ if(localStorage.getItem("mp-admin")==="1") document.getElementById("btnAdmin").hidden=false; }catch(e){}
+window.addEventListener("hashchange",()=>{ if(location.hash==="#admin") openAdmin(); });
+if(location.hash==="#admin") openAdmin();
 if(location.hash==="#empresas") setView("co");
 if(location.hash==="#estadisticas") setView("stats");
