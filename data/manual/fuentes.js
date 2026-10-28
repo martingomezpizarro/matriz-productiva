@@ -115,4 +115,9 @@ Object.assign(SRC, {
   cerrQ3: { t:"Cerrado Gold – Producción del 3T 2026 en Minera Don Nicolás (comunicado del 19-oct-2026)", u:"https://www.taiwannews.com.tw/en/news/6460759" },
   pbb25:  { t:"Consorcio de Gestión del Puerto de Bahía Blanca – Estadísticas de tráfico, diciembre 2025", u:"https://puertobahiablanca.com/estadisticaspuerto/2025/12/trafico1225.pdf" },
   pgCalc: { t:"Patagonia Gold – Calcatreu: fin de la suspensión y tercer despacho de doré (27-ago-2026)", u:"https://www.bnnbloomberg.ca/press-releases/2026/08/27/patagonia-gold-announces-lifting-of-temporary-suspension-at-calcatreu-and-third-dore-dispatch/" }
+  ,
+  // --- 28-oct-2026 ---
+  rnVmos: { t:"Gobierno de Río Negro – Continúa la obra del VMOS tras completarse la última soldadura automática (3-nov-2025)", u:"https://rionegro.gov.ar/articulo/56495/continua-la-obra-del-vmos-tras-completarse-la-ultima-soldadura-automatica" },
+  crGpnk: { t:"Casa Rosada – Gasoducto Presidente Néstor Kirchner (hoy Perito Moreno), tramo I: ficha de la obra", u:"https://www.casarosada.gob.ar/pdf/Brief%20GPNK.pdf" },
+  arcaTim:{ t:"Boletín Oficial – ARCA, Res. 32/2026: depósito fiscal de Terminal Timbúes S.A. (2-oct-2026)", u:"https://www.boletinoficial.gob.ar/seccion/primera/20261002" }
 });

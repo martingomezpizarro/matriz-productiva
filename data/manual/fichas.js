@@ -49,7 +49,9 @@ const TEC = {
   "og-fp":  VM({ prod:"Gas seco (metano) de la ventana gasífera de Vaca Muerta y algo de condensado.", nums: fr(16,2493,49,51,10621,83998), nota:"Desarrollado para abastecer el gasoducto Perito Moreno (ex GPNK)." }),
   "og-ape": VM({ prod:"Gas y condensado de la ventana gasífera de Vaca Muerta.", nums: fr(12,2992,49,61,9717,71899) }),
   "og-lll": VM({ prod:"Gas convencional (yacimiento histórico, descubierto en 1977) y nuevos pozos de Vaca Muerta.", nums: fr(3,3100,51,61,12087,70770), nota:"Fue el mayor yacimiento de gas del país; hoy declina y se reconvierte a shale." }),
-  "og-ltoldos": VM({ prod:OIL, nota:"Desarrollo en etapa de proyecto: los números de fractura y producción aparecerán cuando empiece a perforar en serie." }),
+  "og-ltoldos": VM({ prod:OIL,
+    nums:[["Inversión total RIGI","US$ 6.432 M","bo1771_26"],["Desarrollo","380 pozos horizontales en 78 km²","bo1771_26"],["Horizonte del programa","Hasta 2054, en tres tramos","bo1771_26"],["Vehículo RIGI","UT RIGI Los Toldos (Tecpetrol + Gas y Petróleo del Neuquén)","bo1771_26"]],
+    nota:"Aprobado en el RIGI en oct-2026. Los números de fractura y producción aparecerán cuando empiece a perforar en serie.", src:["bo1771_26","seConc"] }),
   "og-cd": {
     met:"Convencional, cuenca del Golfo San Jorge: miles de pozos verticales con recuperación secundaria (inyección de agua para empujar el crudo) y pilotos de recuperación terciaria con polímeros.",
     proc:["Pozos verticales con bombeo mecánico","Inyección de agua en capas productoras","Baterías y planta de tratamiento","Oleoducto a terminal Caleta Córdova","Exportación o refinerías locales"],
@@ -108,7 +110,11 @@ const TEC = {
   "og-rcd": { met:TEC_GEN["og-ref"].met, proc:TEC_GEN["og-ref"].proc, prod:TEC_GEN["og-ref"].prod, nums:[["Crudo procesado (may–jul 2026)","0 bbl/d: la Secretaría no registra crudo procesado en el período","seRefP"]], nota:"La caída de la producción del Noroeste dejó a la refinería sin crudo propio de la cuenca.", src:["seRefP"] },
   "og-rcamp": { met:TEC_GEN["og-ref"].met, proc:TEC_GEN["og-ref"].proc, prod:TEC_GEN["og-ref"].prod, nums:[["Crudo procesado (may–jul 2026)","≈ 94.000 bbl/d, la tercera del país","seRefP"]], src:["seRefP"] },
   // ---------------- OIL & GAS · EXPORTACIÓN ----------------
-  "og-pc": { met:"Oleoducto + terminal de exportación de crudo (proyecto VMOS).", proc:["Oleoducto de ~437 km desde Allen (Río Negro)","Tanques en Punta Colorada","Monoboyas en aguas profundas","Buques VLCC"], prod:"Crudo Medanito de Vaca Muerta para exportación", src:["vmosAmb","ypf2T"] },
+  "og-pc": { met:"Terminal de exportación de crudo en aguas profundas, cabecera marítima del oleoducto VMOS: playa de tanques en tierra y monoboyas mar adentro.",
+    proc:["Llegada del oleoducto VMOS desde Allen (437 km)","Playa de tanques en Punta Colorada","Bombeo a líneas submarinas","Monoboyas mar adentro","Carga de buques de gran porte"],
+    prod:"Crudo Medanito de Vaca Muerta para exportación",
+    nums:[["Almacenaje","6 tanques de 120.000 m³ cada uno","rnVmos"],["Capacidad del sistema","390.000 bbl/d iniciales, ampliable a 550.000 bbl/d en 2027","rnVmos"],["Capacidad base en la resolución RIGI","377.400 bbl/d","bo302_25"],["Inversión computable RIGI (oleoducto + terminal)","US$ 2.486 M","bo302_25"]],
+    src:["rnVmos","bo302_25","vmosAmb"] },
   "og-lng": {
     met:"Licuefacción flotante (FLNG): el gas se enfría a –162 °C dentro de un buque y se carga en metaneros.",
     proc:["Gas de Vaca Muerta","Gasoducto dedicado al Golfo San Matías","Pretratamiento en el buque","Licuefacción a –162 °C","Carga en metaneros para exportar"],
@@ -191,6 +197,22 @@ const TEC = {
   },
 
 
+  // ---------------- Fichas completadas el 28-oct-2026 ----------------
+  "ln-vmos": { met:"Oleoducto troncal de exportación: el crudo de Vaca Muerta se impulsa con estaciones de bombeo hasta una terminal de aguas profundas con monoboyas.",
+    proc:["Cabecera en Allen (Río Negro)","Oleoducto troncal de 437 km hasta Punta Colorada","4 estaciones de bombeo y 28 válvulas de bloqueo","Playa de tanques en Punta Colorada","Monoboyas mar adentro y carga de buques"],
+    prod:"Crudo Medanito de Vaca Muerta para exportación",
+    nums:[["Longitud","437 km (Allen – Punta Colorada)","rnVmos"],["Capacidad","390.000 bbl/d iniciales, ampliable a 550.000 bbl/d en 2027","rnVmos"],["Capacidad base en la resolución RIGI","377.400 bbl/d","bo302_25"],["Bombeo","4 estaciones de bombeo y 28 válvulas de bloqueo","rnVmos"],["Almacenaje en destino","6 tanques de 120.000 m³","rnVmos"],["Inversión computable RIGI","US$ 2.486 M","bo302_25"]],
+    src:["rnVmos","bo302_25"] },
+  "ln-gpm": { met:"Gasoducto troncal de alta presión: el gas acondicionado en Tratayén se impulsa con plantas compresoras hasta el nodo Saturno (Salliqueló), donde empalma con el sistema troncal de TGS.",
+    proc:["Acondicionamiento del gas en Tratayén (Neuquén)","Planta compresora cabecera Tratayén","Ducto de 36\" por Río Negro y La Pampa","Planta compresora Saturno (Salliqueló, Buenos Aires)","Entrega al sistema troncal"],
+    prod:"Gas natural de Vaca Muerta",
+    nums:[["Longitud","573 km (Tratayén – Saturno)","crGpnk"],["Diámetro","36 pulgadas","crGpnk"],["Capacidad con compresión","21 MMm³/d","crGpnk"],["Construcción","10 meses, a cargo de ENARSA: UT Techint-Sacde (440 km) y BTU (133 km)","crGpnk"],["Ampliación RIGI (TGS)","US$ 550 M totales · US$ 513 M computables","bo676_26"]],
+    src:["crGpnk","bo676_26","seSIG"] },
+  "ag-tmult": { met:"Terminal portuaria multipropósito sobre la Vía Navegable Troncal (río Paraná): granel sólido, granos, carga general y líquidos en un mismo predio.",
+    proc:["Ingreso de camiones y balanza","Depósito fiscal para graneles bajo control aduanero","Almacenaje en celdas, silos y tanques","Muelle sobre el Paraná","Carga y descarga de buques (importación y exportación)"],
+    prod:"Graneles sólidos (fertilizantes y granos), carga general y líquidos",
+    nums:[["Inversión computable RIGI","US$ 277 M","bo1842_25"],["Predio","186 ha","bo1842_25"],["Tanques de líquidos","Hasta 120.000 m³","bo1842_25"],["Depósito fiscal habilitado por ARCA","≈ 29.450 m² (celda techada y plazoleta descubierta) para graneles sólidos","arcaTim"]],
+    src:["bo1842_25","arcaTim","bcrPto"] },
   // ---------------- Fichas completadas el 27-oct-2026 ----------------
   "ln-tgnn": { met:"Gasoducto troncal de alta presión operado por TGN; el gas avanza impulsado por plantas compresoras a lo largo del trazado.",
     proc:["Ingreso de gas en Campo Durán (Salta) y, con la reversión, desde la cuenca Neuquina","Plantas compresoras a lo largo del trazado","Medición y entrega a distribuidoras, usinas e industrias","Llegada al nodo San Jerónimo (Santa Fe)"],
