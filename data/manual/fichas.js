@@ -56,7 +56,8 @@ const TEC = {
     met:"Convencional, cuenca del Golfo San Jorge: miles de pozos verticales con recuperación secundaria (inyección de agua para empujar el crudo) y pilotos de recuperación terciaria con polímeros.",
     proc:["Pozos verticales con bombeo mecánico","Inyección de agua en capas productoras","Baterías y planta de tratamiento","Oleoducto a terminal Caleta Córdova","Exportación o refinerías locales"],
     prod:"Crudo Escalante: mediano-pesado (~24° API), muy demandado por refinerías de Asia y EE.UU.",
-    nota:"Es el mayor yacimiento convencional del país; produce más del 90% de su crudo sin fractura.", src:["cap4"]
+    nums:[["Producción (ago-2026)","64.737 bbl/d de petróleo y 4,76 MMm³/d de gas, sumando la parte de Chubut y la de Santa Cruz","cap4"],["Ranking","4ª área petrolera del país y primera convencional (ago-2026)","cap4"],["Operador","Pan American Energy","seConc"]],
+    nota:"Es el mayor yacimiento convencional del país; produce más del 90% de su crudo sin fractura.", src:["cap4","seConc"]
   },
   "og-fenix": {
     met:"Gas convencional costa afuera: plataforma fija no tripulada en 70 m de agua, conectada a las instalaciones existentes de Cuenca Marina Austral 1.",
@@ -142,9 +143,9 @@ const TEC = {
     met:"Salmuera con extracción directa de litio (DLE) en el Salar del Rincón: sin pozas de evaporación de largo plazo y con reinyección de la salmuera.",
     proc:["Bombeo de salmuera","Reactores DLE","Purificación y concentración","Planta de carbonato grado batería","Exportación"],
     prod:"Carbonato de litio grado batería",
-    nums:[["Planta inicial","3.000 t/año (385 t en el 2T 2026, en estabilización)","rtQ2"],["Capacidad total","60.000 t/año (3k inicial + 50k planta grande + 7k optimización)","rtQ2"],["Inversión","US$ 2,5 mil M (RIGI)","rtQ2"],["Producción plena","Primera producción de la planta grande en 2028 y 3 años de rampa","rtQ2"]],
+    nums:[["Planta inicial","3.000 t/año (385 t en el 2T 2026, en estabilización)","rtQ2"],["Capacidad total","60.000 t/año (3k inicial + 50k planta grande + 7k optimización)","rtQ2"],["Inversión RIGI","US$ 2.744 M totales · US$ 2.299 M computables; US$ 1.294 M en los dos primeros años (Res. ME 735/2025)","bo735_25"],["Producción plena","Primera producción de la planta grande en 2028 y 3 años de rampa","rtQ2"]],
     hitos:[["2026","Planta inicial (3 kt) en rampa"],["2028","Primer litio de la planta de 50 kt"],["2031","Capacidad plena 60 kt (estimado por la rampa de 3 años)"]],
-    src:["rtQ2"]
+    src:["rtQ2","bo735_25"]
   },
   "mi-olaroz": {
     met:"Salmuera con pozas de evaporación solar y planta de carbonato (la primera operación de litio de Jujuy).",
@@ -196,6 +197,30 @@ const TEC = {
     src:["galan"]
   },
 
+
+  // ---------------- Fichas completadas el 29-oct-2026 ----------------
+  "ln-gsm": {
+    met:"Gasoducto troncal dedicado a la exportación: lleva gas seco de Vaca Muerta a los buques de licuefacción flotante (FLNG) del Golfo San Matías, sin pasar por el sistema regulado.",
+    proc:["Predio cabecera Tratayén (gas acondicionado)","Planta compresora de cabecera","Gasoducto troncal de 36\" (≈ 480 km)","Planta compresora San Antonio Oeste (repotenciada)","Entrega a los buques FLNG del Golfo San Matías"],
+    prod:"Gas natural seco para licuefacción",
+    nums:[["Longitud y diámetro","≈ 480 km · 36\"","bo873_26"],["Capacidad de transporte","27 MMm³/d","bo873_26"],["Compresión","Planta compresora nueva de 60.000 HP + repotenciación de San Antonio Oeste","bo873_26"],["Inversión RIGI","US$ 1.300 M totales; US$ 955 M computables en los dos primeros años","bo873_26"],["Vehículo","San Matías Pipeline S.A. (SMP)","bo873_26"]],
+    src:["bo873_26"]
+  },
+  "ag-fertilpampa": {
+    met:"Fertilizantes nitrogenados a partir de gas natural de Vaca Muerta, con escala de exportación.",
+    proc:["Gas natural","Reformado con vapor → gas de síntesis (hidrógeno)","Síntesis de amoníaco (3.450 t/día)","Síntesis de urea en dos trenes gemelos","Granulación (2 × 3.000 t/día)","Almacenaje y despacho por buque en Ingeniero White"],
+    prod:"Urea granulada (46% N) y amoníaco",
+    nums:[["Urea","2 plantas de 3.000 t/día cada una","bo1468_26"],["Amoníaco","3.450 t/día","bo1468_26"],["Inversión RIGI","US$ 2.693 M en activos computables (etapa 1: US$ 1.105 M · etapa 2: US$ 1.588 M)","bo1468_26"],["Compromiso dos primeros años","US$ 1.666 M","bo1468_26"],["Predio","≈ 80 ha en el Puerto de Ingeniero White","bo1468_26"]],
+    hitos:[["17-jul-2026","Contrato EPC firmado; arranca la etapa 1 (ingeniería y compras)"],["3-ago-2026","Adhesión al RIGI"],["7-sep-2026","Res. ME 1468/2026 en el Boletín Oficial"],["dic-2027","Fin de la etapa 1"],["1-dic-2029","Plazo para la inversión mínima RIGI"],["16-dic-2029","Fin de la etapa 2 (montaje, comisionado y puesta en marcha)"]],
+    src:["bo1468_26"]
+  },
+  "ag-qq": {
+    met:"Puerto de ultramar administrado por un consorcio público (Consorcio de Gestión del Puerto Quequén), en la desembocadura del río Quequén Grande; terminales de granos del sudeste bonaerense.",
+    proc:["Llegada de camiones desde el sudeste bonaerense","Calado y clasificación","Acopio en silos y celdas de las terminales","Cinta y cargador de buques","Navegación por el canal de acceso al Atlántico"],
+    prod:"Soja, maíz, trigo y cebada (forrajera y cervecera) a exportación",
+    nums:[["Cargas 2025","9.009.768 t, récord histórico","pqq25"],["Buques 2025","370 (eslora promedio 208 m; máxima 235 m)","pqq25"],["Calado máximo operado","44,1 pies","pqq25"],["Principales granos 2025","Soja 2,41 Mt · maíz 2,04 Mt · trigo 1,53 Mt · cebada forrajera 1,30 Mt · cebada cervecera 0,70 Mt","pqq25"]],
+    src:["pqq25","pqqEst"]
+  },
 
   // ---------------- Fichas completadas el 28-oct-2026 ----------------
   "ln-vmos": { met:"Oleoducto troncal de exportación: el crudo de Vaca Muerta se impulsa con estaciones de bombeo hasta una terminal de aguas profundas con monoboyas.",
@@ -388,7 +413,7 @@ const TEC = {
     met:"Plata-oro a cielo abierto con lixiviación en tanques (Puna salteña-catamarqueña).",
     proc:["Mina a cielo abierto (relación estéril/mineral 5,9)","Chancado y molienda","Lixiviación en tanques: 9.000 t/día","Recuperación de plata y oro","Barras doré"],
     prod:"Doré de plata y oro",
-    nums:[["Producción años 1–5","13,9 Moz de plata y 89.000 oz de oro por año (~20 Moz AgEq)","abraDFS"],["Promedio vida útil","5,9 Moz de plata y 62.000 oz de oro por año","abraDFS"],["Inversión inicial","US$ 722 M","abraDFS"],["VAN 5% / TIR","US$ 3.000 M · 41,9% (caso base)","abraDFS"],["Vida útil","25 años","abraDFS"]],
+    nums:[["Producción años 1–5","13,9 Moz de plata y 89.000 oz de oro por año (~20 Moz AgEq)","abraDFS"],["Promedio vida útil","5,9 Moz de plata y 62.000 oz de oro por año","abraDFS"],["Inversión inicial","US$ 722 M","abraDFS"],["Inversión RIGI","US$ 482 M computables; US$ 352 M en los dos primeros años (Res. ME 562/2026)","bo562_26"],["VAN 5% / TIR","US$ 3.000 M · 41,9% (caso base)","abraDFS"],["Vida útil","25 años","abraDFS"]],
     hitos:[["3T 2026","Obras tempranas"],["2T 2027","Decisión de construcción"],["2029","Primera producción"]],
     src:["abraDFS"]
   },

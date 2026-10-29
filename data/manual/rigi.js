@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-10-28",
+  actualizado: "2026-10-29",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -37,14 +37,14 @@ const BO = (fecha, aviso) => aviso
 const RIGI_SRC = {
   bo302_25:  { t: "Boletín Oficial – Res. ME 302/2025 (VMOS), 21-mar-2025", u: BO("2025-03-21", 322830) },
   bo559_25:  { t: "Boletín Oficial – Res. ME 559/2025 (Southern Energy, FLNG), 5-may-2025", u: "https://www.boletinoficial.gob.ar/detalleAviso/primera/324772/1" },
-  bo735_25:  { t: "Boletín Oficial – Res. ME 735/2025 (Rincón, Rio Tinto), jun-2025", u: "https://www.argentina.gob.ar/economia/rigi" },
+  bo735_25:  { t: "Boletín Oficial – Res. ME 735/2025 (Rincón, Rio Tinto), 3-jun-2025", u: BO("2025-06-03", 326364) },
   bo1271_25: { t: "Boletín Oficial – Res. ME 1271/2025 (Hombre Muerto Oeste, Galan), ago-2025", u: "https://www.argentina.gob.ar/economia/rigi" },
   bo1553_25: { t: "Boletín Oficial – Res. ME 1553/2025 (Los Azules), 14-oct-2025", u: BO("2025-10-14") },
   bo1842_25: { t: "Boletín Oficial – Res. ME 1842/2025 (Terminal Timbúes), 20-nov-2025", u: BO("2025-11-20", 334814) },
   bo6_26:    { t: "Boletín Oficial – Res. ME 6/2026 (Nuevo Gualcamayo), 15-ene-2026", u: BO("2026-01-15", 337468) },
   bo413_26:  { t: "Boletín Oficial – Res. ME 413/2026 (Veladero, fases 8 y 9), 1-abr-2026", u: "https://www.boletinoficial.gob.ar/pdf/aviso/primera/340249/20260401" },
   bo431_26:  { t: "Boletín Oficial – Res. ME 431/2026 (Fénix, expansión 1B), 6-abr-2026", u: BO("2026-04-06", 340329) },
-  bo562_26:  { t: "Boletín Oficial – Res. ME 562/2026 (Diablillos), may-2026", u: "https://www.argentina.gob.ar/economia/rigi" },
+  bo562_26:  { t: "Boletín Oficial – Res. ME 562/2026 (Diablillos), 11-may-2026", u: BO("2026-05-11") },
   bo676_26:  { t: "Boletín Oficial – Res. ME 676/2026 (ampliación Gasoducto Perito Moreno, TGS), 13-may-2026", u: BO("2026-05-13") },
   bo801_26:  { t: "Boletín Oficial – Res. ME 801/2026 (PSJ Cobre Mendocino), 28-may-2026", u: "https://www.boletinoficial.gob.ar/pdf/aviso/primera/342483/20260528" },
   bo825_26:  { t: "Boletín Oficial – Res. ME 825/2026 (ampliación Cauchari-Olaroz), 5-jun-2026", u: BO("2026-06-05", 342818) },
@@ -54,6 +54,7 @@ const RIGI_SRC = {
   bo1154_26: { t: "Boletín Oficial – Res. ME 1154/2026 (Vicuña), 30-jul-2026", u: "https://www.boletinoficial.gob.ar/pdf/aviso/primera/345167/20260730" },
   bo1157_26: { t: "Boletín Oficial – Res. ME 1157/2026 (Sal de Oro II, POSCO), 31-jul-2026", u: "https://www.boletinoficial.gob.ar/pdf/aviso/primera/345279/20260731" },
   bo1381_26: { t: "Boletín Oficial – Res. ME 1381/2026 (ampliación Mega), 26-ago-2026", u: "https://www.boletinoficial.gob.ar/pdf/aviso/primera/346397/20260826" },
+  bo1468_26: { t: "Boletín Oficial – Res. ME 1468/2026 (Fertilizantes, Fértil Pampa), 7-sep-2026", u: BO("2026-09-07", 346966) },
   bo1771_26: { t: "Boletín Oficial – Res. ME 1771/2026 (Los Toldos II Este), 9-oct-2026", u: BO("2026-10-09") },
   bo1808_26: { t: "Boletín Oficial – Res. ME 1808/2026 (Bajo del Choique – La Invernada), 19-oct-2026", u: BO("2026-10-19") },
   bo1854_26: { t: "Boletín Oficial – Res. ME 1854/2026 (Agua Rica, Glencore), 27-oct-2026", u: BO("2026-10-27") },
@@ -73,8 +74,9 @@ const RIGI = {
     total:6878, comp:2825, adh:"2025-04-28", min2a:459, limite:"2035-12-31",
     cap:"1,5 MTPA de GNL de capacidad de placa; hasta 2,2 MTPA con gas todo el año. Etapa 1: US$ 1.603 M computables; etapa 2: US$ 1.222 M",
     verif:"bo_texto", src:["bo559_25"] },
-  "ln-gsm": { st:"aprobado", res:"873/2026", bo:"2026-06-26", vpu:"SMP S.A.", total:1300,
-    cap:"Gasoducto dedicado desde Vaca Muerta hasta los buques de licuefacción del Golfo San Matías",
+  "ln-gsm": { st:"aprobado", res:"873/2026", bo:"2026-06-26", vpu:"San Matías Pipeline S.A. (SMP, ex Pan American E&P S.A.)", total:1300,
+    adh:"2026-06-01", min2a:955, limite:"2027-05-31", obra:"2026-06-30", op:"2028-05-01",
+    cap:"Gasoducto de ≈ 480 km y 36\" desde el predio cabecera Tratayén (Neuquén) hasta la planta compresora San Antonio Oeste (Río Negro): 27 MMm³/d, una planta compresora nueva de 60.000 HP y repotenciación de la existente. Computables: US$ 454 M el primer año y US$ 501 M el segundo",
     verif:"bo_extracto", src:["bo873_26"] },
 
   "ln-gpm": { st:"aprobado", res:"676/2026", bo:"2026-05-13", vpu:"TGS S.A. (sucursal dedicada)", total:550, comp:513, adh:"2026-04-30", limite:"2026-12-31",
@@ -112,8 +114,10 @@ const RIGI = {
   "mi-co": { st:"aprobado", res:"825/2026", bo:"2026-06-05", vpu:"Minera Exar S.A. – Sucursal dedicada", tipo:"Ampliación de proyecto existente",
     total:1166, adh:"2026-05-09", limite:"2030-07-01", obra:"2026-07", op:"2028-12",
     cap:"De 40.000 a 85.000 t/año de carbonato de litio equivalente; 90 meses de obra desde jul-2026", verif:"bo_extracto", src:["bo825_26"] },
-  "mi-rincon": { st:"aprobado", res:"735/2025", bo:"2025-06", vpu:"Rincón Mining Pty Ltd (Rio Tinto)", tipo:"Proyecto estratégico de exportación de largo plazo",
-    cap:"60.000 t/año de carbonato grado batería por extracción directa (planta inicial de 3.000 t + ampliación)", verif:"pendiente", src:["bo735_25"] },
+  "mi-rincon": { st:"aprobado", res:"735/2025", bo:"2025-06-03", vpu:"Rincón Mining Pty Ltd – Sucursal Argentina (Rio Tinto)", tipo:"Proyecto estratégico de exportación de largo plazo",
+    total:2744, comp:2299, adh:"2025-05-19", min2a:1294, limite:"2029-06-30",
+    cap:"53.000 t/año de carbonato de litio grado batería por extracción directa (DLE), con potencial de 60.000 t/año. Etapa 1 de jul-2024 a dic-2027; etapa 2 de 2026 a 2029; exportación de la planta de 25.000 t/año estimada para ene-2028",
+    verif:"bo_extracto", src:["bo735_25"] },
   "mi-sdv": { st:"presentado", vpu:"Rio Tinto (Sal de Vida)", total:638, verif:"empresa", src:["rtQ2rigi"] },
 
   // ---------------- MINERÍA · COBRE ----------------
@@ -139,11 +143,15 @@ const RIGI = {
   "mi-gualca": { st:"aprobado", res:"6/2026", bo:"2026-01-15", vpu:"Minas Argentinas S.A. – Sucursal dedicada Nuevo Gualcamayo",
     comp:520, total:665, adh:"2025-11-27", min2a:91,
     cap:"Carbonatos Profundos: exploración de las concesiones Gualcamayo 1 y 2 y nueva planta de procesamiento", verif:"bo_extracto", src:["bo6_26"] },
-  "mi-diablillos": { st:"aprobado", res:"562/2026", bo:"2026-05", vpu:"Pacific Rim Mining Argentina (AbraSilver)",
-    comp:482, total:764, limite:"2027-11-30", obra:"2026-07", op:"2029-07",
+  "mi-diablillos": { st:"aprobado", res:"562/2026", bo:"2026-05-11", vpu:"Pacific Rim Mining Corporation Argentina S.A. (AbraSilver)",
+    comp:482, total:764, adh:"2026-02-26", min2a:352, limite:"2027-11-30", obra:"2026-07", op:"2029-07",
     cap:"Mina a cielo abierto y planta de 3,15 Mt/año (≈ 9.000 t/día)", verif:"bo_extracto", src:["bo562_26"] },
 
   // ---------------- AGRO / LOGÍSTICA ----------------
   "ag-tmult": { st:"aprobado", res:"1842/2025", bo:"2025-11-20", vpu:"Terminal Timbúes S.A.", comp:277, limite:"2027-04-01",
-    cap:"Terminal multipropósito sobre el Paraná: muelle, tanques hasta 120.000 m³ y depósito fiscal en un predio de 186 ha", verif:"bo_texto", src:["bo1842_25"] }
+    cap:"Terminal multipropósito sobre el Paraná: muelle, tanques hasta 120.000 m³ y depósito fiscal en un predio de 186 ha", verif:"bo_texto", src:["bo1842_25"] },
+  "ag-fertilpampa": { st:"aprobado", res:"1468/2026", bo:"2026-09-07", vpu:"Fértil Pampa S.A.U. (Pampa Energía)", tipo:"Proyecto estratégico de exportación de largo plazo · Proyecto Único «Fertilizantes»",
+    comp:2693, adh:"2026-08-03", min2a:1666, limite:"2029-12-01",
+    cap:"Dos plantas de urea granulada de 3.000 t/día cada una y una planta de amoníaco de 3.450 t/día en el Puerto de Ingeniero White (≈ 80 ha), con gas de Vaca Muerta. Etapa 1 (jul-2026 a dic-2027, ingeniería y compras): US$ 1.105 M; etapa 2 (2028 a dic-2029, montaje y puesta en marcha): US$ 1.588 M",
+    verif:"bo_extracto", src:["bo1468_26"] }
 };

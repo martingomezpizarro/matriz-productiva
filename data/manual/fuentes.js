@@ -120,4 +120,8 @@ Object.assign(SRC, {
   rnVmos: { t:"Gobierno de Río Negro – Continúa la obra del VMOS tras completarse la última soldadura automática (3-nov-2025)", u:"https://rionegro.gov.ar/articulo/56495/continua-la-obra-del-vmos-tras-completarse-la-ultima-soldadura-automatica" },
   crGpnk: { t:"Casa Rosada – Gasoducto Presidente Néstor Kirchner (hoy Perito Moreno), tramo I: ficha de la obra", u:"https://www.casarosada.gob.ar/pdf/Brief%20GPNK.pdf" },
   arcaTim:{ t:"Boletín Oficial – ARCA, Res. 32/2026: depósito fiscal de Terminal Timbúes S.A. (2-oct-2026)", u:"https://www.boletinoficial.gob.ar/seccion/primera/20261002" }
+  ,
+  // --- 29-oct-2026 ---
+  pqq25:  { t:"Consorcio de Gestión del Puerto Quequén – Cerramos 2025 con récord histórico (cierre anual de cargas)", u:"https://puertoquequen.com/en/we-closed-2025-with-a-historic-record-and-a-safe-and-predictable-port-system/" },
+  pqqEst: { t:"Consorcio de Gestión del Puerto Quequén – Estadísticas anuales", u:"https://puertoquequen.com/en/annual-statistics/" }
 });
