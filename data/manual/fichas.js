@@ -418,6 +418,45 @@ const TEC = {
     src:["abraDFS"]
   },
 
+  "mi-casposo": {
+    met:"Oro y plata epitermal en Calingasta (San Juan), con planta de procesamiento propia. Reanudó operaciones en oct-2025 tras un período de parada.",
+    proc:["Extracción del mineral","Chancado y molienda","Lixiviación con cianuro","Recuperación del metal","Fundición de barras doré"],
+    prod:"Doré de oro y plata",
+    nums:[["Guía 2026","11.000–13.000 oz de oro equivalente (seis meses con mineral propio)","agdG26"],["Reinicio","Operaciones reanudadas en oct-2025","agdG26"],["Plan 2026","1T y 3T: procesamiento a façon de mineral de Hualilán (Challenger); 2T y 4T: mineral propio","agdG26"],["Producción 1S 2026 (Austral Gold)","11.648 oz de oro equivalente sumando Casposo y Guanaco (Chile), casi el doble que el 1S 2025","agdH126"]],
+    src:["agdG26","agdH126"]
+  },
+  "mi-hualilan": {
+    met:"Oro-plata-zinc a cielo abierto en Ullum (San Juan): arranca con lixiviación en pilas y suma después una planta de flotación para el mineral sulfurado.",
+    proc:["Mina a cielo abierto","Chancado","Lixiviación en pilas (8 Mt/año) para el mineral oxidado","Planta de flotación (1,5 Mt/año) para el sulfurado, unos dos años después","Doré de oro y concentrados"],
+    prod:"Doré de oro (lixiviación) y concentrados con oro, plata y zinc (flotación)",
+    nums:[["Producción","≈ 105.000 oz AuEq/año los primeros años; ≈ 135.000 oz AuEq/año el resto de la vida útil","celPFS26"],["Producción vida útil","1,84 Moz AuEq: 1,67 Moz de oro, 6,39 Moz de plata y 74.000 t de zinc","celPFS26"],["Reservas probables","62,9 Mt a 0,75 g/t Au: 1,51 Moz de oro, 7,73 Moz de plata y 170.000 t de zinc","celPFS26"],["Inversión","US$ 267 M iniciales con contingencia; US$ 604 M en toda la vida útil","celPFS26"],["VAN 5% / TIR","US$ 1.101 M después de impuestos · 45% antes de impuestos (oro a US$ 3.500/oz)","celPFS26"],["Vida útil","14,25 años de minería","celPFS26"]],
+    hitos:[["18-may-2026","Actualización del estudio de prefactibilidad"],["≈ 18 meses de obra","Inicio de la lixiviación en pilas"],["+2 años","Arranque de la planta de flotación"]],
+    src:["celPFS26"]
+  },
+  "mi-altar": {
+    met:"Pórfido de cobre-oro en Calingasta (San Juan): tajo abierto que pasa a explotación subterránea por hundimiento de bloques (block caving).",
+    proc:["Tajo abierto y luego block caving","Chancado y molienda","Flotación convencional (60.000 t/día)","Espesado y filtrado","Concentrado de cobre con oro y plata"],
+    prod:"Concentrado de cobre con oro y plata",
+    nums:[["Producción promedio años 1–20","108.579 t/año de cobre, 43.199 oz de oro y 570.217 oz de plata (121.445 t CuEq)","aldePEA25"],["Producción promedio vida útil","92.891 t/año de cobre (101.413 t CuEq)","aldePEA25"],["Inversión inicial","US$ 1.593 M","aldePEA25"],["VAN 8% / TIR","US$ 2.009 M · 20,5% después de impuestos (cobre a US$ 4,35/lb)","aldePEA25"],["Vida útil","48 años, incluidos 3 de construcción","aldePEA25"],["Participación","Aldebaran 80% (cifras al 100%)","aldePEA25"]],
+    hitos:[["30-oct-2025","Evaluación económica preliminar (PEA), con recursos inferidos"]],
+    src:["aldePEA25"]
+  },
+  "mi-navidad": {
+    met:"Depósito de plata-plomo diseminado en la meseta central de Chubut, uno de los mayores recursos de plata sin desarrollar del mundo.",
+    proc:["Extracción del mineral","Chancado y molienda","Flotación","Concentrado de plata-plomo"],
+    prod:"Concentrado de plata y plomo (proyecto)",
+    nums:[["Recursos medidos e indicados","155,2 Mt: 15,4 Mt a 137 g/t y 139,8 Mt a 126 g/t de plata (632,3 Moz)","paasRR26"],["Recursos inferidos","45,9 Mt a 81 g/t de plata (119,4 Moz)","paasRR26"],["Fecha de corte","30-jun-2026","paasRR26"]],
+    src:["paasRR26"]
+  },
+  "mi-pozuelos-pastos-grandes": {
+    met:"Litio en salmuera de los salares de Pastos Grandes y Pozuelos (Salta), con proceso híbrido: evaporación solar para concentrar y extracción directa (DLE) por solventes para purificar.",
+    proc:["Pozos de bombeo de salmuera","Concentración en pozas de evaporación solar","Extracción directa (DLE) por extracción con solventes","Purificación","Precipitación de carbonato de litio"],
+    prod:"Carbonato de litio (admite hidróxido o cloruro)",
+    nums:[["Capacidad","150.000 t/año de carbonato de litio equivalente, en tres etapas de 50.000 t/año","larPPG25"],["Inversión","Etapa 1: US$ 1.124 M (16% de contingencia); total: US$ 3.301 M","larPPG25"],["VAN 8% / TIR","US$ 8.100 M · 32,7% después de impuestos (carbonato a US$ 18.000/t)","larPPG25"],["Recursos medidos e indicados","15,1 Mt de carbonato de litio equivalente (más 6,7 Mt inferidos)","larPPG25"],["Vida útil","30 años","larPPG25"],["Participación","Ganfeng 67% · Lithium Argentina 33%","larPPG25"]],
+    hitos:[["7-nov-2025","Declaración de impacto ambiental de la etapa 1 (Salta)"],["10-nov-2025","Estudio de alcance (scoping study)"],["1S 2026","Solicitud RIGI prevista por las empresas"]],
+    src:["larPPG25"]
+  },
+
   // ---------------- AGRO ----------------
   "ag-renova": { nums:[["Capacidad de molienda","≈ 33.000 t/día, la mayor del país","bcrCap"]], src:["bcrCap"] },
   "ag-t6":     { nums:[["Capacidad de molienda","20.000 t/día","bcrCap"],["Accionistas","Bunge + AGD","bcrCap"]], src:["bcrCap"] },

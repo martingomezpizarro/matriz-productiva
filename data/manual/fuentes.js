@@ -123,5 +123,12 @@ Object.assign(SRC, {
   ,
   // --- 29-oct-2026 ---
   pqq25:  { t:"Consorcio de Gestión del Puerto Quequén – Cerramos 2025 con récord histórico (cierre anual de cargas)", u:"https://puertoquequen.com/en/we-closed-2025-with-a-historic-record-and-a-safe-and-predictable-port-system/" },
-  pqqEst: { t:"Consorcio de Gestión del Puerto Quequén – Estadísticas anuales", u:"https://puertoquequen.com/en/annual-statistics/" }
+  pqqEst: { t:"Consorcio de Gestión del Puerto Quequén – Estadísticas anuales", u:"https://puertoquequen.com/en/annual-statistics/" },
+  // --- 30-oct-2026 ---
+  agdG26:  { t:"Austral Gold – Guía de producción 2026 (comunicado del 5-dic-2025)", u:"https://www.newsfilecorp.com/release/277053/Austral-Gold-Provides-2026-Production-Guidance" },
+  agdH126: { t:"Austral Gold – Informe semestral 2026 (comunicado del 27-ago-2026)", u:"https://wwww.stockwatch.com/News/Item/Z-C!AGLD-3857249/C/AGLD" },
+  celPFS26:{ t:"Challenger Gold – Hualilán: actualización del estudio de prefactibilidad (ASX, 18-may-2026)", u:"https://announcements.asx.com.au/asxpdf/20260518/pdf/06zpms1stxbw15.pdf" },
+  aldePEA25:{ t:"Aldebaran Resources – Evaluación económica preliminar (PEA) de Altar (30-oct-2025)", u:"https://www.stockwatch.com/News/Item/Z-C!ALDE-3746897/C/ALDE" },
+  paasRR26:{ t:"Pan American Silver – Reservas y recursos minerales al 30-jun-2026 (SEC 6-K, 16-sep-2026)", u:"https://www.sec.gov/Archives/edgar/data/0000771992/000077199226000065/nr2026reservesupdate.htm" },
+  larPPG25:{ t:"Lithium Argentina y Ganfeng – Estudio de alcance de PPG y aprobación ambiental de la etapa 1 (10-nov-2025)", u:"https://www.itiger.com/news/2582878858" }
 });
