@@ -130,5 +130,13 @@ Object.assign(SRC, {
   celPFS26:{ t:"Challenger Gold – Hualilán: actualización del estudio de prefactibilidad (ASX, 18-may-2026)", u:"https://announcements.asx.com.au/asxpdf/20260518/pdf/06zpms1stxbw15.pdf" },
   aldePEA25:{ t:"Aldebaran Resources – Evaluación económica preliminar (PEA) de Altar (30-oct-2025)", u:"https://www.stockwatch.com/News/Item/Z-C!ALDE-3746897/C/ALDE" },
   paasRR26:{ t:"Pan American Silver – Reservas y recursos minerales al 30-jun-2026 (SEC 6-K, 16-sep-2026)", u:"https://www.sec.gov/Archives/edgar/data/0000771992/000077199226000065/nr2026reservesupdate.htm" },
-  larPPG25:{ t:"Lithium Argentina y Ganfeng – Estudio de alcance de PPG y aprobación ambiental de la etapa 1 (10-nov-2025)", u:"https://www.itiger.com/news/2582878858" }
+  larPPG25:{ t:"Lithium Argentina y Ganfeng – Estudio de alcance de PPG y aprobación ambiental de la etapa 1 (10-nov-2025)", u:"https://www.itiger.com/news/2582878858" },
+  // --- 31-oct-2026 ---
+  glenCMD25:{ t:"Glencore – Capital Markets Day 2025: reactivación de Alumbrera (dic-2025)", u:"https://www.glencore.com/media-and-insights/news/glencore-capital-markets-day-2025" },
+  glenH126: { t:"Glencore – Presentación de resultados del 1S 2026 (5-ago-2026)", u:"https://www.glencore.com/.rest/api/v1/documents/static/a8dfc8ac-480f-46d8-bbf3-ede5686cba20/20260805+GLEN+2026+Half-Year+Results+Presentation.pdf" },
+  pgdQ126:  { t:"Patagonia Gold – Resultados financieros del 1T 2026 (comunicado)", u:"https://www.rohstoff-welt.de/news/735892--Patagonia-Gold-Quarter-1-2026-Financial-Results.html" },
+  lkeAR25:  { t:"Lake Resources – Informe anual 2025 (ASX): adenda del DFS de Kachi y reservas (4-ago-2025)", u:"https://announcements.asx.com.au/asxpdf/20250926/pdf/06pr55r6nl1tkn.pdf" },
+  cneaSP:   { t:"CNEA – Sitio Sierra Pintada (actualizado 12-ago-2026)", u:"https://www.argentina.gob.ar/node/475902" },
+  mzaSP19:  { t:"Gobierno de Mendoza – Comienzan los trabajos de remediación de Sierra Pintada (1-oct-2019)", u:"https://www.mendoza.gov.ar/prensa/comienzan-los-trabajos-de-remediacion-de-sierra-pintada/" },
+  galCanPEA:{ t:"Galan Lithium – Evaluación económica preliminar de Candelas (ASX, 30-nov-2021)", u:"https://wcsecure.weblink.com.au/pdf/GLN/02459769.pdf" },
 });

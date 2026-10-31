@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-10-30",
+  actualizado: "2026-10-31",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -59,6 +59,7 @@ const RIGI_SRC = {
   bo1808_26: { t: "Boletín Oficial – Res. ME 1808/2026 (Bajo del Choique – La Invernada), 19-oct-2026", u: BO("2026-10-19") },
   bo1854_26: { t: "Boletín Oficial – Res. ME 1854/2026 (Agua Rica, Glencore), 27-oct-2026", u: BO("2026-10-27") },
   glc_ago25: { t: "Glencore – solicitudes RIGI de El Pachón y Agua Rica (ago-2025)", u: "https://www.glencore.com/media-and-insights/news/glencore-submits-RIGI-applications-in-respect-of-its-argentine-copper-projects" },
+  ypfBdT:    { t: "YPF – Comunicado: solicitud de adhesión al RIGI del proyecto Bajo del Toro (30-oct-2026)", u: "https://novedades.ypf.com/noticias.html" },
   rtQ2rigi:  { t: "Rio Tinto – reporte de operaciones 2T 2026 (Sal de Vida, solicitud RIGI)", u: "https://www.riotinto.com/en/invest/reports" },
   portalRIGI:{ t: "Ministerio de Economía – Portal oficial del RIGI", u: "https://www.argentina.gob.ar/economia/rigi" }
 };
@@ -97,6 +98,9 @@ const RIGI = {
     total:12240, limite:"2029-04-30",
     cap:"620 pozos y 4 plantas de tratamiento. Etapa 1 (2025–2037): 206 pozos, US$ 4.175 M, hasta 50.000 bbl/d de petróleo y 6 MMm³/d de gas",
     verif:"bo_extracto", src:["bo1808_26"] },
+  "og-bdt": { st:"presentado", vpu:"YPF S.A. (operador, 65%) con Vista Energy Argentina (35%)", total:8729,
+    cap:"Petróleo no convencional con gas asociado en Bajo del Toro y Bajo del Toro Norte: 440 pozos en la vida del proyecto, meseta de ≈ 80.000 bbl/d de petróleo y 3 MMm³/d de gas entre 2033 y 2040, y exportaciones por ≈ US$ 25.000 M entre 2027 y 2055. Primer RIGI del «Hub Norte» de YPF; solicitud presentada el 30-oct-2026, sin resolución todavía",
+    verif:"empresa", src:["ypfBdT"] },
 
   // ---------------- MINERÍA · LITIO ----------------
   "mi-3q": { st:"aprobado", res:"1153/2026", bo:"2026-07-29", vpu:"Liex S.A. – Sucursal dedicada",
@@ -114,7 +118,7 @@ const RIGI = {
   "mi-co": { st:"aprobado", res:"825/2026", bo:"2026-06-05", vpu:"Minera Exar S.A. – Sucursal dedicada", tipo:"Ampliación de proyecto existente",
     total:1166, adh:"2026-05-09", limite:"2030-07-01", obra:"2026-07", op:"2028-12",
     cap:"De 40.000 a 85.000 t/año de carbonato de litio equivalente; 90 meses de obra desde jul-2026", verif:"bo_extracto", src:["bo825_26"] },
-  "mi-rincon": { st:"aprobado", res:"735/2025", bo:"2025-06-03", vpu:"Rincón Mining Pty Ltd – Sucursal Argentina (Rio Tinto)", tipo:"Proyecto estratégico de exportación de largo plazo",
+  "mi-rincon-2": { st:"aprobado", res:"735/2025", bo:"2025-06-03", vpu:"Rincón Mining Pty Ltd – Sucursal Argentina (Rio Tinto)", tipo:"Proyecto estratégico de exportación de largo plazo",
     total:2744, comp:2299, adh:"2025-05-19", min2a:1294, limite:"2029-06-30",
     cap:"53.000 t/año de carbonato de litio grado batería por extracción directa (DLE), con potencial de 60.000 t/año. Etapa 1 de jul-2024 a dic-2027; etapa 2 de 2026 a 2029; exportación de la planta de 25.000 t/año estimada para ene-2028",
     verif:"bo_extracto", src:["bo735_25"] },

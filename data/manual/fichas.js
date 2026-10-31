@@ -139,7 +139,7 @@ const TEC = {
     nums:[["Capacidad etapa 1","15.000 t/año LCE","rtQ2"],["Inicio","Primera producción 2T 2026; en puesta en marcha","rtQ2"],["Inversión","US$ 0,7 mil M","rtQ2"]],
     src:["rtQ2"]
   },
-  "mi-rincon": {
+  "mi-rincon-2": {
     met:"Salmuera con extracción directa de litio (DLE) en el Salar del Rincón: sin pozas de evaporación de largo plazo y con reinyección de la salmuera.",
     proc:["Bombeo de salmuera","Reactores DLE","Purificación y concentración","Planta de carbonato grado batería","Exportación"],
     prod:"Carbonato de litio grado batería",
@@ -455,6 +455,46 @@ const TEC = {
     nums:[["Capacidad","150.000 t/año de carbonato de litio equivalente, en tres etapas de 50.000 t/año","larPPG25"],["Inversión","Etapa 1: US$ 1.124 M (16% de contingencia); total: US$ 3.301 M","larPPG25"],["VAN 8% / TIR","US$ 8.100 M · 32,7% después de impuestos (carbonato a US$ 18.000/t)","larPPG25"],["Recursos medidos e indicados","15,1 Mt de carbonato de litio equivalente (más 6,7 Mt inferidos)","larPPG25"],["Vida útil","30 años","larPPG25"],["Participación","Ganfeng 67% · Lithium Argentina 33%","larPPG25"]],
     hitos:[["7-nov-2025","Declaración de impacto ambiental de la etapa 1 (Salta)"],["10-nov-2025","Estudio de alcance (scoping study)"],["1S 2026","Solicitud RIGI prevista por las empresas"]],
     src:["larPPG25"]
+  },
+
+  "mi-bajo-de-la-alumbrera": {
+    met:"Pórfido de cobre-oro a cielo abierto en Belén (Catamarca), con concentradora propia. Glencore reactiva la mina para alargar su vida útil y mantener la planta, la gente y la infraestructura que va a compartir con Agua Rica (MARA).",
+    proc:["Perforación y voladura en el tajo","Chancado y molienda","Flotación","Espesado y filtrado","Concentrado de cobre con oro y molibdeno"],
+    prod:"Concentrado de cobre con oro; molibdeno",
+    nums:[["Producción prevista","≈ 75.000 t de cobre, 317.000 oz de oro y 1.000 t de molibdeno en total, en cuatro años de operación","glenCMD25"],["Reinicio de la mina","Junio de 2026, adelantado respecto del plan","glenH126"],["Primera producción","2S 2027 (la guía original era el 1S 2028)","glenH126"],["Vínculo con MARA","La infraestructura de Alumbrera se comparte con Agua Rica (MARA)","glenCMD25"]],
+    hitos:[["dic-2025","Glencore anuncia la reactivación (Capital Markets Day)"],["2-jun-2026","Reinicio de la explotación minera"],["2S 2027","Primera producción prevista"]],
+    src:["glenCMD25","glenH126"]
+  },
+  "mi-cap-oeste": {
+    met:"Oro y plata epitermal en el Macizo del Deseado (Santa Cruz). Hoy produce con operaciones residuales sobre el material ya apilado mientras Patagonia Gold desarrolla el proyecto subterráneo.",
+    proc:["Lixiviación residual del material en pilas","Recuperación del metal de la solución","Fundición de barras doré","Desarrollo subterráneo (proyecto)"],
+    prod:"Doré de oro y plata",
+    nums:[["Producción 1T 2026","390 oz de oro equivalente (173 oz de oro y 11.836 oz de plata), de operaciones residuales","pgdQ126"],["Ventas 1T 2026","432 oz de oro equivalente (211 oz de oro y 11.839 oz de plata)","pgdQ126"],["Proyecto","Desarrollo subterráneo de Cap-Oeste","pgdQ126"]],
+    src:["pgdQ126"]
+  },
+  "mi-kachi": {
+    met:"Litio en salmuera en Antofagasta de la Sierra (Catamarca) con extracción directa (DLE) por intercambio iónico y reinyección de casi toda la salmuera al acuífero: sin pozas de evaporación.",
+    proc:["Pozos de producción de salmuera (11)","Extracción directa por intercambio iónico (Lilac Gen4)","Reinyección de la salmuera agotada (14 pozos)","Concentración y purificación del eluido","Carbonato de litio grado batería"],
+    prod:"Carbonato de litio grado batería",
+    nums:[["Capacidad","≈ 25.000 t/año de carbonato de litio equivalente","lkeAR25"],["Inversión","US$ 1.157 M (16% menos que el estudio anterior)","lkeAR25"],["Costo operativo","US$ 5.895/t LCE","lkeAR25"],["VAN 10% / TIR","US$ 1.011 M · 19,7% después de impuestos (carbonato a ≈ US$ 20.500/t)","lkeAR25"],["Reservas","626.760 t LCE (174.230 probadas y 452.540 probables)","lkeAR25"],["Recursos","11,1 Mt LCE (8,2 Mt medidos e indicados) en 275 km²","lkeAR25"],["Vida útil","25 años","lkeAR25"]],
+    hitos:[["14-may-2025","Actualización de recursos"],["4-ago-2025","Adenda del estudio de factibilidad (DFS) y reservas"],["Pendiente","Decisión final de inversión, después de la aprobación ambiental y de sumar un socio"]],
+    src:["lkeAR25"]
+  },
+  "mi-sierra-pintada": {
+    met:"Uranio en San Rafael (Mendoza): el mayor depósito de uranio conocido del país, explotado por la CNEA en canteras a cielo abierto y procesado en el Complejo Minero Fabril Sierra Pintada. Hoy está en remediación ambiental y bajo licencia de parada prolongada.",
+    proc:["Explotación en canteras (1975–1997)","Procesamiento en el complejo minero fabril","Remediación fase 1: tratamiento del agua de cantera (uranio, radio y arsénico)","Recuperación del uranio remanente de los residuos en tambores","Disposición final en dique de múltiples barreras"],
+    prod:"Concentrado de uranio (producción histórica); hoy en remediación",
+    nums:[["Producción histórica","1.600 t de uranio entre 1975 y 1997, ≈ 20% del recurso total","cneaSP"],["Agua de cantera a tratar","≈ 1.300.000 m³","mzaSP19"],["Uranio a recuperar de residuos y agua","≈ 14 t","mzaSP19"],["Plazo de la remediación","Entre 5 y 8 años (hasta 10 para el agua de cantera), según el anuncio de 2019","mzaSP19"]],
+    hitos:[["1975–1997","Operación de la CNEA"],["oct-2019","Comienzan los trabajos de remediación"],["Fase 1","Licencia de parada prolongada de la ARN y ensayo industrial de la planta de tratamiento de uranio concluido; planta de radio y arsénico en obra"]],
+    src:["cneaSP","mzaSP19"]
+  },
+  "mi-candelas": {
+    met:"Litio en salmuera en el sistema del Salar del Hombre Muerto (Antofagasta de la Sierra, Catamarca), con pozas de evaporación solar para preconcentrar y una planta de carbonato.",
+    proc:["Pozos de bombeo de salmuera","Pozas de evaporación solar (preconcentración y purificación)","Precipitación de impurezas en dos etapas","Pulido por intercambio iónico","Precipitación con carbonato de sodio a 85 °C"],
+    prod:"Carbonato de litio grado batería (grado técnico los primeros tres años)",
+    nums:[["Capacidad","14.000 t/año de carbonato de litio","galCanPEA"],["Inversión","US$ 408 M","galCanPEA"],["Costo operativo","US$ 4.277/t LCE","galCanPEA"],["VAN 8% / TIR","US$ 660 M · 20,9% después de impuestos","galCanPEA"],["Recursos indicados","685.000 t LCE a 672 mg/l de litio","galCanPEA"],["Recuperación de litio","61,6%","galCanPEA"],["Vida útil","25 años sin contar la rampa","galCanPEA"]],
+    hitos:[["30-nov-2021","Evaluación económica preliminar (PEA)"],["feb-2023","Galan pasa al 100% del proyecto"]],
+    src:["galCanPEA"]
   },
 
   // ---------------- AGRO ----------------
