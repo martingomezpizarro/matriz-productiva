@@ -139,4 +139,9 @@ Object.assign(SRC, {
   cneaSP:   { t:"CNEA – Sitio Sierra Pintada (actualizado 12-ago-2026)", u:"https://www.argentina.gob.ar/node/475902" },
   mzaSP19:  { t:"Gobierno de Mendoza – Comienzan los trabajos de remediación de Sierra Pintada (1-oct-2019)", u:"https://www.mendoza.gov.ar/prensa/comienzan-los-trabajos-de-remediacion-de-sierra-pintada/" },
   galCanPEA:{ t:"Galan Lithium – Evaluación económica preliminar de Candelas (ASX, 30-nov-2021)", u:"https://wcsecure.weblink.com.au/pdf/GLN/02459769.pdf" },
+  termapInst:{ t:"Termap – Instalaciones marítimas de Caleta Córdova y Caleta Olivia", u:"https://terminales.termap.com.ar/termapWeb/paginas/Terminales/e_maritimo.html" },
+  termapHist:{ t:"Termap – Historia de la compañía", u:"https://terminales.termap.com.ar/TermapWeb/Paginas/historia.html" },
+  termapReg: { t:"Termap – Reglamento de la terminal: operatoria de programación", u:"https://terminales.termap.com.ar/TermapAsp/DocumentoShow.asp?DocumentoID=41" },
+  termapOp:  { t:"Termap – Operaciones e hitos", u:"https://www.termap.com.ar/operaciones.php" },
+  dowAR:     { t:"Dow Argentina – Sitio institucional (complejo de Bahía Blanca)", u:"https://ar.dow.com/es-ar.html" },
 });

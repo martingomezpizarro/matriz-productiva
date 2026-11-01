@@ -22,6 +22,8 @@ const EMP = {
   vmos:      { n: "VMOS S.A. (Vaca Muerta Oil Sur)", tipo: "Consorcio de productoras liderado por YPF", t: [], w: null },
   enarsa:    { n: "ENARSA (Energía Argentina)", tipo: "Estatal", t: [], w: "https://www.enarsa.com.ar" },
   southern:  { n: "Southern Energy (Argentina LNG)", tipo: "Consorcio: PAE, YPF, Pampa, Harbour y Golar", t: [], w: null },
+  eni:       { n: "Eni", tipo: "Cotiza", t: [["NYSE","E"]], w: "https://www.eni.com" },
+  xrg:       { n: "XRG (ADNOC)", tipo: "Privada · inversora internacional de ADNOC (Abu Dabi)", t: [], w: "https://www.xrg.com" },
   termap:    { n: "Termap", tipo: "Privada", t: [], w: null },
   oiltank:   { n: "Oiltanking Ebytem", tipo: "Privada", t: [], w: "https://www.oiltanking.com" },
   pluspetrol:{ n: "Pluspetrol", tipo: "Privada", t: [], pqo:{t:"94.913 bbl/d de petróleo y 16,49 MMm³/d de gas operados (ago-2026).", s:"cap4"}, w: "https://www.pluspetrol.net" },

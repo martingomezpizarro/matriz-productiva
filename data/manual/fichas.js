@@ -97,9 +97,10 @@ const TEC = {
   },
   "og-pbb": {
     met:"Petroquímica: craqueo del etano a muy alta temperatura para obtener etileno, y polimerización.",
-    proc:["Etano de Mega y TGS","Crackers de vapor → etileno","Polimerización","Pellets de polietileno"],
+    proc:["Etano de Mega y TGS","Crackers de vapor (steam cracking) → etileno","Polimerización (polietileno de alta y baja densidad)","Extrusión y pelletizado","Pellets de polietileno a mercado interno y exportación"],
     prod:"Etileno y polietileno (base de envases, films y caños)",
-    nota:"Dow es el principal comprador del etano argentino. Capacidades de planta pendientes de cargar con fuente oficial.", src:["mega"]
+    nums:[["Plantas en Bahía Blanca","Seis: 2 de etileno y 4 de polietileno","dowAR"],["Escala","El complejo petroquímico más grande de América Latina, según la empresa","dowAR"],["Presencia de Dow en el país","Más de 60 años","dowAR"]],
+    nota:"Dow es el principal comprador del etano argentino. Las capacidades en toneladas por año de cada planta siguen pendientes de una fuente oficial o de la empresa.", src:["dowAR","mega"]
   },
   // ---------------- OIL & GAS · REFINACIÓN ----------------
   "og-rlp": { met:TEC_GEN["og-ref"].met, proc:["Destilación atmosférica y al vacío","Craqueo catalítico (FCC)","Coque","Hidrotratamiento de gasoil y naftas","Despacho a la zona AMBA"], prod:TEC_GEN["og-ref"].prod,
@@ -495,6 +496,29 @@ const TEC = {
     nums:[["Capacidad","14.000 t/año de carbonato de litio","galCanPEA"],["Inversión","US$ 408 M","galCanPEA"],["Costo operativo","US$ 4.277/t LCE","galCanPEA"],["VAN 8% / TIR","US$ 660 M · 20,9% después de impuestos","galCanPEA"],["Recursos indicados","685.000 t LCE a 672 mg/l de litio","galCanPEA"],["Recuperación de litio","61,6%","galCanPEA"],["Vida útil","25 años sin contar la rampa","galCanPEA"]],
     hitos:[["30-nov-2021","Evaluación económica preliminar (PEA)"],["feb-2023","Galan pasa al 100% del proyecto"]],
     src:["galCanPEA"]
+  },
+
+  // ---------------- OIL & GAS · fichas agregadas el 1-nov-2026 ----------------
+  "og-bdt": VM({ prod:OIL,
+    nums:[["Inversión total declarada","US$ 8.729 M (solicitud RIGI)","ypfBdT"],["Pozos","440 en la vida del proyecto","ypfBdT"],["Meseta de producción","≈ 80.000 bbl/d de petróleo y 3 MMm³/d de gas entre 2033 y 2040","ypfBdT"],["Exportaciones","≈ US$ 25.000 M entre 2027 y 2055","ypfBdT"],["Socios","YPF 65% (operador) · Vista 35%","ypfBdT"]],
+    hitos:[["30-oct-2026","YPF presenta la solicitud de adhesión al RIGI, la primera del «Hub Norte»"]],
+    nota:"Áreas Bajo del Toro y Bajo del Toro Norte, en el norte de Vaca Muerta.",
+    src:["seFrac","ypfBdT"] }),
+  "og-arglng": {
+    met:"GNL integrado: gas de Vaca Muerta tratado en tierra, llevado por gasoductos dedicados a la costa y licuado a −162 °C en buques de licuefacción flotantes (FLNG) amarrados frente a la costa.",
+    proc:["Perforación y terminación de pozos no convencionales en Neuquén","Plantas de tratamiento de gas","Trenes de fraccionamiento de líquidos","Gasoductos dedicados hasta el Golfo San Matías","Pretratamiento y licuefacción a bordo de los FLNG","Almacenaje a bordo y carga de buques metaneros (transferencia barco a barco)"],
+    prod:"Gas natural licuado (GNL) para exportación; líquidos del gas natural",
+    nums:[["Capacidad","12 MTPA de GNL entre dos unidades FLNG","ypfArgLNG"],["Inversión total","US$ 51.000 M en la vida del proyecto","ypfArgLNG"],["Inversión hasta el arranque","≈ US$ 29.000 M hasta 2031 (≈ US$ 5.000 M en upstream)","ypfArgLNG"],["Exportaciones","≈ US$ 10.000 M por año durante unas dos décadas","ypfArgLNG"],["Empleo","≈ 20.000 puestos por año en construcción (2026–2030), con picos de hasta 40.000; ≈ 8.000 en operación (directos e indirectos)","ypfArgLNG"]],
+    hitos:[["13-ago-2026","Solicitud de adhesión al RIGI"],["2031","Arranque previsto de los dos FLNG"]],
+    src:["ypfArgLNG"]
+  },
+  "og-co": {
+    met:"Terminal marítima de despacho de crudo: el petróleo del Golfo San Jorge llega por ducto a la playa de tanques y se carga en buques tanque amarrados a una monoboya mar adentro.",
+    proc:["Recepción de crudo por oleoducto desde los yacimientos","Playa de tanques (almacenaje y medición)","Bombeo por ducto submarino","Monoboya CALM a ≈ 3.500 m de la costa","Carga de buque tanque"],
+    prod:"Crudo Escalante, de la cuenca del Golfo San Jorge, para exportación y cabotaje",
+    nums:[["Buques","Hasta 160.000 t de porte bruto (DWT)","termapInst"],["Amarre","Monoboya de amarre a punto único (SPM/CALM) con seis líneas de cadenas, a ≈ 3.500 m de la costa","termapHist"],["Existencia de crudo en la terminal","Máxima diaria de 115.000 m³ y mínima de 20.000 m³; promedio no mayor a 90.000 m³","termapReg"],["Tiempo de carga previsto (cláusula de demoras)","36 h para 68.000 m³ y 48 h para 150.000 m³","termapReg"],["Termap (Caleta Córdova + Caleta Olivia)","450 millones de m³ embarcados en más de 7.100 operaciones (hito 2023)","termapOp"]],
+    hitos:[["feb-1994","Termap empieza a operar las terminales de Caleta Córdova y Caleta Olivia"]],
+    src:["termapInst","termapHist","termapReg","termapOp"]
   },
 
   // ---------------- AGRO ----------------
