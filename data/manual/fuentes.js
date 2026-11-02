@@ -144,4 +144,10 @@ Object.assign(SRC, {
   termapReg: { t:"Termap – Reglamento de la terminal: operatoria de programación", u:"https://terminales.termap.com.ar/TermapAsp/DocumentoShow.asp?DocumentoID=41" },
   termapOp:  { t:"Termap – Operaciones e hitos", u:"https://www.termap.com.ar/operaciones.php" },
   dowAR:     { t:"Dow Argentina – Sitio institucional (complejo de Bahía Blanca)", u:"https://ar.dow.com/es-ar.html" },
+  // --- 2-nov-2026 ---
+  orvTagPEA:  { t:"Orvana Minerals – Actualización de la evaluación económica preliminar (PEA) de Taguas (comunicado, 29-dic-2021)", u:"https://www.orvana.com/English/news/news-details/2021/ORVANA-FILES-2021-ANNUAL-INFORMATION-FORM-AND-NI-43-101-REPORT-FOR-DON-MARIO-AND-ANNOUNCES-UPDATED-PEA-FOR-TAGUAS/default.aspx" },
+  lchArzPEA:  { t:"Lithium Chile – Evaluación económica preliminar (PEA) de Arizaro (comunicado, 8-ago-2023)", u:"https://www.rohstoff-welt.de/news/450260--Lithium-Chile-Delivers-Positive-Preliminary-Economic-Assessment-for-the-Arizaro-Project-in-Argentina.html" },
+  noaRGPEA:   { t:"NOA Lithium Brines – Evaluación económica preliminar (PEA) de Rio Grande (comunicado, 6-oct-2025)", u:"https://webdisclosure.com/press-release/noa-lithium-brines-inc-cve-noal-noa-lithium-announces-positive-preliminary-economic-assessment-results-for-rio-grande-project-9cu6bWD7qW3" },
+  lisHMN25:   { t:"Lithium South – Comunicado sobre la venta de Hombre Muerto Norte a POSCO Argentina (22-sep-2025)", u:"https://minedocs.com/29/Lithium_South-PR-09222025.pdf" },
+  smCoy240223:{ t:"Secretaría de Minería – Informe semanal de coyuntura minera, foco local (23-feb-2024): PEA de Ivana", u:"https://argentina.gob.ar/sites/default/files/informe_semanal_de_coyuntura_minera_-_foco_local_23.02.24.pdf" },
 });

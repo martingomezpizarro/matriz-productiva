@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-01",
+  actualizado: "2026-11-02",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -136,7 +136,8 @@ const RIGI = {
   "mi-azules": { st:"aprobado", res:"1553/2025", bo:"2025-10-14", vpu:"Andes Corporación Minera S.A.", tipo:"Proyecto estratégico de exportación de largo plazo",
     total:2672, comp:2354, adh:"2025-09-25", min2a:415, limite:"2027-12-31",
     cap:"Mina, lixiviación en pilas y planta SX-EW para cátodos de cobre; 61% de proveedores locales comprometidos", verif:"bo_extracto", src:["bo1553_25"] },
-  "mi-psj": { st:"aprobado", res:"801/2026", bo:"2026-05-28", vpu:"Minera San Jorge S.A.", comp:613, op:"2029-01",
+  "mi-psj": { st:"aprobado", res:"801/2026", bo:"2026-05-28", vpu:"Minera San Jorge S.A.", comp:613, adh:"2026-05-13", min2a:189, limite:"2028-09-01", obra:"2027-06", op:"2029-01",
+    cap:"Mina a cielo abierto y planta concentradora por flotación de ≈ 10 Mt/año: sulfuros de cobre con oro como subproducto. 27% de la inversión con proveedores locales",
     verif:"bo_extracto", src:["bo801_26"] },
   "mi-mara": { st:"aprobado", res:"1854/2026", bo:"2026-10-27", vpu:"Minera Agua Rica LLC, Sucursal Argentina (Glencore)", tipo:"Proyecto Único «Agua Rica»",
     total:6394, comp:3311, adh:"2026-09-30", min2a:772, limite:"2028-12-31", obra:"2027-11-01", op:"2031-10-01",

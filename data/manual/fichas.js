@@ -353,8 +353,9 @@ const TEC = {
     met:"Yacimiento de cobre-oro en Uspallata, con flotación convencional.",
     proc:["Mina","Chancado y molienda","Flotación","Concentrado de cobre"],
     prod:"Concentrado de cobre",
-    nums:[["Producción","≈ 40.000 t/año de concentrado de cobre","psjDIA"],["Inversión inicial","US$ 559 M","psjDIA"],["Vida útil","16 años","psjDIA"],["Construcción","18–24 meses tras la factibilidad","psjDIA"]],
-    src:["psjDIA"]
+    nums:[["Producción","≈ 40.000 t/año de concentrado de cobre","psjDIA"],["Inversión inicial","US$ 559 M","psjDIA"],["Vida útil","16 años","psjDIA"],["Construcción","18–24 meses tras la factibilidad","psjDIA"],["RIGI (Res. ME 801/2026)","US$ 613 M en activos computables; US$ 189 M en los dos primeros años","bo801_26"]],
+    hitos:[["13-may-2026","Adhesión al RIGI"],["28-may-2026","Res. ME 801/2026 en el Boletín Oficial"],["jun-2027","Inicio de construcción (según la resolución)"],["ene-2029","Inicio de operación (según la resolución)"]],
+    src:["psjDIA","bo801_26"]
   },
 
   // ---------------- MINERÍA · ORO Y PLATA ----------------
@@ -496,6 +497,48 @@ const TEC = {
     nums:[["Capacidad","14.000 t/año de carbonato de litio","galCanPEA"],["Inversión","US$ 408 M","galCanPEA"],["Costo operativo","US$ 4.277/t LCE","galCanPEA"],["VAN 8% / TIR","US$ 660 M · 20,9% después de impuestos","galCanPEA"],["Recursos indicados","685.000 t LCE a 672 mg/l de litio","galCanPEA"],["Recuperación de litio","61,6%","galCanPEA"],["Vida útil","25 años sin contar la rampa","galCanPEA"]],
     hitos:[["30-nov-2021","Evaluación económica preliminar (PEA)"],["feb-2023","Galan pasa al 100% del proyecto"]],
     src:["galCanPEA"]
+  },
+
+  // ---------------- MINERÍA · fichas agregadas el 2-nov-2026 ----------------
+  "mi-taguas": {
+    met:"Oro y plata diseminados de baja ley a cielo abierto, con lixiviación en pilas (estudio económico preliminar).",
+    proc:["Mina a cielo abierto (camión y pala)","Chancado","Apilado en capas de 10 m sobre pila de lixiviación permanente","Lixiviación con cianuro","Recuperación por Merrill-Crowe","Fundición de barras doré"],
+    prod:"Doré de oro y plata",
+    nums:[["Ritmo de planta","15.000 t/día; mina de hasta 14 Mt/año (con remanejo)","orvTagPEA"],["Producción en la vida del proyecto","430.000 oz de oro y 7,6 Moz de plata","orvTagPEA"],["Recuperación","Oro 83% · plata 42%","orvTagPEA"],["Inversión inicial","US$ 141,2 M (US$ 147,8 M en la vida del proyecto)","orvTagPEA"],["AISC promedio","US$ 915/oz de oro pagable","orvTagPEA"],["VAN 8% / TIR","US$ 56,9 M · 20,2% después de impuestos (oro a US$ 1.700/oz, plata a US$ 22/oz)","orvTagPEA"],["Vida útil","9,2 años de producción más 1 de construcción","orvTagPEA"],["Recursos inferidos","55,0 Mt a 0,35 g/t Au y 12,1 g/t Ag: 619.000 oz de oro y 21,4 Moz de plata (a jun-2021)","orvTagPEA"]],
+    hitos:[["29-dic-2021","Orvana anuncia la actualización de la evaluación económica preliminar (PEA)"]],
+    src:["orvTagPEA"]
+  },
+  "mi-arizaro": {
+    met:"Litio en salmuera del Salar de Arizaro con una etapa de extracción directa (DLE) en el esquema de proceso.",
+    proc:["Pozos de bombeo de salmuera","Extracción directa de litio (DLE)","Ósmosis inversa y evaporación mecánica","Purificación","Planta química: precipitación de carbonato de litio","Secado y envasado"],
+    prod:"Carbonato de litio grado batería",
+    nums:[["Capacidad","25.000 t/año de carbonato de litio","lchArzPEA"],["Inversión inicial","US$ 823 M","lchArzPEA"],["Costo operativo","US$ 5.197/t LCE","lchArzPEA"],["VAN 8% / TIR","US$ 1.100 M · 24,1% después de impuestos","lchArzPEA"],["Vida útil","19,1 años","lchArzPEA"],["Recursos","1.737.000 t LCE indicados y 1.583.000 t LCE inferidos","lchArzPEA"]],
+    hitos:[["8-ago-2023","Lithium Chile publica la evaluación económica preliminar (PEA)"]],
+    src:["lchArzPEA"]
+  },
+  "mi-rio-grande-2": {
+    met:"Litio en salmuera con pozas de evaporación solar convencionales (la DLE se evaluará en la próxima etapa).",
+    proc:["Pozos de bombeo de salmuera","Pozas de evaporación solar","Remoción de impurezas (magnesio, boro, calcio)","Precipitación con carbonato de sodio","Secado y envasado"],
+    prod:"Carbonato de litio grado batería",
+    nums:[["Capacidad","Hasta 40.000 t/año LCE en dos etapas de 20.000 t/año","noaRGPEA"],["Inversión inicial","US$ 706,2 M la etapa 1; la etapa 2 suma US$ 639,7 M","noaRGPEA"],["Costo operativo","US$ 5.897/t LCE a capacidad de placa (20.000 t/año); US$ 6.012/t en la vida del proyecto","noaRGPEA"],["VAN 8% / TIR (20.000 t/año)","US$ 1.276 M · 22,6% después de impuestos (carbonato a US$ 24.000/t)","noaRGPEA"],["Vida útil","30 años","noaRGPEA"],["Recursos","≈ 2,66 Mt LCE medidos e indicados y ≈ 2,04 Mt LCE inferidos, con ley media de más de 520 mg/l de litio","noaRGPEA"]],
+    hitos:[["6-oct-2025","NOA Lithium publica la evaluación económica preliminar (PEA)"]],
+    src:["noaRGPEA"]
+  },
+  "mi-hombre-muerto-norte": {
+    met:"Litio en salmuera en el norte del Salar del Hombre Muerto.",
+    proc:["Pozos de bombeo de salmuera","Concentración de la salmuera","Purificación","Precipitación de carbonato de litio","Secado y envasado"],
+    prod:"Carbonato de litio",
+    nums:[["Capacidad potencial","15.600 t/año de carbonato de litio (PEA del 30-abr-2024)","lisHMN25"],["Recursos","1.583.200 t LCE (1.463.000 medidas y 120.000 indicadas) a 736 mg/l de litio, en tres de los cinco bloques","lisHMN25"],["Venta a POSCO Argentina","Due diligence sustancialmente completa; negociación del acuerdo definitivo (sep-2025)","lisHMN25"]],
+    hitos:[["30-abr-2024","Evaluación económica preliminar (PEA) de Lithium South"],["22-sep-2025","Lithium South informa la due diligence de POSCO casi completa y negocia el acuerdo definitivo"]],
+    src:["lisHMN25"]
+  },
+  "mi-ivana": {
+    met:"Uranio y vanadio en sedimentos superficiales (proyecto Amarillo Grande): minería a cielo abierto poco profunda.",
+    proc:["Desbroce y minería superficial","Concentración del mineral","Procesamiento y producción de concentrados de uranio y vanadio"],
+    prod:"Concentrado de uranio (U₃O₈) y pentóxido de vanadio (V₂O₅)",
+    nums:[["Vida útil","11 años de operación minera superficial","smCoy240223"],["VAN después de impuestos","US$ 227,7 M","smCoy240223"],["TIR después de impuestos","38,9%","smCoy240223"],["Recupero de la inversión","1,9 años después de impuestos","smCoy240223"],["Base del estudio","Evaluación económica preliminar sobre recursos indicados e inferidos","smCoy240223"]],
+    hitos:[["22-feb-2024","Blue Sky Uranium presenta la nueva evaluación económica preliminar (PEA) de Ivana"]],
+    src:["smCoy240223"]
   },
 
   // ---------------- OIL & GAS · fichas agregadas el 1-nov-2026 ----------------
