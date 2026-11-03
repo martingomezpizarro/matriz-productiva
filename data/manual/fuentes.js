@@ -150,4 +150,10 @@ Object.assign(SRC, {
   noaRGPEA:   { t:"NOA Lithium Brines – Evaluación económica preliminar (PEA) de Rio Grande (comunicado, 6-oct-2025)", u:"https://webdisclosure.com/press-release/noa-lithium-brines-inc-cve-noal-noa-lithium-announces-positive-preliminary-economic-assessment-results-for-rio-grande-project-9cu6bWD7qW3" },
   lisHMN25:   { t:"Lithium South – Comunicado sobre la venta de Hombre Muerto Norte a POSCO Argentina (22-sep-2025)", u:"https://minedocs.com/29/Lithium_South-PR-09222025.pdf" },
   smCoy240223:{ t:"Secretaría de Minería – Informe semanal de coyuntura minera, foco local (23-feb-2024): PEA de Ivana", u:"https://argentina.gob.ar/sites/default/files/informe_semanal_de_coyuntura_minera_-_foco_local_23.02.24.pdf" },
+  // --- 3-nov-2026 ---
+  cofTim:  { t:"COFCO International – Inside COFCO International's Timbúes complex (newsroom)", u:"https://www.cofcointernational.com/newsroom/inside-cofco-international-s-timbues-complex-a-hub-of-agri-industrial-efficiency-in-argentina" },
+  gbaMAG:  { t:"Gobierno de la Provincia de Buenos Aires – Se realizó la presentación formal del Mercado Agroganadero (6-jun-2023)", u:"https://gba.gob.ar/node/41465" },
+  agyQ226: { t:"Argosy Minerals – Quarterly Activities Report, June 2026 (ASX, 31-jul-2026)", u:"https://announcements.asx.com.au/asxpdf/20260731/pdf/0728j9j2qfkndz.pdf" },
+  cancTSR: { t:"Cancillería – Empresa china anuncia inversiones en litio en Argentina por más de 2.000 millones de dólares (Información para la Prensa 590/22, 4-nov-2022)", u:"https://www.cancilleria.gob.ar/es/actualidad/noticias/empresa-china-anuncia-inversiones-en-litio-en-argentina-por-mas-de-2000-millones" },
+  pgdMar:  { t:"Patagonia Gold – Martha mill and property (sitio de la empresa)", u:"https://patagoniagold.com/operations/martha-mill-and-property/" },
 });

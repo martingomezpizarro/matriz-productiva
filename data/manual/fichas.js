@@ -578,5 +578,40 @@ const TEC = {
     prod:"Urea granulada (46% N) y amoníaco",
     nums:[["Urea","≈ 1.320.000 t/año","profer"],["Amoníaco","≈ 790.000 t/año","profer"],["Mercado","Abastece más de la mitad de la urea que usa el país","profer"],["Ampliación en estudio","Duplicar la urea: US$ 1.500–2.000 M","profer"],["Accionistas","Adecoagro 90% · ACA 10% (desde dic-2025)","profer"]],
     src:["profer"]
-  }
+  },
+  // ---------------- Fichas completadas el 3-nov-2026 ----------------
+  "ag-cofco": {
+    met:"Complejo agroindustrial y portuario sobre el Paraná: la soja llega en camión, se muele en el mismo predio y la harina y el aceite salen por buque.",
+    proc:["Recepción y descarga de camiones con plataformas hidráulicas","Calado y almacenaje en silos","Acondicionamiento, quebrado y laminado","Extracción del aceite por solvente","Desolventizado y tostado de la harina; pelletizado","Carga de buques en el muelle propio"],
+    prod:"Harina y pellets de soja, y aceite de soja",
+    nums:[["Procesamiento","≈ 2,3 Mt/año de soja","cofTim"],["Recepción","≈ 900 camiones de soja por día","cofTim"],["Descarga","Hasta 10 camiones por hora por plataforma hidráulica","cofTim"],["Almacenaje","≈ 90.000 t en silos","cofTim"],["Energía propia","Hasta el 60% de su electricidad con turbinas a vapor","cofTim"]],
+    src:["cofTim"] },
+  "ag-mag": {
+    met:"Mercado concentrador de hacienda en pie: los consignatarios rematan la hacienda por cuenta de los productores y la compran frigoríficos y matarifes. Sucedió al histórico Mercado de Liniers.",
+    proc:["Llegada de la hacienda en camión","Descarga, pesaje y encierre en corrales","Remate por lotes a cargo de las casas consignatarias","Formación del precio de referencia del ganado","Despacho de la hacienda a faena"],
+    prod:"Comercialización de hacienda vacuna (novillos, novillitos, vaquillonas, vacas y toros) y precios de referencia del mercado",
+    nums:[["Predio","110 ha en el km 88 de la Ruta Provincial 6","gbaMAG"],["Capacidad","12.000 cabezas por día, ampliable en 6.000 más","gbaMAG"],["Inversión privada","US$ 20 M","gbaMAG"],["Firmas que operan","45","gbaMAG"]],
+    hitos:[["6-jun-2023","Presentación y habilitación formal con el gobierno bonaerense"]],
+    src:["gbaMAG"] },
+  "mi-rincon": {
+    met:"Salmuera de litio en el Salar del Rincón: bombeo de salmuera y proceso con extracción por solventes (SX) para obtener cloruro de litio, base del carbonato.",
+    proc:["Pozos de bombeo de salmuera","Concentración de la salmuera","Extracción por solventes (SX) → cloruro de litio","Evaporación y cristalización","Conversión a carbonato de litio grado batería"],
+    prod:"Cloruro de litio sólido (etapa 1a) y carbonato de litio grado batería",
+    nums:[["Proyecto comercial","12.000 t/año de carbonato de litio; DFS en curso; la empresa informa que tiene la aprobación regulatoria para desarrollarlo","agyQ226"],["Planta demostrativa","2.000 t/año, con la operación suspendida y equipos en conservación","agyQ226"],["Prueba piloto SX","Cloruro de litio de 99% de pureza y recuperación máxima de 94,4%","agyQ226"],["Energía","Estudio de EDESA para hasta 40 MW: línea de 33 kV de ≈ 8,6 km a la red de 500 kV","agyQ226"],["Participación","Argosy 77,5% en el joint venture, con opción al 90%","agyQ226"]],
+    hitos:[["sep-2026","Fin previsto de la ingeniería básica del DFS"]],
+    src:["agyQ226"] },
+  "mi-sal-de-los-angeles": {
+    met:"Litio en salmuera en el Salar de Diablillos, desarrollado por Tibet Summit Resources (Xizang Zhufeng).",
+    proc:TEC_GEN["mi-li"].proc,
+    prod:"Carbonato de litio grado batería",
+    nums:[["Capacidad anunciada","≈ 50.000 t/año de carbonato de litio grado batería","cancTSR"],["Inversión anunciada","US$ 700 M","cancTSR"]],
+    hitos:[["4-nov-2022","Anuncio de la inversión en Shanghái (CIIE), informado por Cancillería"]],
+    src:["cancTSR"] },
+  "mi-mina-martha": {
+    met:"Mina subterránea de vetas epitermales de plata y oro en el Macizo del Deseado, con planta de flotación propia.",
+    proc:["Extracción del mineral de vetas","Chancado","Molienda","Flotación","Concentrado de alta ley a la venta"],
+    prod:"Concentrado de plata y oro de alta ley (relación Ag:Au histórica mayor a 900:1)",
+    nums:[["Capacidad de planta","480 t/día máxima; 240 t/día probada; promedio actual informado de 120 t/día","pgdMar"],["Mineral de Hunt Mining","Más de 26.000 t con 1,01 g/t de oro y 771 g/t de plata","pgdMar"],["Leyes históricas","Plata de más de 2.500 g/t en los primeros años y de más de 400 g/t en los últimos","pgdMar"],["Recursos","Sin recursos ni reservas vigentes; último NI 43-101 de oct-2018","pgdMar"]],
+    hitos:[["ene-2017","Reinicio de la producción tras reacondicionar la planta (Hunt Mining)"]],
+    src:["pgdMar"] }
 };
