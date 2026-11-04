@@ -613,5 +613,34 @@ const TEC = {
     prod:"Concentrado de plata y oro de alta ley (relación Ag:Au histórica mayor a 900:1)",
     nums:[["Capacidad de planta","480 t/día máxima; 240 t/día probada; promedio actual informado de 120 t/día","pgdMar"],["Mineral de Hunt Mining","Más de 26.000 t con 1,01 g/t de oro y 771 g/t de plata","pgdMar"],["Leyes históricas","Plata de más de 2.500 g/t en los primeros años y de más de 400 g/t en los últimos","pgdMar"],["Recursos","Sin recursos ni reservas vigentes; último NI 43-101 de oct-2018","pgdMar"]],
     hitos:[["ene-2017","Reinicio de la producción tras reacondicionar la planta (Hunt Mining)"]],
-    src:["pgdMar"] }
+    src:["pgdMar"] },
+  // --- 4-nov-2026 ---
+  "og-esc": {
+    met:"Terminal de regasificación de GNL sobre el río Paraná: un buque regasificador (FSRU) amarrado al muelle recibe el GNL de los metaneros por transferencia barco a barco y lo devuelve al estado gaseoso para inyectarlo a la red del Gran Buenos Aires.",
+    proc:["Llegada del buque metanero con GNL importado","Transferencia barco a barco (ship-to-ship) al buque regasificador amarrado al muelle","Regasificación en circuito cerrado (closed-loop) a bordo del FSRU","Descarga del gas por brazo de alta presión","Inyección al sistema de transporte de gas para cubrir los picos de invierno"],
+    prod:"Gas natural regasificado para la demanda invernal del área metropolitana",
+    nums:[["Puesta en servicio","2011, nueve meses después de firmados los acuerdos definitivos","excEsc"],["Configuración","Muelle tipo GasPort con transferencia barco a barco y regasificación en circuito cerrado","excEsc"],["Cliente de Excelerate","UTE GNL Escobar; Excelerate aporta el FSRU, la puesta en marcha y la operación","excEsc"],["Temporada 2026","Res. SE 33/2026: el comercializador privado adjudicado opera toda la capacidad de regasificación de la terminal entre abril y septiembre, con contrato de acceso por un año","se33_26"]],
+    hitos:[["2011","Inicio de operación de la terminal"],["9-feb-2026","Res. SE 33/2026: licitación para que un comercializador privado importe el GNL por Escobar en lugar de ENARSA"]],
+    src:["excEsc","se33_26"] },
+  "mi-aguilar": {
+    met:"Yacimiento polimetálico de plomo, zinc y plata en la Sierra de Aguilar, explotado a cielo abierto y por minería subterránea, con planta concentradora por flotación diferencial en la mina.",
+    proc:["Extracción a cielo abierto (bancos de 5 m) y subterránea (corte y relleno; sub-level stoping)","Molienda SAG y clasificación en hidrociclones","Flotación diferencial: primero plomo, después zinc (rougher, scavenger y celdas columnares)","Espesado y filtrado de los concentrados","Concentrado de zinc a la refinería de Rosario; concentrado de plomo-plata a la fundición de Palpalá y a exportación"],
+    prod:"Concentrado de zinc (≈ 50% Zn) y concentrado de plomo con plata (≈ 75% Pb y 1.300 g/t Ag); plomo y plata refinados en Palpalá",
+    nums:[["Alimentación de planta","2.100 t secas por día, con leyes de cabeza de 2,5% Pb y 4,5% Zn","segAgu"],["Concentrado de zinc","190 t/día con 50% Zn y 100 g/t Ag; recuperación de zinc de 91%","segAgu"],["Concentrado de plomo","105 t/día con 75% Pb y 1.300 g/t Ag; recuperación de 82% del plomo y 80% de la plata","segAgu"],["Despachos de 2010","53.575 t secas de concentrado de zinc; 16.881 t de concentrado de plomo a Palpalá y 13.874 t exportadas","segAgu"],["Fundición de Palpalá","≈ 14.000 t/año de plomo refinado y 27 t/año de plata refinada","segAgu"]],
+    hitos:[["nov-1928","Se constituye Minera Aguilar"],["1936","Comienza la producción continua de concentrados de plomo, zinc y plata"],["1999","Arranca la Fundición Aguilar en Palpalá"],["dic-2010","Relevamiento de campo del SEGEMAR"]],
+    nota:"Los números son del relevamiento del SEGEMAR de dic-2010 (informe revisado en feb-2017); la operación actual, a cargo de otro controlante, puede diferir.",
+    src:["segAgu"] },
+  "ag-arre": {
+    met:"Frigorífico exportador de ciclo completo (faena y desposte) habilitado por SENASA, en Pérez Millán (partido de Ramallo); la empresa tiene una segunda planta en Escobar.",
+    proc:["Recepción de hacienda","Faena","Desposte","Enfriado o congelado y envasado","Exportación: cortes enfriados (cuota Hilton), congelados, cuartos y menudencias"],
+    prod:"Cortes vacunos enfriados (Hilton) y congelados, cuartos y menudencias",
+    nums:[["Capacidad de faena de la empresa","1.500 cabezas por día entre las plantas de Pérez Millán y Escobar","ipcvaArre"],["Establecimiento SENASA","N° 2082 (Pérez Millán)","ipcvaArre"],["Destinos de exportación","25 países, entre ellos China, Estados Unidos, Alemania, Israel y Brasil","ipcvaArre"],["Certificaciones","Halal, Kosher, Aberdeen Angus, HACCP, BRCGS y bienestar animal","ipcvaArre"]],
+    src:["ipcvaArre"] },
+  "ag-gorina": {
+    met:"Frigorífico exportador de ciclo completo en Melchor Romero (La Plata), habilitado por SENASA, con faena, desposte y laboratorio propios.",
+    proc:["Recepción de hacienda","Faena","Desposte (≈ 5.000 cuartos por día)","Enfriado o congelado y envasado","Exportación: cortes Hilton enfriados, congelados y huesos"],
+    prod:"Cortes vacunos enfriados (Hilton) y congelados para exportación y mercado interno",
+    nums:[["Faena","30.000 cabezas por mes; capacidad declarada de 1.600 por día","ipcvaGor"],["Desposte","5.000 cuartos por día","ipcvaGor"],["Capacidad de producción","75.000 t/año, de las que ≈ 60.000 t se exportan","ipcvaGor"],["Establecimiento SENASA","N° 2025","ipcvaGor"],["Personal","540 empleados (jun-2025)","gbaGor"],["Ranking 2024","Tercer frigorífico del país por animales faenados","gbaGor"]],
+    hitos:[["17-feb-2025","Un incendio destruye gran parte de la planta"],["abr-2025","Se retoma la faena, dos meses después del incendio; la empresa estima dos años para la recuperación total"]],
+    src:["ipcvaGor","gbaGor"] }
 };

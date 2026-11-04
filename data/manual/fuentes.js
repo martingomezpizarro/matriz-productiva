@@ -156,4 +156,11 @@ Object.assign(SRC, {
   agyQ226: { t:"Argosy Minerals – Quarterly Activities Report, June 2026 (ASX, 31-jul-2026)", u:"https://announcements.asx.com.au/asxpdf/20260731/pdf/0728j9j2qfkndz.pdf" },
   cancTSR: { t:"Cancillería – Empresa china anuncia inversiones en litio en Argentina por más de 2.000 millones de dólares (Información para la Prensa 590/22, 4-nov-2022)", u:"https://www.cancilleria.gob.ar/es/actualidad/noticias/empresa-china-anuncia-inversiones-en-litio-en-argentina-por-mas-de-2000-millones" },
   pgdMar:  { t:"Patagonia Gold – Martha mill and property (sitio de la empresa)", u:"https://patagoniagold.com/operations/martha-mill-and-property/" },
+  // --- 4-nov-2026 ---
+  excEsc:   { t:"Excelerate Energy – GNL Escobar (sitio de la empresa)", u:"https://excelerateenergy.com/?p=319" },
+  se33_26:  { t:"Boletín Oficial – Res. SE 33/2026: licitación de un comercializador de GNL para la terminal de Escobar, 9-feb-2026", u:"https://www.boletinoficial.gob.ar/seccion/primera/20260209" },
+  segAgu:   { t:"SEGEMAR – Reconocimiento de procesos productivos mineros: Mina Aguilar (relevamiento dic-2010, rev. feb-2017)", u:"https://repositorio.segemar.gov.ar//bitstream/308849217/4314/1/AGUILAR%20FINAL.pdf" },
+  ipcvaArre:{ t:"Argentine Beef – Directorio de frigoríficos exportadores: Arre Beef SA (datos declarados por la empresa)", u:"https://argentinebeef.org.ar/en/exportadores/frigorificos/arre-beef-sa" },
+  ipcvaGor: { t:"Argentine Beef – Directorio de frigoríficos exportadores: Frigorífico Gorina SAIC (datos declarados por la empresa)", u:"https://argentinebeef.org.ar/en/exportadores/frigorificos/frigorifico-gorina-saic" },
+  gbaGor:   { t:"Gobierno de la Provincia de Buenos Aires, Ministerio de Trabajo – Trabajo asiste a uno de los frigoríficos más grandes tras un grave incendio (26-jun-2025)", u:"https://gba.gob.ar/trabajo/noticias/trabajo_asiste_uno_de_los_frigor%C3%ADficos_m%C3%A1s_grandes_tras_un_grave_incendio" },
 });
