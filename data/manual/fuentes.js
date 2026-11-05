@@ -163,4 +163,10 @@ Object.assign(SRC, {
   ipcvaArre:{ t:"Argentine Beef – Directorio de frigoríficos exportadores: Arre Beef SA (datos declarados por la empresa)", u:"https://argentinebeef.org.ar/en/exportadores/frigorificos/arre-beef-sa" },
   ipcvaGor: { t:"Argentine Beef – Directorio de frigoríficos exportadores: Frigorífico Gorina SAIC (datos declarados por la empresa)", u:"https://argentinebeef.org.ar/en/exportadores/frigorificos/frigorifico-gorina-saic" },
   gbaGor:   { t:"Gobierno de la Provincia de Buenos Aires, Ministerio de Trabajo – Trabajo asiste a uno de los frigoríficos más grandes tras un grave incendio (26-jun-2025)", u:"https://gba.gob.ar/trabajo/noticias/trabajo_asiste_uno_de_los_frigor%C3%ADficos_m%C3%A1s_grandes_tras_un_grave_incendio" },
+  // --- 5-nov-2026 ---
+  tolPEA23: { t:"Alpha Lithium – Actualización de la evaluación económica preliminar (PEA) de Tolillar (comunicado, 14-ago-2023)", u:"https://app.researchpool.com/provider/globenewswire/voltaic-minerals-corp-vlt-alpha-lithium-updates-and-improves-preliminary-economic-assessment-for-qqd8Oelchp" },
+  purRGS26: { t:"Pursuit Minerals – Extraordinary High-Grade Lithium Results from DDH-3 at Rio Grande Sur (ASX, 28-oct-2026)", u:"https://announcements.asx.com.au/asxpdf/20261028/pdf/075w3x8x1f0lc1.pdf" },
+  agagEQ26: { t:"Argenta Silver – Comunicado del 22-ene-2026 con el recurso NI 43-101 de El Quevar (Yaxtché)", u:"https://www.stockwatch.com/News/Item/Z-C!AGAG-3777060/C/AGAG?fmt=orig" },
+  frdEDM26: { t:"Fredonia Mining – Comunicado del 2-nov-2026 con el resumen de la PEA de El Dorado Monserrat", u:"https://www.bnnbloomberg.ca/press-releases/2026/11/02/fredonia-confirms-continuity-of-goldsilver-mineralization-and-the-potential-expansion-of-the-conceptual-edm-mine-plan-at-herradura-hill/" },
+  cneaDO66: { t:"CNEA – Distrito Uranífero del Tonco / Yacimiento «Don Otto» (Gerencia de Materias Primas, 1966)", u:"https://nuclea.cnea.gob.ar/bitstreams/9cf86172-82e2-403d-a512-5559a2ae55b0/download" },
 });

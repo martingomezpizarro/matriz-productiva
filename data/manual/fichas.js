@@ -642,5 +642,42 @@ const TEC = {
     prod:"Cortes vacunos enfriados (Hilton) y congelados para exportación y mercado interno",
     nums:[["Faena","30.000 cabezas por mes; capacidad declarada de 1.600 por día","ipcvaGor"],["Desposte","5.000 cuartos por día","ipcvaGor"],["Capacidad de producción","75.000 t/año, de las que ≈ 60.000 t se exportan","ipcvaGor"],["Establecimiento SENASA","N° 2025","ipcvaGor"],["Personal","540 empleados (jun-2025)","gbaGor"],["Ranking 2024","Tercer frigorífico del país por animales faenados","gbaGor"]],
     hitos:[["17-feb-2025","Un incendio destruye gran parte de la planta"],["abr-2025","Se retoma la faena, dos meses después del incendio; la empresa estima dos años para la recuperación total"]],
-    src:["ipcvaGor","gbaGor"] }
+    src:["ipcvaGor","gbaGor"] },
+  // --- 5-nov-2026 ---
+  "mi-salar-tolillar": {
+    met:"Litio en salmuera en el Salar de Tolillar (Puna salteña): bombeo de salmuera y extracción directa de litio (DLE) en lugar de pozas de evaporación de largo plazo.",
+    proc:["Pozos de bombeo de salmuera","Extracción directa de litio (DLE) por adsorción selectiva","Concentración y purificación del eluido (se quitan magnesio, boro y calcio)","Precipitación con carbonato de sodio","Secado, micronizado y envasado de carbonato grado batería","Reinyección de la salmuera agotada al salar"],
+    prod:"Carbonato de litio grado batería",
+    nums:[["Producción (fase 1 de la PEA)","25.000 t/año de carbonato de litio; una segunda fase de 25.000 t/año queda fuera del estudio","tolPEA23"],["Vida útil","35 años","tolPEA23"],["Inversión inicial","US$ 776,6 M, con US$ 179,2 M de contingencias","tolPEA23"],["Costo de producción","US$ 5.172/t (bombeo y proceso, sin transporte); costo en efectivo con transporte y regalías de US$ 5.980/t","tolPEA23"],["Valor presente neto (8%, después de impuestos)","US$ 1.739 M, con TIR de 25,6% y repago en 3,7 años","tolPEA23"],["Precio supuesto","Promedio de US$ 23.146/t de carbonato en la vida del proyecto","tolPEA23"]],
+    nota:"Números de la evaluación económica preliminar (PEA) actualizada por Alpha Lithium en ago-2023; una PEA no demuestra viabilidad económica.",
+    hitos:[["10-jul-2023","Alpha Lithium publica la PEA de Tolillar"],["14-ago-2023","PEA actualizada con los recursos nuevos"]],
+    src:["tolPEA23"] },
+  "mi-rio-grande-sur": {
+    met:"Litio en salmuera en el Salar de Río Grande (Salta, cerca de Tolar Grande), con salmueras profundas de ley alta y proceso convencional por evaporación solar.",
+    proc:["Perforación diamantina y pozos de bombeo de salmuera","Concentración en pozas de evaporación solar","Purificación (se quitan magnesio, boro y calcio)","Precipitación con carbonato de sodio (carbonato) o producción de cloruro de litio","Secado y envasado"],
+    prod:"Carbonato de litio o cloruro de litio (ambas vías en estudio en las adendas de la prefactibilidad)",
+    nums:[["Recurso mineral","1,264 Mt de carbonato de litio equivalente (LCE) con 424 mg/l de Li","purRGS26"],["Indicados","705.000 t de LCE con 443 mg/l de Li","purRGS26"],["Inferidos","559.000 t de LCE con 405 mg/l de Li","purRGS26"],["Pozo DDH-3 (Mito)","≈ 560 m de profundidad, terminado en salmuera mineralizada; máximo de 995 mg/l de Li entre 444,2 y 445,0 m","purRGS26"],["Escala inicial","Operación inicial de 5.000 t/año; las adendas de la prefactibilidad estudian una expansión","purRGS26"]],
+    hitos:[["feb-2026","Actualización del recurso mineral"],["28-oct-2026","Resultados finales del pozo DDH-3"],["2027","Prueba de bombeo continuo de 30 días en el pozo PW-1 (María Magdalena)"]],
+    src:["purRGS26"] },
+  "mi-el-quevar": {
+    met:"Plata epitermal de sulfuración alta a intermedia, con oro asociado, alojada en brechas y domos dacíticos (depósito Yaxtché), en la Puna de Salta.",
+    proc:TEC_GEN["mi-au"].proc,
+    prod:"Plata (con oro asociado)",
+    nums:[["Recurso indicado (Yaxtché)","2,93 Mt con 482 g/t de plata: 45,3 Moz de plata","agagEQ26"],["Recurso inferido","0,31 Mt con 417 g/t de plata: 4,1 Moz de plata","agagEQ26"],["Fecha efectiva del recurso","30-sep-2024 (informe NI 43-101)","agagEQ26"],["Superficie","57.000 ha; menos del 3% con exploración completa","agagEQ26"],["Infraestructura","Campamento propio para 100 personas, más de 60 km de caminos internos; ferrocarril, gasoducto y camino de servicio a ≈ 3 km, y línea de alta tensión a ≈ 20 km","agagEQ26"]],
+    src:["agagEQ26"] },
+  "mi-el-dorado-monserrat": {
+    met:"Oro y plata epitermal de baja ley en el Macizo del Deseado (Santa Cruz), con un plan conceptual a cielo abierto de gran escala.",
+    proc:["Mina a cielo abierto con camiones y palas","Chancado","Lixiviación del mineral","Recuperación del metal","Fundición de doré"],
+    prod:"Doré de oro y plata",
+    nums:[["Producción promedio (PEA)","146.000 oz por año","frdEDM26"],["Vida útil","17 años","frdEDM26"],["Escala de mina","10 Mt/año de mineral","frdEDM26"],["Valor presente neto (10%)","US$ 1.500 M, con TIR de 65%","frdEDM26"],["Informe técnico","Fecha efectiva 17-ago-2026; presentado en SEDAR+ el 7-oct-2026","frdEDM26"]],
+    nota:"Evaluación económica preliminar (PEA) basada en parte en recursos inferidos; no demuestra viabilidad económica.",
+    hitos:[["17-ago-2026","Fecha efectiva del informe técnico de la PEA"],["7-oct-2026","Presentación del informe en SEDAR+"]],
+    src:["frdEDM26"] },
+  "mi-don-otto": {
+    met:"Uranio sedimentario en margas de la Formación Coloradas Inferiores (distrito del Tonco, Valles Calchaquíes), explotado por la CNEA con labores subterráneas y lixiviación en pilas.",
+    proc:["Labores subterráneas (galerías, piques y chimeneas)","Extracción del mineral friable, sin molienda previa","Lixiviación en pilas con ácido sulfúrico (5 a 10 g/l, pH ≈ 2)","Precipitación del uranio con cal","Secado del preconcentrado"],
+    prod:"Preconcentrado de uranio con 5% a 10% de U₃O₈",
+    nums:[["Reservas (mitad sur, hasta el nivel 0)","≈ 200.000 t con ley media de 0,15% de U₃O₈","cneaDO66"],["Extensión del yacimiento","2.100 m de corrida en el flanco este del sinclinal del Tonco","cneaDO66"],["Labores","3.200 m de galerías, piques y chimeneas; galería principal ≈ 100 m bajo el afloramiento","cneaDO66"],["Lixiviación","Extracción de más de 90% con 19 kg de ácido por tonelada; primera etapa prevista de 36.000 t","cneaDO66"]],
+    nota:"Datos del informe de la CNEA de 1966, cuando el yacimiento estaba en preparación y explotación; fue el primero de Sudamérica en usar lixiviación en pilas para uranio. La cartera oficial lo lista hoy en factibilidad.",
+    src:["cneaDO66"] }
 };
