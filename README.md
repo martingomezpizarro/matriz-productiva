@@ -14,6 +14,7 @@ terminos.html         términos y condiciones de uso, fuentes y privacidad
 js/app.js             lógica del mapa, la tabla, las empresas y los gráficos
 js/sitio.config.js    datos del autor, links de colaboración y licencia (pie y términos)
 js/pie.js             pie de página institucional (barra + ventana «Acerca de»)
+js/circuito.js        vista «Circuito global»: mapa mundial y peso de la Argentina en cada empresa del RIGI
 css/pie.css           estilos del pie
 data/
   auto/               lo regenera scripts/actualizar.py (no editar a mano)
@@ -28,8 +29,11 @@ data/
     empresas.js         directorio de empresas
     fichas.js           fichas técnicas («Cómo funciona»)
     estadisticas.js     indicadores y rankings publicados
+    circuito.js         empresas del RIGI en el mundo: bases, participaciones, proyectos y cadenas
     fuentes.js          todas las fuentes citadas (SRC)
-  geo/                límites provinciales y departamentales
+  geo/                límites provinciales y departamentales; mundo.js = países (Natural Earth 1:110m)
+docs/
+  circuito-global-rigi.md  análisis escrito del circuito global (mismos números que la vista)
 scripts/
   actualizar.py         baja las fuentes y regenera data/auto
   actualizar-energia.bat  corre el paso de Energía desde una PC en Argentina
@@ -69,6 +73,10 @@ Hace `git pull`, corre `python scripts/actualizar.py --grupo energia` y sube los
 ### RIGI
 
 Los proyectos del RIGI están en `data/manual/rigi.js`, uno por activo del mapa, con los datos de la resolución del Ministerio de Economía publicada en el Boletín Oficial (vehículo, inversión total y computable, plazos y alcance). Una tarea programada de Claude («Matriz Productiva: RIGI y fichas») corre todos los días a las 7:56: revisa resoluciones nuevas, las carga, completa hasta 5 fichas incompletas y sube los cambios a `main`.
+
+### Circuito global
+
+La vista **Circuito global** muestra, para cada empresa con proyectos RIGI, su casa matriz y el resto de su negocio en el mundo, cuánto pesa hoy la Argentina en sus ingresos (o en su producción) y cuánto pesaría con los proyectos a régimen, con dos juegos de precios de referencia. También muestra la participación del país en la producción mundial y la cadena de valor de cada producto. Los datos están en `data/manual/circuito.js`: para sumar una empresa, copiar un bloque de `CIR_EMP`, cargar su base (última cifra anual con fuente) y sus proyectos (id del activo del mapa, participación y producción a régimen). El cálculo está explicado en la cabecera del archivo y en `docs/circuito-global-rigi.md`.
 
 ### Panel de administración
 

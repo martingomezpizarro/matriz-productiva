@@ -572,12 +572,16 @@ function setView(v){
   document.getElementById("coWrap").hidden = v!=="co";
   if(v==="table") renderTable();
   if(v==="co"){ drawer.hidden=true; renderCoList(); if(!st.coSel && window.innerWidth>860) openProfile("ypf"); }
+  document.getElementById("vGl").setAttribute("aria-pressed",v==="gl");
+  document.getElementById("glWrap").hidden = v!=="gl";
+  if(v==="gl"){ drawer.hidden=true; if(window.renderCircuito) renderCircuito(); }
   try{ localStorage.setItem("mp-view",v); }catch(e){}
 }
 document.getElementById("vMap").onclick=()=>setView("map");
 document.getElementById("vTab").onclick=()=>setView("table");
 document.getElementById("vCo").onclick=()=>setView("co");
 document.getElementById("vSt").onclick=()=>setView("stats");
+document.getElementById("vGl").onclick=()=>setView("gl");
 
 // ---------- empresas ----------
 const assetsOf = k => ALL.filter(a=>a.emp.some(([x])=>x===k));
@@ -1251,7 +1255,7 @@ document.addEventListener("mouseover",ev=>{
 document.getElementById("nTot").textContent = ALL.length;
 { const f=META.actualizado.split("-"); const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"]; document.getElementById("upd").textContent = `${+f[2]}-${M[+f[1]-1]}-${f[0]}`; }
 render();
-try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="stats") setView(v); }catch(e){}
+try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="stats"||v==="gl") setView(v); }catch(e){}
 // ---------- Panel de administración ----------
 // Se abre con …/#admin (queda recordado en este navegador y aparece el botón «Admin»).
 // Sólo muestra estado y atajos: las acciones piden el login de GitHub o de Claude.
