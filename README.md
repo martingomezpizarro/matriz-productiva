@@ -39,6 +39,8 @@ scripts/
   actualizar-energia.bat  corre el paso de Energía desde una PC en Argentina
 ```
 
+Los archivos `.js` y `.css` propios se cargan con `?v=AAAAMMDD` en `index.html`. Al publicar un cambio de código, subí ese número (en todas las etiquetas a la vez) para que los navegadores no mezclen el `index.html` nuevo con un `app.js` viejo guardado en caché.
+
 Para verlo en local: `python -m http.server` en la carpeta del repo y abrir http://localhost:8000.
 
 ## Actualización de datos
