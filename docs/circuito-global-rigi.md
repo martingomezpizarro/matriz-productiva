@@ -97,7 +97,7 @@ Resultado del modelo con el precio de cada estudio, contra lo que publicó la em
 
 El modelo es más simple que los estudios (sin capital de trabajo, deuda ni quebrantos), así que sirve para ver sensibilidades y órdenes de magnitud, no para reemplazarlos. Los supuestos propios de cada proyecto están escritos en la ficha.
 
-**McEwen:** con el precio del estudio, su 46,3% de Los Azules vale ≈ US$ 1.160 M en el modelo, casi toda su capitalización (≈ US$ 1.100–1.300 M). Con 2 puntos más de tasa, el VAN cae ≈ US$ 1.600 M a 100%: es la variable que más mueve el valor, más que el precio del cobre. Eso explica por qué las desarrolladoras sufren tanto cuando suben las tasas.
+**McEwen:** con el precio del estudio, su 46,3% de Los Azules vale ≈ US$ 1.160 M en el modelo, casi toda su capitalización (≈ US$ 1.100–1.300 M). Con 2 puntos más de tasa (de 8% a 10%), el VAN a 100% cae ≈ US$ 750 M, un 30%: casi lo mismo que una baja de 10% en el precio del cobre (≈ US$ 900 M). Por eso las desarrolladoras sufren tanto cuando suben las tasas, aunque el metal no caiga.
 
 ## 6. Movimiento
 
