@@ -194,6 +194,31 @@ let K=1;
 // estiran en vertical por 1/cos(tilt) para que sigan viéndose redondos al inclinarse.
 const CAM = { tilt:0, yaw:0, uy:1, raf:0 };
 const REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---------- números que cuentan hasta su valor (respeta «reducir movimiento») ----------
+// countUp(raíz, selector, clave?): anima el primer número del texto de cada elemento.
+// Con clave, recuerda el valor anterior y cuenta desde ahí (útil cuando cambian los filtros).
+const CU_PREV = new Map();
+function countUp(root, sel, keyOf){
+  if(!root) return;
+  root.querySelectorAll(sel).forEach((el,i)=>{
+    const tn=[...el.childNodes].find(n=>n.nodeType===3 && /\d/.test(n.nodeValue)); if(!tn) return;
+    const m=tn.nodeValue.match(/^([^\d]*?)(\d{1,3}(?:\.\d{3})+|\d+)(,\d+)?([\s\S]*)$/); if(!m) return;
+    const dec=m[3]?m[3].length-1:0;
+    const to=parseFloat(m[2].replace(/\./g,"")+(m[3]?"."+m[3].slice(1):""));
+    const key=keyOf?keyOf(el,i):null;
+    const from=key&&CU_PREV.has(key)?CU_PREV.get(key):0;
+    if(key) CU_PREV.set(key,to);
+    if(REDUCED||from===to||!isFinite(to)) return;
+    const fmt=v=>v.toLocaleString("es-AR",{minimumFractionDigits:dec,maximumFractionDigits:dec});
+    const t0=performance.now(), D=900;
+    const step=now=>{ const u=Math.min(1,(now-t0)/D), e=1-Math.pow(1-u,3);
+      tn.nodeValue=m[1]+(u<1?fmt(from+(to-from)*e):m[2]+(m[3]||""))+m[4]; if(u<1) requestAnimationFrame(step); };
+    tn.nodeValue=m[1]+fmt(from)+m[4];
+    requestAnimationFrame(step);
+  });
+}
+
 const cam3d = document.getElementById("cam3d");
 function sizeMarks(){
   const s = 1/Math.pow(K,.75);
@@ -284,6 +309,7 @@ function renderKpis(){
     const seg = ["op","con","pro","exp"].map(e=>`<i style="width:${xs.filter(a=>a.st===e).length/n*100}%;background:var(--${e})"></i>`).join("");
     return `<div class="kpi" style="--c:${cvar(s)}"><b>${xs.length}</b><span>${SECT[s].n}</span><div class="bar" title="Operación / construcción / proyecto">${xs.length?seg:""}</div></div>`;
   }).join("");
+  countUp(document.getElementById("kpis"), ".kpi b", (el,i)=>"kpi"+i);
 }
 
 function symSvg(sym,s,size=14){
@@ -558,6 +584,7 @@ function renderStats(){
   }).join("") + `<section class="statsec x"><h2><i></i>Visión transversal</h2><p class="note" style="max-width:72ch;margin-top:-8px">Los tres sectores comparados entre sí y con el resto de la economía.</p>${vizCards("x")}</section>`;
   el.querySelectorAll("[data-asset]").forEach(b=>b.onclick=()=>{ setView("map"); select(b.dataset.asset); });
   requestAnimationFrame(drawViz);
+  countUp(el, ".tile .v");
 }
 function setView(v){
   st.view=v;
@@ -572,12 +599,16 @@ function setView(v){
   document.getElementById("coWrap").hidden = v!=="co";
   if(v==="table") renderTable();
   if(v==="co"){ drawer.hidden=true; renderCoList(); if(!st.coSel && window.innerWidth>860) openProfile("ypf"); }
+  document.getElementById("vGl").setAttribute("aria-pressed",v==="gl");
+  document.getElementById("glWrap").hidden = v!=="gl";
+  if(v==="gl"){ drawer.hidden=true; if(window.renderCircuito) renderCircuito(); }
   try{ localStorage.setItem("mp-view",v); }catch(e){}
 }
 document.getElementById("vMap").onclick=()=>setView("map");
 document.getElementById("vTab").onclick=()=>setView("table");
 document.getElementById("vCo").onclick=()=>setView("co");
 document.getElementById("vSt").onclick=()=>setView("stats");
+document.getElementById("vGl").onclick=()=>setView("gl");
 
 // ---------- empresas ----------
 const assetsOf = k => ALL.filter(a=>a.emp.some(([x])=>x===k));
@@ -677,6 +708,7 @@ function openProfile(k){
     <p class="note">Los montos RIGI son los de cada resolución del Boletín Oficial para el proyecto completo, no la participación de esta empresa.</p>`;
   document.getElementById("coWrap").classList.add("has-sel");
   el.scrollTop=0; renderCoList();
+  countUp(el, ".stat b");
   document.getElementById("coBack").onclick=()=>{ st.coSel=null; document.getElementById("coWrap").classList.remove("has-sel"); renderCoList(); };
   el.querySelectorAll("[data-onmap]").forEach(b=>b.onclick=()=>{ setView("map"); select(b.dataset.onmap); });
   el.querySelectorAll("[data-cop2]").forEach(b=>b.onclick=()=>openProfile(b.dataset.cop2));
@@ -1251,7 +1283,7 @@ document.addEventListener("mouseover",ev=>{
 document.getElementById("nTot").textContent = ALL.length;
 { const f=META.actualizado.split("-"); const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"]; document.getElementById("upd").textContent = `${+f[2]}-${M[+f[1]-1]}-${f[0]}`; }
 render();
-try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="stats") setView(v); }catch(e){}
+try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="stats"||v==="gl") setView(v); }catch(e){}
 // ---------- Panel de administración ----------
 // Se abre con …/#admin (queda recordado en este navegador y aparece el botón «Admin»).
 // Sólo muestra estado y atajos: las acciones piden el login de GitHub o de Claude.
