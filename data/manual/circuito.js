@@ -77,6 +77,10 @@ const CIR_SRC = {
   gualcaE: { t:"Mineros S.A. vendió Minas Argentinas (Gualcamayo) a Eris LLC (2023)", u:"https://www.mining-technology.com/news/mineros-divest-gualcamayo-property" },
   caem26:  { t:"CAEM – Informe productivo 2026: oro 1,184 Moz y plata 22,1 Moz en 2025; litio 116 kt LCE", u:"https://caem.com.ar/storage/2026/05/informe-productivo-caem-2026.pdf" },
   usgs26:  { t:"USGS – Mineral Commodity Summaries 2026 (producción mundial de litio, cobre, oro y plata)", u:"https://pubs.usgs.gov/publication/mcs2026" },
+  usgsLi:  { t:"USGS – MCS 2026, litio: Argentina 23.000 t de litio contenido en 2025 (13.800 en 2024); mundo 290.000 t", u:"https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-lithium.pdf" },
+  usgsCu:  { t:"USGS – MCS 2026, cobre: producción mundial de mina de 23 Mt en 2025", u:"https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-copper.pdf" },
+  usgsAu:  { t:"USGS – MCS 2026, oro: producción mundial de 3.300 t en 2025; la Argentina aportó 14% del doré importado por EE.UU. (2021–24)", u:"https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-gold.pdf" },
+  usgsAg:  { t:"USGS – MCS 2026, plata: Argentina 800 t en 2025 (774 en 2024); mundo 26.000 t", u:"https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-silver.pdf" },
   ei25:    { t:"Energy Institute – Statistical Review of World Energy (producción mundial de petróleo, gas y comercio de GNL)", u:"https://www.energyinst.org/statistical-review" }
 };
 
@@ -334,10 +338,10 @@ const CIR_EMP = {
 // ---------------- ARGENTINA EN EL MUNDO ----------------
 // hoy = participación de la Argentina en la producción mundial; proy = lo que agregaría la cartera, contra el mundo de hoy.
 const CIR_PAIS = [
-  { k:"li", n:"Litio", hoy:7.6, proy:null, hoyT:"≈ 116–120 kt LCE en 2025 (≈ 22 kt de litio contenido) contra ≈ 290 kt de litio en el mundo", proyT:"573 kt LCE en 2035 si avanzan 15 proyectos: casi 5 veces lo de hoy", s:["caem26","usgs26","litLN"] },
-  { k:"cu", n:"Cobre", hoy:0, proy:4.5, hoyT:"Sin producción desde el cierre de Alumbrera (2018)", proyT:"Vicuña, El Pachón, MARA y Los Azules suman ≈ 1 Mt/año: ≈ 4–5% del cobre de mina actual (≈ 23 Mt)", s:["usgs26","vicPEA","pachonPM","bo1854_26","azulFS"] },
-  { k:"au", n:"Oro", hoy:1.1, proy:null, hoyT:"1,18 Moz (≈ 37 t) en 2025 contra ≈ 3.300 t en el mundo; la producción cae 42% en una década", proyT:"Nuevas minas (Gualcamayo, Diablillos) compensan sobre todo la caída", s:["caem26","usgs26"] },
-  { k:"ag", n:"Plata", hoy:2.7, proy:null, hoyT:"22,1 Moz (≈ 690 t) en 2025 contra ≈ 25.000 t en el mundo", proyT:"Diablillos sumaría ≈ 14 Moz/año en sus primeros años", s:["caem26","usgs26","abraDFS"] },
+  { k:"li", n:"Litio", hoy:7.9, proy:null, hoyT:"23.000 t de litio contenido en 2025 (≈ 122 kt LCE, +67% frente a 2024) contra 290.000 t en el mundo: 5° productor, detrás de Australia, China, Chile y Zimbabue", proyT:"573 kt LCE en 2035 si avanzan 15 proyectos: casi 5 veces lo de hoy", s:["usgsLi","caem26","litLN"] },
+  { k:"cu", n:"Cobre", hoy:0, proy:4.5, hoyT:"Sin producción desde el cierre de Alumbrera (2018)", proyT:"Vicuña, El Pachón, MARA y Los Azules suman ≈ 1 Mt/año: ≈ 4–5% de las 23 Mt de cobre de mina de 2025", s:["usgsCu","vicPEA","pachonPM","bo1854_26","azulFS"] },
+  { k:"au", n:"Oro", hoy:1.1, proy:null, hoyT:"1,18 Moz (≈ 37 t) en 2025 contra 3.300 t en el mundo; la producción cae 42% en una década", proyT:"Nuevas minas (Gualcamayo, Diablillos) compensan sobre todo la caída. El 14% del doré que importa EE.UU. sale de la Argentina", s:["caem26","usgsAu"] },
+  { k:"ag", n:"Plata", hoy:3.1, proy:null, hoyT:"800 t en 2025 según el USGS contra 26.000 t en el mundo (la CAEM informa 22,1 Moz, ≈ 690 t)", proyT:"Diablillos sumaría ≈ 14 Moz/año en sus primeros años", s:["usgsAg","caem26","abraDFS"] },
   { k:"oil", n:"Petróleo", hoy:0.9, proy:null, hoyT:"939 mil bbl/d (ago-2026) contra ≈ 105 millones de bbl/d de líquidos en el mundo", proyT:"La meta de la industria de duplicar el shale hacia 2030 la acercaría a ≈ 1,5%", s:["cap4","ei25","ypfPlan"] },
   { k:"gas", n:"GNL", hoy:0, proy:4.3, hoyT:"Sin exportación de GNL hoy", proyT:"Southern Energy (≈ 6 Mtpa) + Argentina LNG (12 Mtpa) ≈ 4% del comercio mundial actual (≈ 420 Mt)", s:["sesaSoc","ypfArgLNG","ei25"] }
 ];

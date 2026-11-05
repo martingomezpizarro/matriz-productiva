@@ -58,10 +58,10 @@ Análisis al 5-nov-2026. Los números de este documento son los que calcula la v
 
 | Producto | Hoy | Con la cartera (contra el mercado actual) |
 |---|---|---|
-| Litio | ≈ 7,6% (116–120 kt LCE en 2025) | 573 kt LCE en 2035 si avanzan 15 proyectos: casi 5 veces lo de hoy |
-| Cobre | 0% | ≈ 4–5% (≈ 1 Mt/año con Vicuña, El Pachón, MARA y Los Azules) |
-| Oro | ≈ 1,1% (1,18 Moz en 2025) | sobre todo compensa la caída de las minas maduras |
-| Plata | ≈ 2,7% (22,1 Moz en 2025) | Diablillos sumaría ≈ 14 Moz/año en sus primeros años |
+| Litio | 7,9% (23.000 t de litio contenido en 2025, USGS) | 573 kt LCE en 2035 si avanzan 15 proyectos: casi 5 veces lo de hoy |
+| Cobre | 0% | ≈ 4–5% (≈ 1 Mt/año con Vicuña, El Pachón, MARA y Los Azules, contra 23 Mt mundiales, USGS) |
+| Oro | ≈ 1,1% (1,18 Moz en 2025 contra 3.300 t mundiales, USGS) | sobre todo compensa la caída de las minas maduras |
+| Plata | 3,1% (800 t en 2025, USGS; la CAEM informa 22,1 Moz) | Diablillos sumaría ≈ 14 Moz/año en sus primeros años |
 | Petróleo | ≈ 0,9% (939 mil bbl/d, ago-2026) | ≈ 1,5% si se duplica el shale hacia 2030 |
 | GNL | 0% | ≈ 4% del comercio mundial actual (Southern Energy + Argentina LNG ≈ 18 Mtpa) |
 
