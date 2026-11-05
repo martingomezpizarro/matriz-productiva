@@ -359,12 +359,92 @@ tbody tr:hover{background:var(--bg)}
 .glcad .lab{font-family:var(--f-display);font-size:20px;text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:8px}
 .glcad .lab i{width:12px;height:12px;border-radius:3px;background:var(--c)}
 .glcad ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px;counter-reset:p}
-.glcad li{position:relative;border:1px solid var(--line);border-left:3px solid var(--c);border-radius:8px;padding:6px 10px;font-size:12px;max-width:260px;flex:1 1 180px;background:var(--panel)}
-.glcad li b{display:block;font-size:13px;margin-bottom:2px}
+.glcad li{position:relative;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;max-width:260px;flex:1 1 180px;background:var(--panel)}
+.glcad li b{display:flex;align-items:center;gap:6px;font-size:13px;margin-bottom:2px}
+.glcad li b::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
 .glcad li span{color:var(--muted)}
 .glmeth{font-size:13px;max-width:82ch;display:flex;flex-direction:column;gap:8px}
 .glmeth p{margin:0}
 @media (max-width: 1100px){ .glgrid{grid-template-columns:minmax(0,1fr)} }
+
+/* ===== Laboratorio de valuación ===== */
+.vlab{border-top:1px solid var(--line);padding-top:22px}
+.vchips .chip{min-height:32px}
+.vgrid2{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr);gap:22px;align-items:start}
+.vctl{display:flex;flex-direction:column;gap:12px}
+.vctl label{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.vctl label span b{font-variant-numeric:tabular-nums}
+.vctl label small{color:var(--muted)}
+.vctl input[type=range]{width:100%;accent-color:var(--c);height:28px;touch-action:manipulation}
+.vqk{display:flex;flex-wrap:wrap;gap:6px;margin-top:-4px}
+.vqk .chip{font-size:11.5px}
+.vk{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:14px}
+.vk b{font-size:26px}
+.vcmp{margin:10px 0 0;padding:10px 12px;background:var(--bg);border-radius:8px}
+.vatr{display:flex;flex-direction:column;gap:4px;font-size:13px;margin-top:10px}
+.vatr small{color:var(--muted)}
+.vcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 22px}
+.vcard{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.vcard.wide{grid-column:1/-1}
+.vchart{width:100%;height:auto;display:block}
+.vchart text{font:11px var(--f-mono);fill:var(--muted)}
+.vchart line.g{stroke:var(--line);stroke-width:1}
+.vchart line.z{stroke:var(--ink);stroke-opacity:.5;stroke-width:1}
+.vchart .vb{fill:var(--c)}
+.vchart .vb.neg{fill:color-mix(in srgb,var(--ink) 30%,var(--panel))}
+.vchart .vb.sunk{fill:var(--line)}
+.vchart .vcum{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.vchart .vhits rect:hover{fill:color-mix(in srgb,var(--ink) 6%,transparent)}
+.vgw{overflow-x:auto}
+.vgridt{width:100%;min-width:0;border-collapse:separate;border-spacing:2px;font-size:12px}
+.vgridt th{position:static;cursor:default;font-size:10.5px;text-align:center;padding:4px;background:none;text-transform:none;letter-spacing:0}
+.vgridt th small{display:block;color:var(--faint);font-weight:400}
+.vgridt td{text-align:center;padding:7px 4px;border:0;border-radius:4px;font-variant-numeric:tabular-nums;transition:background-color .25s}
+.vgridt td.cur{outline:2px solid var(--ink);outline-offset:-2px}
+.vtor{display:flex;flex-direction:column;gap:8px}
+.vtor .tr{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 10px;align-items:center;font-size:12.5px}
+.vtor .tr em{grid-column:2;font-style:normal;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.vtor .tb{display:flex;height:12px;background:var(--bg);border-radius:3px;position:relative}
+.vtor .tb::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--ink);opacity:.5}
+.vtor .tb i{display:block;width:50%;height:100%;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.vtor .tb i.dn{background:color-mix(in srgb,var(--og) 70%,var(--panel));transform-origin:right;border-radius:3px 0 0 3px}
+.vtor .tb i.up{background:color-mix(in srgb,var(--op) 70%,var(--panel));transform-origin:left;border-radius:0 3px 3px 0}
+.vsup ul{margin:6px 0 10px;padding-left:18px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.vglos summary{cursor:pointer;font-weight:600;font-size:14px;padding:10px 0}
+.vglos dl{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:8px 18px;margin:6px 0 0;font-size:13px}
+.vglos dt{font-weight:600}.vglos dd{margin:0;color:var(--ink)}
+#glVal[data-anim="1"] .vlab>*{animation:mpUp .55s cubic-bezier(.16,1,.3,1) both}
+#glVal[data-anim="1"] .vlab>:nth-child(3){animation-delay:.04s}#glVal[data-anim="1"] .vlab>:nth-child(4){animation-delay:.08s}#glVal[data-anim="1"] .vlab>:nth-child(n+5){animation-delay:.12s}
+.vbtn{font-size:11px;padding:2px 9px;margin-left:auto}
+/* respuesta al tocar (apple-design: feedback al presionar, sin demora de tap) */
+.chip,.glrank,.seg button,.vqk .chip,.glzoom button,.zoom button{touch-action:manipulation}
+.chip:active,.glrank:active,.seg button:active,.glzoom button:active,.zoom button:active,.bar:active{transform:scale(.97);transition:transform .1s ease-out}
+@media (max-width: 900px){ .vgridt{font-size:11px} .vgridt th{font-size:10px;padding:3px 2px} .vgrid2,.vcards{grid-template-columns:minmax(0,1fr)} .vk{grid-template-columns:repeat(2,minmax(0,1fr))} .vglos dl{grid-template-columns:1fr} }
+@media (prefers-reduced-motion: reduce){ #glVal .vlab>*{animation:none!important} .vtor .tb i,.vgridt td{transition:none} .chip:active,.glrank:active,.seg button:active{transform:none} }
+/* ===== Circuito global: movimiento (mismo lenguaje que el resto del sitio) ===== */
+.glhead,.glgrid,.glwrap>.glsec,#glCad{animation:mpUp .7s cubic-bezier(.16,1,.3,1) both}
+.glgrid{animation-delay:.06s}.glwrap>.glsec{animation-delay:.12s}
+.glrank .b{transform-origin:left;animation:mpGrow .9s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.15s + var(--i,0)*.04s)}
+.glrank{transition:background .2s,padding-left .25s cubic-bezier(.16,1,.3,1)}
+.glrank:hover{padding-left:12px}
+#glCard[data-anim="sel"] .glcard>*{animation:mpFwd .55s cubic-bezier(.16,1,.3,1) both}
+#glCard[data-anim="soft"] .glcard>*{animation:mpFade .35s ease both}
+#glCard .glcard>:nth-child(2){animation-delay:.05s}#glCard .glcard>:nth-child(3){animation-delay:.1s}#glCard .glcard>:nth-child(4){animation-delay:.15s}#glCard .glcard>:nth-child(n+5){animation-delay:.2s}
+.glstack i{transform-origin:left;animation:mpGrow .9s cubic-bezier(.16,1,.3,1) .25s both}
+.glpais .pb s{transform-origin:left;animation:mpGrow 1s cubic-bezier(.16,1,.3,1) .3s both}
+.glcad li{animation:mpFwd .5s cubic-bezier(.16,1,.3,1) both}
+.glcad li:nth-child(2){animation-delay:.06s}.glcad li:nth-child(3){animation-delay:.12s}.glcad li:nth-child(4){animation-delay:.18s}.glcad li:nth-child(5){animation-delay:.24s}
+.glcad li:not(:last-child)::after{content:"→";position:absolute;right:-9px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--faint);background:var(--panel);line-height:1}
+.glmap .arc.prod.flow{animation:flow 1.2s linear infinite}
+.glmap .arc.cap.hl{stroke:var(--c);stroke-opacity:.9;stroke-width:1.8}
+.glmap .hq.hl rect{fill:var(--c)}
+.glmap .glpulse{fill:none;stroke:var(--c);stroke-width:1.6;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;animation:mpPulse 1.8s cubic-bezier(.2,.6,.3,1) infinite;pointer-events:none}
+.glmap .hq .glpulse{stroke:var(--c)}
+@media (prefers-reduced-motion: reduce){
+  .glhead,.glgrid,.glwrap>.glsec,#glCad,.glrank .b,#glCard .glcard>*,.glstack i,.glpais .pb s,.glcad li,.glmap .arc.prod.flow,.glmap .glpulse{animation:none!important}
+  .glrank{transition:none}
+}
+
 @media (max-width: 860px){
   .glwrap{padding:16px}
   .glrank{grid-template-columns:minmax(0,110px) minmax(0,1fr) 78px}
@@ -507,6 +587,7 @@ tbody tr:hover{background:var(--bg)}
 .drawer.has-nav h2{padding-right:28px}
 .drawer.has-nav .crumb{padding-right:150px;min-height:30px}
 .tablewrap:not([hidden]),.cowrap:not([hidden]),.statwrap:not([hidden]),.glwrap:not([hidden]){animation:mpFade .45s ease both}
+.kpi b,.stat b,.tile .v,.glkpis b{font-variant-numeric:tabular-nums}
 @keyframes mpFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .statsec{animation:mpUp .7s cubic-bezier(.16,1,.3,1) both}
 .statsec:nth-child(2){animation-delay:.05s}.statsec:nth-child(3){animation-delay:.12s}.statsec:nth-child(4){animation-delay:.19s}.statsec:nth-child(5){animation-delay:.26s}
@@ -617,6 +698,7 @@ tbody tr:hover{background:var(--bg)}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@14.4.0/dist/motion.js"></script>
 <script src="data/geo/departamentos.js"></script>
 <script src="data/geo/provincias.js"></script>
 <script src="data/manual/fuentes.js"></script>

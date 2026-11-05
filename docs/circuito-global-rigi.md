@@ -79,3 +79,26 @@ Análisis al 5-nov-2026. Los números de este documento son los que calcula la v
 - Las participaciones y capacidades son las publicadas por las empresas y las resoluciones del Boletín Oficial. Cuando faltan, el proyecto se muestra sin entrar en la suma.
 - Las cifras con ≈ son estimaciones: ingresos de Vista (desde su EBITDA y margen), de Pampa (orden de magnitud), el 49% de San José en McEwen, la producción minera de Shandong Gold y el aporte actual de Veladero a Barrick.
 - Monedas: RMB 7,19 y KRW 1.420 por dólar (promedios 2025).
+
+## 5. Laboratorio de valuación
+
+En la vista **Circuito global**, debajo del mapa, cada proyecto con datos públicos suficientes tiene un flujo de fondos simplificado: producción × (precio − costo oficial) − regalías − impuesto a las ganancias − inversión, descontado a 2026. Se pueden mover el precio, la tasa de descuento, la inversión, el costo y la alícuota (RIGI 25% contra régimen general 35%). Muestra VAN, TIR, repago, precio de equilibrio, margen por unidad, intensidad de capital, una tabla de sensibilidad precio × tasa, un gráfico de qué variable mueve más el valor y el VAN que le corresponde a cada empresa (y qué parte de su capitalización representa).
+
+Resultado del modelo con el precio de cada estudio, contra lo que publicó la empresa (VAN a 100% del proyecto):
+
+| Proyecto | Costo oficial | Modelo | Estudio publicado |
+|---|---|---|---|
+| Los Azules | AISC US$ 2,11/lb | VAN8 ≈ US$ 2.500 M, TIR 19%, equilibrio US$ 3,21/lb | VAN8 US$ 2.940 M, TIR 19,8%, equilibrio US$ 3,10/lb |
+| Vicuña | AISC neto US$ 0,47/lb | VAN8 ≈ US$ 10.900 M | VAN8 US$ 9.500 M (PEA) |
+| Diablillos | AISC US$ 19,89/oz AgEq | VAN5 ≈ US$ 2.800 M | VAN5 US$ 3.003 M |
+| Hombre Muerto Oeste (fase 1) | US$ 3.963/t | VAN8 ≈ US$ 400 M | VAN8 US$ 460 M |
+| MARA | AISC US$ 1,44/lb (2020) | VAN8 ≈ US$ 3.300 M | US$ 1.906 M con precios de 2020 |
+| Rincón, Cauchari-Olaroz etapa 2, Veladero, Bajo del Toro | ver supuestos | estimación propia | sin estudio económico público |
+
+El modelo es más simple que los estudios (sin capital de trabajo, deuda ni quebrantos), así que sirve para ver sensibilidades y órdenes de magnitud, no para reemplazarlos. Los supuestos propios de cada proyecto están escritos en la ficha.
+
+**McEwen:** con el precio del estudio, su 46,3% de Los Azules vale ≈ US$ 1.160 M en el modelo, casi toda su capitalización (≈ US$ 1.100–1.300 M). Con 2 puntos más de tasa, el VAN cae ≈ US$ 1.600 M a 100%: es la variable que más mueve el valor, más que el precio del cobre. Eso explica por qué las desarrolladoras sufren tanto cuando suben las tasas.
+
+## 6. Movimiento
+
+La vista usa el mismo lenguaje de movimiento que el resto del sitio (aparición en cascada, barras que crecen con `scaleX`, flujos de exportación animados, pulso en los proyectos de la empresa elegida, vuelo de cámara del mapa hacia su huella global) y [Motion](https://motion.dev) 14.4.0 para los números del laboratorio: resortes sin rebote que parten del valor que se ve en pantalla y heredan la velocidad, de modo que mover un deslizador nunca produce saltos. Todo respeta «reducir movimiento».

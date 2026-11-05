@@ -78,6 +78,8 @@ Los proyectos del RIGI están en `data/manual/rigi.js`, uno por activo del mapa,
 
 La vista **Circuito global** muestra, para cada empresa con proyectos RIGI, su casa matriz y el resto de su negocio en el mundo, cuánto pesa hoy la Argentina en sus ingresos (o en su producción) y cuánto pesaría con los proyectos a régimen, con dos juegos de precios de referencia. También muestra la participación del país en la producción mundial y la cadena de valor de cada producto. Los datos están en `data/manual/circuito.js`: para sumar una empresa, copiar un bloque de `CIR_EMP`, cargar su base (última cifra anual con fuente) y sus proyectos (id del activo del mapa, participación y producción a régimen). El cálculo está explicado en la cabecera del archivo y en `docs/circuito-global-rigi.md`.
 
+El **laboratorio de valuación** (`CIR_VAL` en el mismo archivo) arma un flujo de fondos por proyecto con los costos oficiales de cada estudio y permite mover precio, tasa de descuento, inversión, costo y alícuota. Los números animados usan [Motion](https://motion.dev) (`motion@14.4.0`, cargado desde jsDelivr); si no carga, la página funciona igual sin animación. `countUp()` en `js/app.js` hace contar los indicadores del panel lateral, de Estadísticas y de las fichas de empresa.
+
 ### Panel de administración
 
 Agregando `#admin` a la dirección del sitio se abre un panel con la fecha y el resultado de cada fuente, los últimos RIGI publicados, la lista de fichas incompletas y atajos para actualizar (tarea de Claude, workflow de GitHub Actions y script de Energía). El navegador lo recuerda y muestra un engranaje en la barra superior.
