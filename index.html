@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/pie.css?v=20261105b">
+<link rel="stylesheet" href="css/pie.css?v=20261105c">
 <style>
 /* Layout: tablero de una pantalla — panel de capas a la izquierda, mapa al centro, ficha deslizable sobre el mapa. */
 :root{
@@ -606,7 +606,71 @@ tbody tr:hover{background:var(--bg)}
 /* Pie institucional: tercera fila del tablero */
 .app{grid-template-rows:auto minmax(0,1fr) auto}
 @media (max-width: 860px){ .app{grid-template-rows:auto minmax(0,1fr) auto} .side{bottom:calc(46px + env(safe-area-inset-bottom,0px))} }
+/* ===== Panel de capas ocultable (computadora y celular) ===== */
+.btn-layers{display:inline-flex;align-items:center;gap:6px;order:-1}
+@media (max-width: 1560px){ .brand .sub{display:none} }
+.btn-layers::before{content:"";width:14px;height:10px;border-block:2px solid currentColor;box-shadow:inset 0 -4px 0 -2px currentColor;opacity:.8}
+.btn-layers[aria-expanded="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.app.side-off{grid-template-columns:minmax(0,1fr)}
+.app.side-off .side{display:none}
+.sidehead{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 0 16px;position:sticky;top:0;background:var(--panel);z-index:2}
+.sideclose{border:0;background:none;width:32px;height:32px;border-radius:7px;font-size:20px;line-height:1;cursor:pointer;color:var(--muted)}
+.sideclose:hover{background:var(--bg);color:var(--ink)}
+@media (max-width: 860px){
+  .app.side-off{grid-template-columns:1fr}
+  .app.side-off .side.open{display:flex}
+  .top{gap:8px 10px}
+  .search{flex:1 1 90px;min-width:0}
+  .top .seg{order:3;width:auto;flex:1 1 230px}
+  .top .btn-layers{order:4;flex:none;padding:7px 10px}
+}
+
+/* ===== Circuito: mapa más alto, pantalla completa, toques ===== */
+.glmap{height:clamp(300px,42vw,620px)}
+@media (max-width: 860px){ .glmap{height:min(58vh,440px)} }
+.glmap .hit{fill:transparent;stroke:none;pointer-events:all;cursor:pointer}
+.glmap .gact{cursor:pointer}
+.glzoom button{display:grid;place-items:center;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.glzoom .gzfull{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.glzoom button:hover{border-color:var(--ink)}
+.glpop{position:absolute;z-index:6;width:min(280px,calc(100% - 16px));background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:10px 12px 12px;font-size:13px;animation:mpFade .2s ease both}
+.glpop>b{display:block;font-size:14px;padding-right:22px;line-height:1.25}
+.glpop .pp{font-size:12px;color:var(--muted)}
+.glpop .x{position:absolute;right:4px;top:4px;border:0;background:none;width:28px;height:28px;font-size:18px;cursor:pointer;color:var(--muted);border-radius:6px}
+.glpop .pbtns{display:flex;flex-direction:column;gap:2px}
+.glpop .pbtns button{display:flex;align-items:center;gap:8px;border:0;background:none;padding:7px 6px;border-radius:6px;cursor:pointer;text-align:left;font-size:13px;color:var(--ink);min-height:36px}
+.glpop .pbtns button:hover,.glpop .pbtns button[aria-current="true"]{background:var(--bg)}
+.glpop .pbtns button[aria-current="true"]{font-weight:600}
+.glpop .pbtns i{width:9px;height:9px;border-radius:2px;background:var(--c);flex:none}
+.glpop .pbtns small{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.glpop .pacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.glpop .pacts button{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 10px;font-size:12px;cursor:pointer;color:var(--ink);min-height:32px}
+.glpop .pacts button:hover{border-color:var(--ink)}
+.glsum{display:none}
+.glmapbox.full{position:fixed;inset:0;z-index:60;border-radius:0;border:0;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);background:var(--sea)}
+.glmapbox.full #glMap{flex:1;min-height:0;display:flex;flex-direction:column}
+.glmapbox.full .glmap{flex:1;height:auto;min-height:0}
+.glmapbox.full .glzoom{top:calc(10px + env(safe-area-inset-top,0px));right:calc(10px + env(safe-area-inset-right,0px))}
+.glmapbox.full .glzoom button{width:38px;height:38px}
+.glmapbox.full .gllegend{max-height:22vh;overflow:auto;flex:none}
+.glmapbox.full .glsum{display:flex;position:absolute;left:calc(10px + env(safe-area-inset-left,0px));top:calc(10px + env(safe-area-inset-top,0px));right:64px;max-width:420px;align-items:center;gap:10px;background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:var(--shadow);font-size:12px;z-index:4}
+.glsum>div{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.glsum>div b{font-size:14px;display:flex;align-items:center;gap:6px}
+.glsum>div>i{display:none}
+.glsum>div b::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--c)}
+.glsum span{color:var(--muted)}
+.glsum span b{display:inline;font-size:12px;color:var(--ink)}
+.glsum span b::before{display:none}
+.glsum button{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 11px;font-size:12px;cursor:pointer;color:var(--ink)}
+body.gl-full{overflow:hidden}
+body.gl-full .vtip{z-index:80}
+.vtip{z-index:70}
+/* selector de empresa del laboratorio */
+.vsel{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px}
+.vsel span{font-weight:600}
+.vsel select{flex:1 1 240px;max-width:440px;min-height:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);font:inherit}
 @media (prefers-reduced-motion: reduce){
+  .glpop{animation:none}
   .sway,.pt .pulse{animation:none}
   .drawer,.drawer *,.statsec,.coprof>*,.bar .bf,.tablewrap,.cowrap,.statwrap{animation:none!important}
   .par,.pt path{transition:none}
@@ -699,25 +763,25 @@ tbody tr:hover{background:var(--bg)}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@14.4.0/dist/motion.js"></script>
-<script src="data/geo/departamentos.js?v=20261105b"></script>
-<script src="data/geo/provincias.js?v=20261105b"></script>
-<script src="data/manual/fuentes.js?v=20261105b"></script>
-<script src="data/auto/fuentes-auto.js?v=20261105b"></script>
-<script src="data/manual/empresas.js?v=20261105b"></script>
-<script src="data/manual/activos.js?v=20261105b"></script>
-<script src="data/auto/mercado.js?v=20261105b"></script>
-<script src="data/manual/estadisticas.js?v=20261105b"></script>
-<script src="data/manual/fichas.js?v=20261105b"></script>
-<script src="data/manual/rigi.js?v=20261105b"></script>
-<script src="data/auto/siacam.js?v=20261105b"></script>
-<script src="data/auto/viz.js?v=20261105b"></script>
-<script src="data/auto/produccion.js?v=20261105b"></script>
-<script src="data/auto/meta.js?v=20261105b"></script>
-<script src="data/geo/mundo.js?v=20261105b"></script>
-<script src="data/manual/circuito.js?v=20261105b"></script>
-<script src="js/app.js?v=20261105b"></script>
-<script src="js/circuito.js?v=20261105b"></script>
-<script src="js/sitio.config.js?v=20261105b"></script>
-<script src="js/pie.js?v=20261105b"></script>
+<script src="data/geo/departamentos.js?v=20261105c"></script>
+<script src="data/geo/provincias.js?v=20261105c"></script>
+<script src="data/manual/fuentes.js?v=20261105c"></script>
+<script src="data/auto/fuentes-auto.js?v=20261105c"></script>
+<script src="data/manual/empresas.js?v=20261105c"></script>
+<script src="data/manual/activos.js?v=20261105c"></script>
+<script src="data/auto/mercado.js?v=20261105c"></script>
+<script src="data/manual/estadisticas.js?v=20261105c"></script>
+<script src="data/manual/fichas.js?v=20261105c"></script>
+<script src="data/manual/rigi.js?v=20261105c"></script>
+<script src="data/auto/siacam.js?v=20261105c"></script>
+<script src="data/auto/viz.js?v=20261105c"></script>
+<script src="data/auto/produccion.js?v=20261105c"></script>
+<script src="data/auto/meta.js?v=20261105c"></script>
+<script src="data/geo/mundo.js?v=20261105c"></script>
+<script src="data/manual/circuito.js?v=20261105c"></script>
+<script src="js/app.js?v=20261105c"></script>
+<script src="js/circuito.js?v=20261105c"></script>
+<script src="js/sitio.config.js?v=20261105c"></script>
+<script src="js/pie.js?v=20261105c"></script>
 
 </body></html>

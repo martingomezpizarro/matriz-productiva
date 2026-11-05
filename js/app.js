@@ -1238,8 +1238,20 @@ function drawViz(){
 let vizT; window.addEventListener("resize",()=>{ if(st.view!=="stats") return; clearTimeout(vizT); vizT=setTimeout(drawViz,200); });
 
 const side=document.getElementById("side"), bl=document.getElementById("btnLayers");
-bl.onclick=()=>{ const o=!side.classList.contains("open"); side.classList.toggle("open",o); bl.setAttribute("aria-expanded",o); };
-document.addEventListener("keydown",ev=>{ if(ev.key==="Escape"){ closeDrawer(); side.classList.remove("open"); }
+// Panel de capas: en el celular es una hoja que sube desde abajo; en la computadora se puede ocultar
+// para darle todo el ancho al mapa (la preferencia queda guardada).
+const appEl=document.querySelector(".app"), isNarrow=()=>window.innerWidth<=860;
+const sideSync=()=>{ const vis=isNarrow()?side.classList.contains("open"):!appEl.classList.contains("side-off"); bl.setAttribute("aria-expanded",vis); bl.title=vis?"Ocultar el panel de capas":"Mostrar el panel de capas"; };
+const sideSet=vis=>{
+  if(isNarrow()) side.classList.toggle("open",vis);
+  else { appEl.classList.toggle("side-off",!vis); try{ localStorage.setItem("mp-side",vis?"1":"0"); }catch(e){} setTimeout(()=>dispatchEvent(new Event("resize")),30); }
+  sideSync(); };
+try{ if(localStorage.getItem("mp-side")==="0") appEl.classList.add("side-off"); }catch(e){}
+bl.onclick=()=>sideSet(bl.getAttribute("aria-expanded")!=="true");
+side.insertAdjacentHTML("afterbegin",`<div class="sidehead"><p class="eyebrow">Capas y sectores</p><button class="sideclose" aria-label="Ocultar el panel">×</button></div>`);
+side.querySelector(".sideclose").onclick=()=>sideSet(false);
+addEventListener("resize",sideSync); sideSync();
+document.addEventListener("keydown",ev=>{ if(ev.key==="Escape"){ closeDrawer(); side.classList.remove("open"); sideSync(); }
   if(!drawer.hidden && st.sel && st.view==="map" && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)){
     if(ev.key==="ArrowRight") stepAsset(1); if(ev.key==="ArrowLeft") stepAsset(-1); } });
 

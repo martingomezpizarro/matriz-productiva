@@ -69,7 +69,16 @@ function calc(k, pr=GL.pr){
 
 // ---------- mapa del mundo ----------
 const GW=1000, GH=520;
-let gProj, gPath, gSvg, gRoot, gZoom, gK=1;
+let gProj, gPath, gSvg, gRoot, gZoom, gK=1, gU=1, gH2=GH;   // gU: unidades del viewBox por píxel de pantalla
+const ICO_FULL='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+const ICO_EXIT='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+const ICO_GLOBE='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>';
+// Toque o clic sin arrastre: el zoom de d3 cancela el "click" ante el mínimo movimiento del dedo.
+function onTap(sel, fn){
+  sel.on("pointerdown.tap",function(ev){ this._tp=[ev.clientX,ev.clientY]; })
+     .on("pointerup.tap",function(ev){ const s=this._tp; this._tp=null; if(!s) return;
+        if(Math.hypot(ev.clientX-s[0],ev.clientY-s[1])<10){ ev.stopPropagation(); fn(ev); } });
+}
 function llOf(id, fb){ const a=byId[id]; if(a&&a.ll) return a.ll; if(a&&a.path) return a.path[Math.floor(a.path.length/2)]; return fb; }
 function arcD(a,b){ // gran círculo [lat,lon] → path proyectado
   return gPath({type:"LineString", coordinates:[[a[1],a[0]],[b[1],b[0]]]});
@@ -79,26 +88,75 @@ function buildMap(el){
   gProj=d3.geoNaturalEarth1().fitExtent([[6,6],[GW-6,GH-6]], {type:"Sphere"});
   gPath=d3.geoPath(gProj);
   el.innerHTML=`<svg class="glmap" viewBox="0 0 ${GW} ${GH}" role="img" aria-label="Mapa mundial: casas matrices de las empresas, sus otros activos y los destinos de lo que se produce en la Argentina"></svg>
-    <div class="glzoom"><button data-gz="in" aria-label="Acercar">+</button><button data-gz="out" aria-label="Alejar">−</button><button data-gz="ar" aria-label="Ver Sudamérica" style="font-size:11px">AR</button><button data-gz="all" aria-label="Ver todo el mundo" style="font-size:13px">⤢</button></div>`;
+    <div class="glzoom"><button data-gz="full" class="gzfull" aria-label="Pantalla completa" title="Pantalla completa">${ICO_FULL}</button><button data-gz="in" aria-label="Acercar" title="Acercar">+</button><button data-gz="out" aria-label="Alejar" title="Alejar">−</button><button data-gz="ar" aria-label="Ver Sudamérica" title="Ver Sudamérica" style="font-size:11px">AR</button><button data-gz="all" aria-label="Ver todo el mundo" title="Ver todo el mundo">${ICO_GLOBE}</button></div>
+    <div class="glpop" id="glPop" hidden></div>
+    <div class="glsum" id="glSum"></div>`;
   gSvg=d3.select(el).select("svg");
   gRoot=gSvg.append("g");
   gRoot.append("path").attr("class","grat").attr("d",gPath(d3.geoGraticule10()));
   gRoot.append("g").selectAll("path").data(land.features).join("path")
     .attr("class",d=>"ctry"+(d.id==="032"?" ar":"")).attr("d",gPath).append("title").text(d=>d.properties.name);
   ["gProdArc","gCapArc","gAct","gDst","gArP","gHq","gLab"].forEach(n=>gRoot.append("g").attr("class",n));
-  gZoom=d3.zoom().scaleExtent([1,12]).translateExtent([[0,0],[GW,GH]]).on("zoom",ev=>{
-    gK=ev.transform.k; gRoot.attr("transform",ev.transform);
-    gRoot.selectAll(".sz").attr("transform",function(){ return this.dataset.t+` scale(${1/gK})`; });
-    gRoot.selectAll("text").style("font-size",(11/gK)+"px").style("stroke-width",(3/gK)+"px");
+  gZoom=d3.zoom().scaleExtent([1,16]).clickDistance(8).on("zoom",ev=>{
+    gK=ev.transform.k; gRoot.attr("transform",ev.transform); glRescale();
   });
-  gSvg.call(gZoom);
+  gSvg.call(gZoom).on("dblclick.zoom",null);
+  onTap(gSvg, ()=>glPopOff());   // tocar el fondo cierra la ventanita
   el.querySelectorAll("[data-gz]").forEach(b=>b.onclick=()=>{
     const z=b.dataset.gz;
+    if(z==="full") return glFull();
     if(z==="in") gSvg.transition().duration(350).call(gZoom.scaleBy,1.6);
     else if(z==="out") gSvg.transition().duration(350).call(gZoom.scaleBy,1/1.6);
     else if(z==="all") gSvg.transition().duration(500).call(gZoom.transform,d3.zoomIdentity);
     else glZoomTo([[-75,-56],[-52,-20]]);
   });
+  glFit();
+}
+// El viewBox copia la proporción real del recuadro (no deja franjas vacías en pantalla completa o en el celular)
+// y los marcadores se dibujan en píxeles de pantalla, del mismo tamaño en cualquier dispositivo.
+function glFit(){
+  if(!gSvg) return; const n=gSvg.node(), w=n.clientWidth, h=n.clientHeight; if(!w||!h) return;
+  const H2=GW*h/w, top=(GH-H2)/2; gH2=H2;
+  gSvg.attr("viewBox",`0 ${top} ${GW} ${H2}`);
+  gZoom.translateExtent([[0,Math.min(0,top)],[GW,Math.max(GH,top+H2)]]);
+  gU=GW/w; glRescale();
+}
+function glRescale(){ const s=gU/gK; gRoot.selectAll(".sz").attr("transform",function(){ return this.dataset.t+` scale(${s})`; }); }
+function glFull(on){
+  const box=document.querySelector(".glmapbox"); if(!box) return;
+  on = on==null ? !box.classList.contains("full") : on;
+  if(on===box.classList.contains("full")) return;
+  // El escenario tiene perspectiva 3D, que encierra a los elementos "fixed": en pantalla completa
+  // el recuadro se muda al <body> y al salir vuelve a su lugar.
+  if(on){ box._ph=document.createComment("glmapbox"); box.before(box._ph); document.body.appendChild(box); }
+  else if(box._ph){ box._ph.replaceWith(box); box._ph=null; }
+  box.classList.toggle("full",on); document.body.classList.toggle("gl-full",on);
+  const b=box.querySelector(".gzfull"); b.innerHTML=on?ICO_EXIT:ICO_FULL; b.setAttribute("aria-label",on?"Salir de pantalla completa":"Pantalla completa"); b.title=b.getAttribute("aria-label");
+  glPopOff(); tipOff();
+  requestAnimationFrame(()=>{ glFit(); glFly(CIR_EMP[GL.sel]); });
+}
+addEventListener("keydown",ev=>{ if(ev.key==="Escape"){ if(document.getElementById("glPop")?.hidden===false) glPopOff(); else if(document.body.classList.contains("gl-full")) glFull(false); } });
+// Ventanita fija al tocar un proyecto o una casa matriz (en el celular no hay "pasar el mouse").
+function glPop(ev, html){
+  const pop=document.getElementById("glPop"), box=pop.parentElement.closest(".glmapbox");
+  pop.innerHTML=`<button class="x" data-pop="x" aria-label="Cerrar">×</button>${html}`; pop.hidden=false; tipOff();
+  const br=box.getBoundingClientRect(), pr=pop.getBoundingClientRect();
+  let x=ev.clientX-br.left+12, y=ev.clientY-br.top+12;
+  if(x+pr.width>br.width-8) x=Math.max(8,ev.clientX-br.left-pr.width-12);
+  if(y+pr.height>br.height-8) y=Math.max(8,ev.clientY-br.top-pr.height-12);
+  pop.style.left=x+"px"; pop.style.top=y+"px";
+  pop.querySelector('[data-pop="x"]').onclick=glPopOff;
+  pop.querySelectorAll("[data-pk]").forEach(b=>b.onclick=()=>{ glPopOff(); glSelect(b.dataset.pk); });
+  pop.querySelectorAll("[data-onmap2]").forEach(b=>b.onclick=()=>{ glFull(false); setView("map"); select(b.dataset.onmap2); });
+  pop.querySelectorAll("[data-val]").forEach(b=>b.onclick=()=>{ glFull(false); valOpen(b.dataset.val); });
+}
+function glPopOff(){ const p=document.getElementById("glPop"); if(p) p.hidden=true; }
+function projPop(ev, id, nm){
+  const a=byId[id], owners=Object.keys(CIR_EMP).filter(k=>CIR_EMP[k].ar.some(p=>p.id===id));
+  glPop(ev, `<b>${esc(a?a.n:nm)}</b>${a?`<span class="pp">${esc(a.prov||"")}</span>`:""}
+    <p class="eyebrow" style="margin:8px 0 4px">Empresas · tocá una para ver su circuito</p>
+    <div class="pbtns">${owners.map(k=>{ const pp=CIR_EMP[k].ar.find(p=>p.id===id); return `<button data-pk="${k}" aria-current="${k===GL.sel}" style="--c:${cvar(CIR_EMP[k].sec)}"><i></i>${esc(CIR_EMP[k].n)}${pp&&pp.part!=null?` <small>${nfx(pp.part,pp.part%1?1:0)}%</small>`:""}</button>`; }).join("")}</div>
+    <div class="pacts">${a?`<button data-onmap2="${id}">Ver en el mapa de la Argentina</button>`:""}${CIR_VAL[id]?`<button data-val="${id}">Valuar el proyecto</button>`:""}</div>`);
 }
 function glZoomTo([[lo0,la0],[lo1,la1]]){
   const [x0,y0]=gProj([lo0,la1]), [x1,y1]=gProj([lo1,la0]);
@@ -108,7 +166,7 @@ function glZoomTo([[lo0,la0],[lo1,la1]]){
 }
 function marker(sel, ll, cls){ // grupo que no escala con el zoom
   const [x,y]=gProj([ll[1],ll[0]]);
-  return sel.append("g").attr("class","sz "+(cls||"")).attr("data-t",`translate(${x},${y})`).attr("transform",`translate(${x},${y}) scale(${1/gK})`);
+  return sel.append("g").attr("class","sz "+(cls||"")).attr("data-t",`translate(${x},${y})`).attr("transform",`translate(${x},${y}) scale(${gU/gK})`);
 }
 function drawMap(){
   const keys=glKeys();
@@ -143,7 +201,10 @@ function drawMap(){
     const m=marker(gA,ll,"gact");
     m.append("path").attr("d",d3.symbol(d3.symbolDiamond,70)()).attr("class","gas").attr("fill",sc);
     m.append("text").attr("x",7).attr("y",4).text(n);
-    m.on("mousemove",ev=>tipOn(ev,`<b>${esc(n)}</b><div class="r"><span>${esc(pr)}</span></div><div style="color:var(--muted);font-size:12px">${esc(nt||"")} · ${esc(cs.n)}</div>`)).on("mouseleave",tipOff);
+    m.append("circle").attr("r",11).attr("class","hit");
+    const info=`<b>${esc(n)}</b><div class="r"><span>${esc(pr)}</span></div><div style="color:var(--muted);font-size:12px">${esc(nt||"")} · ${esc(cs.n)}</div>`;
+    m.on("mousemove",ev=>{ if(ev.pointerType!=="touch") tipOn(ev,info); }).on("mouseleave",tipOff);
+    onTap(m, ev=>glPop(ev, info));
   });
   // proyectos argentinos
   const gR=gRoot.select(".gArP").html("");
@@ -151,10 +212,12 @@ function drawMap(){
   caps.forEach(o=>{ if(seenP.has(o.p.id)) return; seenP.add(o.p.id);
     const on=CIR_EMP[sel].ar.some(p=>p.id===o.p.id);
     const m=marker(gR,o.ll); if(on) m.append("circle").attr("r",4.2).attr("class","glpulse").style("--c",sc);
-    m.append("circle").attr("r",on?4.2:3).attr("class","arp"+(on?" on":"")).style("--c",sc);
+    m.append("circle").attr("r",on?4.6:3.6).attr("class","arp"+(on?" on":"")).style("--c",sc);
+    m.append("circle").attr("r",12).attr("class","hit");
     m.on("mousemove",ev=>{ const a=byId[o.p.id]; const who=keys.filter(k=>CIR_EMP[k].ar.some(p=>p.id===o.p.id)).map(k=>CIR_EMP[k].n);
-      tipOn(ev,`<b>${esc(a?a.n:o.p.n)}</b><div style="color:var(--muted);font-size:12px">${a?esc(a.prov):""}</div><div style="font-size:12px;margin-top:4px">${who.map(esc).join(" · ")}</div>`); })
-     .on("mouseleave",tipOff).on("click",()=>{ const k=keys.find(k=>CIR_EMP[k].ar.some(p=>p.id===o.p.id)&&k!==GL.sel)||GL.sel; glSelect(CIR_EMP[GL.sel].ar.some(p=>p.id===o.p.id)?GL.sel:k); });
+      tipOn(ev,`<b>${esc(a?a.n:o.p.n)}</b><div style="color:var(--muted);font-size:12px">${a?esc(a.prov):""}</div><div style="font-size:12px;margin-top:4px">${who.map(esc).join(" · ")}</div><div style="color:var(--muted);font-size:11px;margin-top:4px">Tocá para ver las empresas</div>`); })
+     .on("mouseleave",tipOff);
+    onTap(m, ev=>projPop(ev, o.p.id, o.p.n));
   });
   // casas matrices
   const gH=gRoot.select(".gHq").html(""), gL=gRoot.select(".gLab").html("");
@@ -162,13 +225,27 @@ function drawMap(){
   keys.forEach(k=>{ const c=CIR_EMP[k]; const on=k===sel;
     const m=marker(on?gL:gH,c.hq.ll,"hq"+(on?" on":"")); m.style("--c",cvar(c.sec)).attr("data-k",k);
     if(on) m.append("circle").attr("r",5).attr("class","glpulse");
-    m.append("rect").attr("x",-4).attr("y",-4).attr("width",8).attr("height",8).attr("rx",1.5);
-    if(on) m.append("text").attr("x",8).attr("y",4).style("font-weight",600).text(c.n);
-    m.on("mousemove",ev=>{ const key=c.hq.ll.map(v=>v.toFixed(0)).join(","); tipOn(ev,`<b>${esc(c.hq.c)}</b><div style="font-size:12px">${byHq[key].map(x=>esc(CIR_EMP[x].n)).join(" · ")}</div><div style="color:var(--muted);font-size:11px;margin-top:4px">Tocá para ver la empresa</div>`); })
-     .on("mouseleave",tipOff).on("click",()=>glSelect(k));
+    m.append("rect").attr("x",-4.5).attr("y",-4.5).attr("width",9).attr("height",9).attr("rx",1.5);
+    if(on) m.append("text").attr("x",9).attr("y",4).style("font-weight",600).text(c.n);
+    m.append("circle").attr("r",12).attr("class","hit");
+    const key=c.hq.ll.map(v=>v.toFixed(0)).join(","), grp=byHq[key];
+    m.on("mousemove",ev=>tipOn(ev,`<b>${esc(c.hq.c)}</b><div style="font-size:12px">${grp.map(x=>esc(CIR_EMP[x].n)).join(" · ")}</div><div style="color:var(--muted);font-size:11px;margin-top:4px">Tocá para ver la empresa</div>`))
+     .on("mouseleave",tipOff);
+    // varias casas matrices en la misma ciudad: se elige en la ventanita
+    onTap(m, ev=>{ if(grp.length===1) return glSelect(k);
+      glPop(ev, `<b>${esc(c.hq.c)}</b><p class="eyebrow" style="margin:8px 0 4px">Casas matrices en esta ciudad</p><div class="pbtns">${grp.map(x=>`<button data-pk="${x}" aria-current="${x===GL.sel}" style="--c:${cvar(CIR_EMP[x].sec)}"><i></i>${esc(CIR_EMP[x].n)}</button>`).join("")}</div>`); });
   });
-  gRoot.selectAll("text").style("font-size",(11/gK)+"px").style("stroke-width",(3/gK)+"px");
+  glSum();
   if(GL.anim==="sel") glFly(cs);
+}
+// Resumen de la empresa elegida, visible en pantalla completa
+function glSum(){
+  const el=document.getElementById("glSum"); if(!el) return;
+  const c=CIR_EMP[GL.sel], r=calc(GL.sel);
+  const dato = !r ? "" : c.local ? `Proyectos RIGI: <b>${pct(r.rigiSh)}</b> del total proyectado` : `Argentina: <b>${pct(r.hoySh,1)}</b> hoy → <b>${pct(r.proySh,1)}</b> a régimen`;
+  el.style.setProperty("--c",cvar(c.sec));
+  el.innerHTML=`<div><i></i><b>${esc(c.n)}</b><span>${esc(c.hq.c)}${dato?" · "+dato:""}</span></div><button data-sumgo>Ver ficha</button>`;
+  el.querySelector("[data-sumgo]").onclick=()=>{ glFull(false); requestAnimationFrame(()=>document.getElementById("glCard")?.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"})); };
 }
 // Vuelo de cámara: encuadra casa matriz, proyectos y otros activos de la empresa elegida.
 function glFly(c){
@@ -177,8 +254,13 @@ function glFly(c){
   const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
   let [x0,x1,y0,y1]=[Math.min(...xs),Math.max(...xs),Math.min(...ys),Math.max(...ys)];
   const pad=40; x0-=pad; x1+=pad; y0-=pad; y1+=pad;
-  const k=Math.max(1,Math.min(5, .92/Math.max((x1-x0)/GW,(y1-y0)/GH)));
-  const t=d3.zoomIdentity.translate(GW/2,GH/2).scale(k).translate(-(x0+x1)/2,-(y0+y1)/2);
+  // en recuadros verticales (celular) el mapa llena el alto en vez de dejar franjas de mar arriba y abajo
+  const kFit=Math.min(5, .92/Math.max((x1-x0)/GW,(y1-y0)/GH)), k=Math.max(1, gH2/GH, kFit);
+  // si no entra todo, el encuadre se corre hacia los proyectos argentinos sin dejar afuera la casa matriz si se puede
+  let cx=(x0+x1)/2;
+  if(k>kFit*1.05){ const ar=c.ar.map(p=>llOf(p.id)).filter(Boolean).map(ll=>gProj([ll[1],ll[0]])[0]);
+    if(ar.length){ const ax=ar.reduce((s,v)=>s+v,0)/ar.length, half=GW/k/2*.9; cx=Math.min(Math.max(cx,ax-half),ax+half); } }
+  const t=d3.zoomIdentity.translate(GW/2,GH/2).scale(k).translate(-cx,-(y0+y1)/2);
   gSvg.transition().duration(REDUCED?0:1100).ease(d3.easeCubicInOut).call(gZoom.transform,t);
 }
 function calcKinds(k){ return [...new Set(CIR_EMP[k].ar.map(prodKind))]; }
@@ -286,12 +368,12 @@ function methSec(){
 
 // ---------- render ----------
 function glSelect(k){ const dir=GL.sel===k?"":"sel"; GL.sel=k;
-  const vp=CIR_EMP[k].ar.find(p=>CIR_VAL[p.id]); if(vp&&VL.id!==vp.id){ VL.id=vp.id; VL.p=null; VL.capexF=100; VL.costF=100; } glSave(); GL.anim=dir||null; glRefresh(); GL.anim=null; const el=document.getElementById("glCard"); if(el&&window.innerWidth<1100) el.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"}); }
+  const vp=CIR_EMP[k].ar.find(p=>CIR_VAL[p.id]); if(vp&&VL.id!==vp.id){ VL.id=vp.id; VL.p=null; VL.capexF=100; VL.costF=100; } glSave(); GL.anim=dir||null; glRefresh(); GL.anim=null; const el=document.getElementById("glCard"); if(el&&window.innerWidth<1100&&!document.body.classList.contains("gl-full")) el.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"}); }
 function glRefresh(){
   document.getElementById("glRank").innerHTML=rankRows();
   const gc=document.getElementById("glCard"); gc.innerHTML=card(GL.sel); gc.dataset.anim=GL.anim||"soft";
   document.getElementById("glCad").innerHTML=cadenaSec();
-  drawMap();
+  glFit(); drawMap();
   wireGl();
   countUp(gc, ".glkpis b");
   if(GL.prPrev!==GL.pr){ VL.p=null; GL.prPrev=GL.pr; }
@@ -352,7 +434,7 @@ function renderCircuito(){
   glRefresh();
 }
 window.renderCircuito=renderCircuito;
-if(st.view==="gl") renderCircuito();
+// (el primer dibujo va al final del archivo: el laboratorio de valuación tiene que estar definido antes)
 
 // ============================================================
 // LABORATORIO DE VALUACIÓN: flujo de fondos, VAN, TIR, repago, precio de equilibrio y sensibilidades.
@@ -360,7 +442,9 @@ if(st.view==="gl") renderCircuito();
 // ============================================================
 Object.assign(SRC, CIR_SRC);
 const VAL_T0 = 2026;
-const VL = { id:null, p:null, r:8, capexF:100, costF:100, tax:25 };
+const VL = { id:null, emp:"", p:null, r:8, capexF:100, costF:100, tax:25 };
+// proyectos valuables de una empresa (socia según el estudio o con el proyecto en su cartera argentina)
+const valIdsOf = k => Object.keys(CIR_VAL).filter(id=>CIR_VAL[id].emp.some(([x])=>x===k) || (CIR_EMP[k]&&CIR_EMP[k].ar.some(p=>p.id===id)));
 // precio del escenario en la unidad del proyecto
 function valPrecioEsc(v, pr){ const P=CIR_META.precios[pr]; const x=P[v.pk]; return v.pk==="cu" ? x/2204.62 : x; }
 function valModel(v, o){
@@ -419,9 +503,17 @@ const GLOSARIO = [
 const valOpts = ()=>({p:VL.p, r:VL.r, capexF:VL.capexF, costF:VL.costF, tax:VL.tax});
 const capUnit = v => v.pk==="cu"?"t de cobre":v.pk==="lce"?"t LCE":v.pk==="brent"?"bbl/d":"oz";
 function valSec(){
-  const ids=Object.keys(CIR_VAL).filter(id=>GL.sec==="all"||CIR_VAL[id].sec===GL.sec);
-  if(!ids.length) return "";
-  if(!VL.id||!ids.includes(VL.id)){ VL.id=ids[0]; VL.p=null; }
+  // El laboratorio muestra siempre todos los proyectos valuables; el filtro es por empresa, no por sector.
+  const all=Object.keys(CIR_VAL);
+  const empIds = VL.emp ? valIdsOf(VL.emp) : all;
+  const ids = empIds.length ? empIds : all;
+  if(!VL.id||!ids.includes(VL.id)){ VL.id=ids[0]; VL.p=null; VL.capexF=100; VL.costF=100; }
+  const empOpts=Object.keys(CIR_EMP).map(k=>({k,n:CIR_EMP[k].n,c:valIdsOf(k).length})).sort((a,b)=>(b.c>0)-(a.c>0)||a.n.localeCompare(b.n,"es"));
+  const empSel=`<label class="vsel"><span>Empresa</span><select data-vemp aria-label="Elegir empresa">
+      <option value="">Todas las empresas · ${all.length} proyectos</option>
+      ${empOpts.map(o=>`<option value="${o.k}" ${o.k===VL.emp?"selected":""}>${esc(o.n)} · ${o.c?o.c+(o.c>1?" proyectos":" proyecto"):"sin estudio para valuar"}</option>`).join("")}
+    </select></label>`;
+  const empNote = VL.emp && !empIds.length ? `<p class="note vcmp" style="margin:0"><b>${esc(CIR_EMP[VL.emp].n)}</b> no tiene proyectos con un estudio económico publicado (costos e inversión oficiales) para armar el flujo de fondos. Se muestran todos los proyectos valuables.</p>` : "";
   const v=CIR_VAL[VL.id]; if(VL.p==null) VL.p=valPrecioEsc(v,GL.pr);
   const pMin=v.pEst*.4, pMax=v.pEst*2.4, stepP=v.pk==="cu"?0.01:v.pk==="ag"||v.pk==="brent"?0.5:v.pk==="au"?10:100;
   const quick=[["Estudio",v.pEst],[CIR_META.precios.estudio.n,valPrecioEsc(v,"estudio")],[CIR_META.precios.alto.n,valPrecioEsc(v,"alto")]].filter((x,i,a)=>a.findIndex(y=>Math.abs(y[1]-x[1])<1e-9)===i);
@@ -429,6 +521,7 @@ function valSec(){
   const fs=[.7,.85,1,1.15,1.3], rs=[5,8,10,12];
   return `<div class="glsec vlab" style="--c:${cvar(v.sec)}"><h2>Laboratorio de valuación</h2>
     <p class="note">Flujo de fondos simplificado de cada proyecto con los costos oficiales de sus estudios. Mové el precio, la tasa de descuento, la inversión o el costo y mirá cuánto vale el proyecto y cuánto le toca a cada empresa. Al final, qué significa cada métrica.</p>
+    ${empSel}${empNote}
     <div class="chips vchips" role="group" aria-label="Proyecto">${ids.map(id=>`<button class="chip" data-vid="${id}" aria-pressed="${id===VL.id}"><span class="dot" style="background:${cvar(CIR_VAL[id].sec)};border-radius:2px"></span>${esc(CIR_VAL[id].n)}</button>`).join("")}</div>
     <div class="vgrid2">
       <div class="vctl">
@@ -538,6 +631,7 @@ function valRender(anim){
   el.innerHTML=valSec(); el.dataset.anim=anim?"1":"";
   if(!CIR_VAL[VL.id]) return;
   el.querySelectorAll("[data-vid]").forEach(b=>b.onclick=()=>{ VL.id=b.dataset.vid; VL.p=null; VL.capexF=100; VL.costF=100; valRender(true); });
+  const sel=el.querySelector("[data-vemp]"); if(sel) sel.onchange=()=>{ VL.emp=sel.value; const ids=VL.emp?valIdsOf(VL.emp):[]; if(ids.length&&!ids.includes(VL.id)){ VL.id=ids[0]; VL.p=null; VL.capexF=100; VL.costF=100; } valRender(true); };
   const sync=()=>el.querySelectorAll("input[data-vk]").forEach(i=>i.value=VL[i.dataset.vk]);
   el.querySelectorAll("[data-vp]").forEach(b=>b.onclick=()=>{ VL.p=+b.dataset.vp; sync(); valUpdate(); });
   el.querySelectorAll("[data-vtax]").forEach(b=>b.onclick=()=>{ VL.tax=+b.dataset.vtax; el.querySelectorAll("[data-vtax]").forEach(x=>x.setAttribute("aria-pressed",x===b)); valUpdate(); });
@@ -545,7 +639,9 @@ function valRender(anim){
   valUpdate(true);
 }
 function valOpen(id){ if(!CIR_VAL[id]) return; VL.id=id; VL.p=null; VL.capexF=100; VL.costF=100;
-  if(GL.sec!=="all"&&CIR_VAL[id].sec!==GL.sec){ GL.sec="all"; document.querySelectorAll("[data-gs]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.gs==="all")); glRefresh(); }
+  if(VL.emp && !valIdsOf(VL.emp).includes(id)) VL.emp="";
   valRender(true); const el=document.getElementById("glVal"); if(el) el.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"}); }
 // el gráfico usa el ancho real en píxeles: se recalcula al cambiar el tamaño de la ventana
-{ let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(st.view==="gl"&&document.getElementById("glVal")?.querySelector(".vchart")) valUpdate(); },150); }); }
+{ let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(st.view!=="gl") return; glFit(); if(document.getElementById("glVal")?.querySelector(".vchart")) valUpdate(); },150); }); }
+// Si la última visita quedó en el Circuito, se dibuja recién ahora que todo está definido.
+if(st.view==="gl") renderCircuito();
