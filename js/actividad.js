@@ -118,7 +118,7 @@ function pibShares(box){
   const keys=PGRP.map(p=>p[0]), S=d3.stack().keys(keys)(R.map(r=>r.sh));
   const y=d3.scaleLinear().domain([0,100]).range([F.h,0]);
   yAxis(F.g,y,F.w,d=>d+"%",4);
-  F.g.append("g").attr("class","ax").attr("transform",`translate(0,${F.h})`).call(d3.axisBottom(x).tickFormat(t=>t==="12m"?"últ. 12 m":t).tickSizeOuter(0));
+  F.g.append("g").attr("class","ax").attr("transform",`translate(0,${F.h})`).call(d3.axisBottom(x).tickFormat(t=>t==="12m"?"12 m":"’"+t.slice(2)).tickSizeOuter(0));
   const col=Object.fromEntries(PGRP.map(p=>[p[0],p[2]]));
   F.g.selectAll(".s").data(S).join("g").style("fill",d=>col[d.key]).selectAll("rect").data(d=>d.map((v,i)=>({v,i,k:d.key}))).join("rect")
     .attr("x",d=>x(R[d.i].y)).attr("width",x.bandwidth()).attr("y",d=>y(d.v[1])).attr("height",d=>Math.max(0,y(d.v[0])-y(d.v[1])-1.5));
@@ -150,7 +150,7 @@ const AGRP = [["A","Agro","var(--ag)"],["C","Minas y canteras","var(--og)"],["D"
 function aportes(modo){
   // denominador: Σ w_j·I_j(t−12) = VAB 2004 total × EMAE total(t−12)/100 (no hace falta que estén todas las ramas)
   const E=ACT.emae, W=Object.fromEntries(ACT.sectores.map(s=>[s.k,s.w])), W0=E.w04||485115.2, ks=["A","C","D","G"].filter(k=>E.sec[k]);
-  const fila=(p,tot,tot0,get)=>{ const o={p,tot:pctv(tot,tot0),A:0,C:0,D:0,G:0,R:0}; const den=W0*tot0/100;
+  const fila=(p,tot,tot0,get)=>{ const o={p,tot:pctv(tot,tot0),A:0,C:0,D:0,G:0,R:0}; const den=W0*tot0;
     ks.forEach(k=>{ const [v,v0]=get(k); o[k]=W[k]*v0/den*pctv(v,v0); }); o.R=o.tot-d3.sum(ks,k=>o[k]); return o; };
   if(modo==="m"){
     const out=[]; for(let i=12;i<E.meses.length;i++) out.push(fila(E.meses[i],E.tot[i],E.tot[i-12],k=>[E.sec[k][i],E.sec[k][i-12]]));
@@ -199,9 +199,12 @@ function emaeResto(){ // EMAE sin agro ni minas: (VAB04·total − wA·A − wC�
   const t=emaeAnual("tot"), a=emaeAnual("A"), c=emaeAnual("C");
   return Object.fromEntries(Object.keys(t).map(y=>[y,(W0*t[y]-W.A*a[y]-W.C*c[y])/(W0-W.A-W.C)]));
 }
+// ventana de tendencia: hasta 10 años (o 6 para minas), sin arrancar en 2020 (base deprimida por la pandemia)
+function ventana(a,yl,n){ const ys=Object.keys(a).map(Number); let y0=Math.max(d3.min(ys),yl-n); if(y0===2020) y0=2019; return y0; }
 function prjDefaults(){
   const a=emaeAnual("A"), c=emaeAnual("C"), r=emaeResto(), yl=d3.max(Object.keys(a).map(Number));
-  return { yl, A:cagr(a,yl-10,yl), C:cagr(c,yl-5,yl), R:cagr(r,yl-10,yl), va:60 };
+  const yA=ventana(a,yl,10), yC=ventana(c,yl,6), yR=ventana(r,yl,10);
+  return { yl, yA, yC, yR, A:cagr(a,yA,yl), C:cagr(c,yC,yl), R:cagr(r,yR,yl), va:60 };
 }
 // proyectos nuevos de la Matriz (desde 2026), sin duplicar los que comparten varias empresas
 function prjList(){
@@ -229,9 +232,9 @@ function prjCtl(box){
   const r=proyectar(), g=r.g, d=r.def;
   const sl=(k,n,min,max,step,u,help)=>`<label class="psl"><span>${n} <b>${nf(g[k],1)}${u}</b></span><input type="range" min="${min}" max="${max}" step="${step}" value="${g[k]}" data-g="${k}"><small>${help}</small></label>`;
   box.innerHTML=`<div class="pctl">
-    ${sl("A","Agro: crecimiento real anual",-3,8,0.1,"%",`Tendencia ${r.def.yl-10}–${r.def.yl}: ${sg(d.A)}% por año`)}
-    ${sl("C","Minas y canteras, producción existente",-3,10,0.1,"%",`Tendencia ${r.def.yl-5}–${r.def.yl}: ${sg(d.C)}% por año (incluye el shale)`)}
-    ${sl("R","Resto de la economía",-3,6,0.1,"%",`Tendencia ${r.def.yl-10}–${r.def.yl}: ${sg(d.R)}% por año`)}
+    ${sl("A","Agro: crecimiento real anual",-3,8,0.1,"%",`Tendencia ${d.yA}–${d.yl}: ${sg(d.A)}% por año`)}
+    ${sl("C","Minas y canteras, producción existente",-3,10,0.1,"%",`Tendencia ${d.yC}–${d.yl}: ${sg(d.C)}% por año (incluye el shale)`)}
+    ${sl("R","Resto de la economía",-3,6,0.1,"%",`Tendencia ${d.yR}–${d.yl}: ${sg(d.R)}% por año`)}
     ${sl("va","Valor agregado de los proyectos nuevos",30,90,5,"% de las ventas","Parte de la facturación que queda como VAB (salarios, rentas, impuestos y ganancias)")}
     <div class="psl"><span>Proyectos nuevos que suman producción (arranque desde 2026, 3 años de rampa)</span><div class="vchips">${Object.entries(PRJ_N).map(([k,n])=>`<button class="chip" data-prj="${k}" aria-pressed="${!!AC.prj[k]}"><i style="background:${PRJ_C[k]};width:8px;height:8px;border-radius:2px;display:inline-block"></i>${n} · ${r.P.filter(p=>p.k===k).length}</button>`).join("")}</div></div>
     <div class="psl"><span>Precios</span><div class="vchips">${Object.entries(CIR_META.precios).map(([k,p])=>`<button class="chip" data-esc="${k}" aria-pressed="${AC.esc===k}" title="${p.t}">${p.n}</button>`).join("")}</div></div>
@@ -257,8 +260,9 @@ function prjDraw(box){
     F.g.append("path").datum(H).attr("d",d3.line().x(d=>x(d.y)).y(d=>y(d[k]))).style("fill","none").style("stroke",c).style("stroke-width",2);
     F.g.append("path").datum(O).attr("d",d3.line().x(d=>x(d.y)).y(d=>y(d[k]))).style("fill","none").style("stroke",c).style("stroke-width",2).style("stroke-dasharray","5 4");
     F.g.append("circle").attr("cx",x(AN_FIN)).attr("cy",y(last[k])).attr("r",4).style("fill",c).style("stroke","var(--panel)").style("stroke-width",2);
-    F.g.append("text").attr("class","val").attr("x",x(AN_FIN)+7).attr("y",y(last[k])+4).text(nf(last[k],1)+"%");
   });
+  const ends=[["A",y(last.A)],["C",y(last.C)]].sort((a,b)=>a[1]-b[1]); if(ends[1][1]-ends[0][1]<13){ const m=(ends[0][1]+ends[1][1])/2; ends[0][1]=m-6.5; ends[1][1]=m+6.5; }
+  ends.forEach(([k,yy])=>F.g.append("text").attr("class","val").attr("x",x(AN_FIN)+7).attr("y",yy+4).text(nf(last[k],1)+"%"));
   const all=[...H.filter(d=>d.y<r.B).map(d=>({...d,p:false})),...O.map(d=>({...d,p:d.y>r.B}))];
   crosshair(F,x,all.map(d=>d.y),i=>{ const d=all[i]; return `<b>${d.y}${d.p?" · proyección":""}</b>${trow("Agro y ganadería","var(--ag)",nf(d.A,1)+"% del PIB")}${trow("Minas y canteras","var(--og)",nf(d.C,1)+"% del PIB")}${d.p&&d.add?trow("VAB de proyectos nuevos",null,"US$ "+nf(d.add)+" M"):""}`; });
   const tot0=h0.A+h0.C, tot1=last.A+last.C;
@@ -277,10 +281,10 @@ function secTiles(s){
   const t=(l,v,u,p,src)=>`<div class="tile"><span class="l">${l}</span><span class="v">${v}<small>${u}</small></span><span class="p">${p}</span>${src}</div>`;
   const sL=k=>SRC[k]?`<a href="${SRC[k].u}" target="_blank" rel="noopener" title="${SRC[k].t}">Fuente: ${SRC[k].t.split(" – ")[0]} ↗</a>`:"";
   const nota=s==="ag"?"":`<p class="note" style="max-width:76ch">En las cuentas nacionales el petróleo, el gas y la minería metalífera forman un solo sector («Explotación de minas y canteras»). El EMAE no los abre por separado; el tablero de abajo suma indicadores propios de cada rubro.</p>`;
-  return `<div class="tiles">${t("Peso en el PIB",nf(r[k]/r.pib*100,1),"%",`${r.y==="12m"?"Últimos 12 meses":r.y}, a precios corrientes`,sL("actPib"))}
+  return `<div class="tiles">${t(s==="ag"?"Agro en el PIB":"Minas y canteras en el PIB",nf(r[k]/r.pib*100,1),"%",`${r.y==="12m"?"Últimos 12 meses":r.y}, a precios corrientes`,sL("actPib"))}
     ${t("Actividad, variación interanual",sg(yoy),"%",`${mlab(E.meses[n])} (EMAE)`,sL("actEmae"))}
     ${t("Acumulado del año",sg(ytd),"%",`ene–${mlab(E.meses[n]).split("-")[0]} vs mismo período de ${+E.meses[n].slice(0,4)-1}`,sL("actEmae"))}
-    ${t(`Crecimiento promedio ${yl-5}–${yl}`,sg(cagr(an,yl-5,yl)),"% anual","Índice EMAE en volumen",sL("actEmae"))}</div>${nota}`;
+    ${t(`Crecimiento promedio ${ventana(an,yl,6)}–${yl}`,sg(cagr(an,ventana(an,yl,6),yl)),"% anual","Índice EMAE en volumen",sL("actEmae"))}</div>${nota}`;
 }
 
 // ---------- montaje ----------

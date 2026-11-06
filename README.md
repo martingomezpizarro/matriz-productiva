@@ -15,12 +15,14 @@ js/app.js             lógica del mapa, la tabla, las empresas y los gráficos
 js/sitio.config.js    datos del autor, links de colaboración y licencia (pie y términos)
 js/pie.js             pie de página institucional (barra + ventana «Acerca de»)
 js/circuito.js        vista «Circuito global»: mapa mundial y peso de la Argentina en cada empresa del RIGI
+js/actividad.js       vista «Actividad»: tablero mensual, PIB por sector, aportes al crecimiento y proyección 2030
 css/pie.css           estilos del pie
 data/
   auto/               lo regenera scripts/actualizar.py (no editar a mano)
     siacam.js           cartera oficial de proyectos mineros
     mercado.js          cotizaciones y múltiplos (Yahoo Finance)
     viz.js              series de los gráficos de Estadísticas
+    actividad.js        tablero mensual, EMAE por sector y VAB a precios corrientes
     produccion.js       producción de petróleo y gas por área y operadora
     fuentes-auto.js     títulos de fuentes con la fecha de descarga
     meta.js             fecha y resultado de cada paso de la actualización
@@ -59,6 +61,7 @@ El workflow `.github/workflows/actualizar-datos.yml` corre el **día 1 de cada m
 | `faena` | SAGyP – faena vacuna (Series de Tiempo) | ciclo ganadero |
 | `provincias` | INDEC – exportaciones por provincia y rubro | coroplético provincial |
 | `agricola` | MAGyP – estimaciones agrícolas | producción por departamento y totales por campaña |
+| `actividad` | Series de Tiempo (INDEC, BCRA, Secretarías de Energía, Agricultura y Hacienda, cámaras republicadas por el Ministerio de Economía) | tablero mensual de la vista Actividad, peso de cada sector en el PIB, aportes al crecimiento y base de la proyección 2030 |
 
 Si una fuente falla o cambia de formato, ese paso conserva el dato anterior y deja el error anotado en `data/auto/meta.js`; los demás pasos siguen. Para correrlo a mano: pestaña **Actions → Actualizar datos → Run workflow**.
 
@@ -81,6 +84,14 @@ Los proyectos del RIGI están en `data/manual/rigi.js`, uno por activo del mapa,
 La vista **Circuito global** muestra, para cada empresa con proyectos RIGI, su casa matriz y el resto de su negocio en el mundo, cuánto pesa hoy la Argentina en sus ingresos (o en su producción) y cuánto pesaría con los proyectos a régimen, con dos juegos de precios de referencia. También muestra la participación del país en la producción mundial y la cadena de valor de cada producto. Los datos están en `data/manual/circuito.js`: para sumar una empresa, copiar un bloque de `CIR_EMP`, cargar su base (última cifra anual con fuente) y sus proyectos (id del activo del mapa, participación y producción a régimen). El cálculo está explicado en la cabecera del archivo y en `docs/circuito-global-rigi.md`.
 
 El **laboratorio de valuación** (`CIR_VAL` en el mismo archivo) arma un flujo de fondos por proyecto con los costos oficiales de cada estudio y permite mover precio, tasa de descuento, inversión, costo y alícuota. Los números animados usan [Motion](https://motion.dev) (`motion@14.4.0`, cargado desde jsDelivr); si no carga, la página funciona igual sin animación. `countUp()` en `js/app.js` hace contar los indicadores del panel lateral, de Estadísticas y de las fichas de empresa.
+
+### Actividad
+
+La vista **Actividad** (antes «Estadísticas») tiene una pestaña **Panorama** y una por sector. Panorama muestra el tablero mensual (variación interanual y mensual desestacionalizada de cada indicador, como mapa de calor), el peso de cada sector en el PIB a precios corrientes, el aporte de cada sector al crecimiento del EMAE y una proyección de participaciones a 2030. Las pestañas de sector suman sus indicadores mensuales a los gráficos que ya había.
+
+- Las series del tablero están en `MONITOR` dentro de `scripts/actualizar.py` (id de Series de Tiempo, unidad, organismo). Para sumar una, agregar una fila: si el organismo no publica serie desestacionalizada, el script la calcula con STL y el sitio la marca con «*».
+- Aportes: peso del sector en el EMAE (VAB 2004 × nivel del año anterior) × su variación; «Resto» es la diferencia con el total.
+- Proyección 2030: ejercicio propio, rotulado como tal. Parte del VAB del último año completo, aplica la tendencia de cada sector (editable) y suma el valor agregado de los proyectos nuevos de `data/manual/circuito.js` (arranque desde 2026, 3 años de rampa, precios de referencia de `CIR_META`), pasado a pesos con el tipo de cambio promedio del año base.
 
 ### Panel de administración
 
