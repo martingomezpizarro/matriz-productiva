@@ -23,6 +23,7 @@ import calendar
 import datetime as dt
 import io
 import json
+import math
 import re
 import sys
 import traceback
@@ -93,6 +94,7 @@ class Estado:
         self.viz = leer_js(AUTO / "viz.js", "VIZ")
         self.meta = leer_js(AUTO / "meta.js", "META")
         self.fuentes = leer_js(AUTO / "fuentes-auto.js", "SRC")
+        self.act = leer_js(AUTO / "actividad.js", "ACT") if (AUTO / "actividad.js").exists() else {}
         self.sucio = set()
 
     def fuente(self, clave, titulo, url):
@@ -103,6 +105,10 @@ class Estado:
         if "viz" in self.sucio:
             escribir_js(AUTO / "viz.js", "VIZ", self.viz,
                         "// GENERADO por scripts/actualizar.py — las claves que el script no toca se conservan.")
+        if "act" in self.sucio:
+            escribir_js(AUTO / "actividad.js", "ACT", self.act,
+                        "// GENERADO por scripts/actualizar.py (paso «actividad»): tablero mensual, EMAE y VAB por sector.\n"
+                        "// Fuente: API de Series de Tiempo de datos.gob.ar. No editar a mano.")
         if "fuentes" in self.sucio:
             escribir_js(AUTO / "fuentes-auto.js", "SRC", self.fuentes,
                         "// GENERADO por scripts/actualizar.py — títulos de fuentes con la fecha de la última descarga.\n"
@@ -257,8 +263,8 @@ def paso_precios(E: Estado):
 SERIES = "https://apis.datos.gob.ar/series/api/series/"
 
 
-def serie(ids, desde="2015-01-01"):
-    j = get(SERIES, params={"ids": ids, "start_date": desde, "limit": 5000, "format": "json"}).json()
+def serie(ids, desde="2015-01-01", **extra):
+    j = get(SERIES, params={"ids": ids, "start_date": desde, "limit": 5000, "format": "json", **extra}).json()
     cols = ["fecha"] + ids.split(",")
     df = pd.DataFrame(j["data"], columns=cols)
     df["fecha"] = pd.to_datetime(df["fecha"])
@@ -523,11 +529,160 @@ def paso_energia(E: Estado):
     return f"{mes_txt(ym)}: {prod['pet']:,} bbl/d".replace(",", ".")
 
 
+# ---------------------------------------------------------------- Actividad: tablero mensual, EMAE y PIB por sector
+# Todo sale de la API de Series de Tiempo (datos.gob.ar). Cada fila del tablero se baja por separado:
+# si una serie deja de publicarse, esa fila queda afuera y el resto sigue.
+IPC = "148.3_INIVELNAL_DICI_M_26"
+DS = "https://datos.gob.ar/series/api/series/?ids="  # enlace legible para citar cada serie
+
+# clave, grupo, nombre, unidad, id original, id desestacionalizado oficial, real (deflactar por IPC), fuente (organismo)
+MONITOR = [
+    ("emae", "tot", "EMAE · actividad económica total", "índice 2004 = 100", "143.3_NO_PR_2004_A_21", "143.3_NO_PR_2004_A_31", False, "INDEC"),
+    ("petroleo", "og", "Producción de petróleo", "miles de bbl/d", "viz:oilTot", None, False, "Secretaría de Energía (Capítulo IV)"),
+    ("gas", "og", "Producción de gas natural", "millones de m³", "364.3_PRODUCCIoNRAL__25", None, False, "Secretaría de Energía"),
+    ("nafta", "og", "Ventas de naftas al mercado interno", "miles de m³", "38.3_N_1994_M_6", None, False, "Secretaría de Energía vía Ministerio de Economía"),
+    ("gasoil", "og", "Ventas de gasoil al mercado interno", "m³", "38.3_G_1994_M_6", None, False, "Secretaría de Energía vía Ministerio de Economía"),
+    ("minas", "mi", "EMAE · Explotación de minas y canteras", "índice 2004 = 100", "11.3_ISD_2004_M_26", None, False, "INDEC"),
+    ("agro", "ag", "EMAE · Agricultura, ganadería, caza y silvicultura", "índice 2004 = 100", "11.3_ISOM_2004_M_39", None, False, "INDEC"),
+    ("faena", "ag", "Faena vacuna", "cabezas", "40.3_VC_0_M_15", None, False, "SAGyP"),
+    ("pesca", "ag", "EMAE · Pesca", "índice 2004 = 100", "11.3_VIPAA_2004_M_5", None, False, "INDEC"),
+    ("ipi", "ind", "Producción industrial manufacturera (IPI)", "índice 2004 = 100", "453.1_SERIE_ORIGNAL_0_0_14_46", "453.1_SERIE_DESEADA_0_0_24_58", False, "INDEC"),
+    ("acero", "ind", "Producción de acero crudo", "miles de t", "359.3_ACERO_CRUDUDO__11", None, False, "Cámara Argentina del Acero, republicado por el Ministerio de Economía"),
+    ("isac", "con", "Actividad de la construcción (ISAC)", "índice 2004 = 100", "33.2_ISAC_NIVELRAL_0_M_18_63", None, False, "INDEC"),
+    ("cemento", "con", "Despachos de cemento al mercado interno", "miles de t", "38.3_CEM_1994_M_7", None, False, "AFCP, republicado por el Ministerio de Economía"),
+    ("issp", "ser", "Servicios públicos (ISSP)", "índice 2004 = 100", "302.3_S_ORIGINALRAL_0_S_21", "302.3_S_DESEST_NRAL_0_S_19", False, "INDEC"),
+    ("expo", "cx", "Exportaciones de bienes", "millones de US$", "74.3_IET_0_M_16", None, False, "INDEC"),
+    ("impo", "cx", "Importaciones de bienes", "millones de US$", "74.3_IIT_0_M_25", None, False, "INDEC"),
+    ("prest", "fin", "Préstamos al sector privado en pesos (real)", "millones de $ del último mes", "91.1_DETALLE_PRPOT_0_0_25", None, True, "BCRA, deflactado por IPC del INDEC"),
+    ("iva", "fis", "Recaudación de IVA DGI (real)", "millones de $ del último mes", "142.3_IVA_D_2001_M_7", None, True, "Secretaría de Hacienda, deflactado por IPC del INDEC"),
+    ("cyd", "fis", "Impuesto a los créditos y débitos (real)", "millones de $ del último mes", "142.3_CREDI_2001_M_24", None, True, "Secretaría de Hacienda, deflactado por IPC del INDEC"),
+]
+
+# Sectores del PIB (letras CIIU). emae = índice mensual del EMAE, pib = VAB trimestral a precios corrientes,
+# w = VAB 2004 a precios de 2004 (millones de $, INDEC, dataset 6.1): ponderación del EMAE base 2004.
+SECTORES = [
+    ("A", "Agro, ganadería y silvicultura", "ag", "11.3_ISOM_2004_M_39", "8.2_AGCS_2004_T_39", 39125.2),
+    ("B", "Pesca", None, "11.3_VIPAA_2004_M_5", "8.2_P_2004_T_5", 1442.5),
+    ("C", "Minas y canteras (petróleo, gas y minería)", "og", "11.3_ISD_2004_M_26", "8.2_EMC_2004_T_26", 24321.8),
+    ("D", "Industria manufacturera", None, "11.3_VMASD_2004_M_23", "8.2_IM_2004_T_23", 91866.3),
+    ("E", "Electricidad, gas y agua", None, "11.3_ITC_2004_M_21", "8.2_SEGA_2004_T_32", 8702.4),
+    ("F", "Construcción", None, "11.3_VMATC_2004_M_12", "8.2_C_2004_T_12", 14904.7),
+    ("G", "Comercio", None, "11.3_AGCS_2004_M_41", "8.2_CMMR_2004_T_41", 60034.6),
+    ("H", "Hoteles y restaurantes", None, "11.3_P_2004_M_20", "8.2_HR_2004_T_20", 6936.0),
+    ("I", "Transporte y comunicaciones", None, "11.3_EMC_2004_M_25", "8.2_TAC_2004_T_40", 29789.9),
+    ("J", "Intermediación financiera", None, "11.3_IM_2004_M_25", "8.2_IF_2004_T_25", 15079.4),
+    ("K", "Inmobiliarias, empresariales y de alquiler", None, "11.3_SEGA_2004_M_48", "8.2_AIEA_2004_T_48", 53084.4),
+    ("L", "Administración pública y defensa", None, "11.3_C_2004_M_60", "8.2_APDPSSAO_2004_T_60", 21585.1),
+    ("M", "Enseñanza", None, "11.3_CMMR_2004_M_10", "8.2_E_2004_T_10", 17057.4),
+    ("N", "Salud y servicios sociales", None, "11.3_HR_2004_M_24", "8.2_SSS_2004_T_24", 13201.4),
+    ("O", "Otros servicios comunitarios", None, "11.3_TAC_2004_M_60", "8.2_OASCSP_2004_T_60", 12253.5),
+    ("T", "Impuestos netos de subsidios y resto", None, "11.3_IF_2004_M_25", None, 485115.2 - 409384.6),
+]
+PIB_PM = "8.2_PIBPM_2004_T_38"
+FX_A3500 = "175.1_DR_REFE500_0_0_25"
+
+
+def ym(ts) -> str:
+    return pd.Timestamp(ts).strftime("%Y-%m")
+
+
+def desestacionalizar(s: pd.Series):
+    """Serie sin estacionalidad propia (STL sobre logaritmos, período 12). Sólo si no hay una oficial."""
+    from statsmodels.tsa.seasonal import STL
+    x = s.dropna()
+    x = x[x > 0]
+    # último tramo contiguo, hasta 12 años
+    idx = pd.date_range(x.index.min(), x.index.max(), freq="MS")
+    x = x.reindex(idx)
+    if x.isna().any():
+        x = x[x.isna()[::-1].cumsum()[::-1] == 0]
+    x = x.tail(144)
+    if len(x) < 48:
+        return None
+    r = STL(pd.Series(x.values, index=x.index).apply(lambda v: math.log(v)), period=12, robust=True).fit()
+    return (r.trend + r.resid).apply(math.exp)
+
+
+def paso_actividad(E: Estado):
+    ipc = serie(IPC, "2015-01-01")[IPC].dropna()
+    filas, fallas = [], []
+    for k, g, n, u, sid, said, real, org in MONITOR:
+        try:
+            if sid.startswith("viz:"):
+                s = pd.Series({pd.Timestamp(m + "-01"): v for m, v in E.viz[sid[4:]]}).sort_index()
+            else:
+                s = serie(sid, "2014-01-01")[sid].dropna()
+            if s.empty:
+                raise ValueError("sin datos")
+            if real:
+                s = (s / ipc.reindex(s.index) * ipc.iloc[-1]).dropna()
+            sa, tipo = None, None
+            if said:
+                sa = serie(said, "2014-01-01")[said].dropna()
+                tipo = "oficial"
+            else:
+                sa = desestacionalizar(s)
+                tipo = "propia" if sa is not None else None
+            if s.index.max() < pd.Timestamp(HOY) - pd.DateOffset(months=15):
+                raise ValueError(f"serie discontinuada (último dato {ym(s.index.max())})")
+            filas.append({"k": k, "g": g, "n": n, "u": u, "id": sid, "org": org, "real": real, "sa": tipo,
+                          "s": [[ym(i), r1(v, 2)] for i, v in s[s.index >= "2016-01-01"].items()],
+                          "d": [[ym(i), r1(v, 2)] for i, v in sa[sa.index >= "2016-01-01"].items()] if sa is not None else None})
+        except Exception as e:
+            fallas.append(f"{k}: {e}"[:120])
+            print(f"   {k}: {e}")
+    if len(filas) < 8:
+        raise ValueError(f"Sólo {len(filas)} series del tablero respondieron: {'; '.join(fallas)}")
+
+    # EMAE por sector, mensual
+    ids = ",".join(s[3] for s in SECTORES)
+    em = serie(ids, "2016-01-01")
+    tot = serie("143.3_NO_PR_2004_A_21,143.3_NO_PR_2004_A_31", "2016-01-01")
+    em = em.join(tot).dropna(how="all")
+    em = em[em[[s[3] for s in SECTORES]].notna().all(axis=1)]
+    if len(em) < 60:
+        raise ValueError("EMAE sectorial demasiado corto")
+    emae = {"meses": [ym(i) for i in em.index],
+            "tot": [r1(v, 2) for v in em["143.3_NO_PR_2004_A_21"]],
+            "sa": [r1(v, 2) for v in em["143.3_NO_PR_2004_A_31"]],
+            "sec": {s[0]: [r1(v, 2) for v in em[s[3]]] for s in SECTORES}}
+
+    # VAB a precios corrientes por sector, trimestral (las letras que INDEC dejó de abrir quedan en «Resto»)
+    pids = [s[4] for s in SECTORES if s[4]] + [PIB_PM]
+    pb = serie(",".join(pids), "2016-01-01").dropna(subset=[PIB_PM])
+    pib = {"trim": [f"{i.year}-Q{(i.month - 1) // 3 + 1}" for i in pb.index], "pib": [r1(v, 0) for v in pb[PIB_PM]], "sec": {}}
+    for s in SECTORES:
+        if s[4] and pb[s[4]].notna().sum() >= len(pb) - 1 and pb[s[4]].iloc[-4:].notna().all():
+            pib["sec"][s[0]] = [r1(v, 0) for v in pb[s[4]]]
+
+    # Tipo de cambio mayorista promedio anual (para pasar a dólares el VAB del año base de la proyección)
+    fx = serie(FX_A3500, "2016-01-01", collapse="year", collapse_aggregation="avg")[FX_A3500].dropna()
+
+    E.act = {"actualizado": HOY.isoformat(), "monitor": filas, "fallas": fallas, "emae": emae, "pib": pib,
+             "fx": {str(i.year): r1(v, 2) for i, v in fx.items()},
+             "sectores": [{"k": s[0], "n": s[1], "s": s[2], "w": s[5], "pib": bool(s[4] and s[0] in pib["sec"])} for s in SECTORES]}
+    E.sucio.add("act")
+    E.fuente("actEmae", f"INDEC – EMAE por sector de actividad, base 2004, a {ymTxt(emae['meses'][-1])} (Series de Tiempo, datasets 11 y 143)",
+             DS + ",".join([s[3] for s in SECTORES]))
+    E.fuente("actPib", f"INDEC – Valor agregado bruto por sector a precios corrientes, a {pib['trim'][-1]} (Series de Tiempo, dataset 8)",
+             DS + ",".join(pids))
+    E.fuente("actFx", "BCRA – Tipo de cambio de referencia Com. A 3500, promedio anual (Series de Tiempo)", DS + FX_A3500)
+    for f in filas:
+        if not f["id"].startswith("viz:"):
+            E.fuente("act_" + f["k"], f"{f['org']} – {f['n']}, a {ymTxt(f['s'][-1][0])} (Series de Tiempo)", DS + f["id"])
+    return f"{len(filas)} series del tablero a {max(f['s'][-1][0] for f in filas)}; EMAE a {emae['meses'][-1]}; VAB a {pib['trim'][-1]}" + (f"; sin datos: {len(fallas)}" if fallas else "")
+
+
+def ymTxt(m):  # "2026-07" -> "jul-2026"
+    return mes_txt(m)
+
+
 # ---------------------------------------------------------------- orquestación
 PASOS = {
     "siacam": ("nube", paso_siacam), "mercado": ("nube", paso_mercado), "precios": ("nube", paso_precios),
     "comercio": ("nube", paso_comercio), "emae": ("nube", paso_emae), "faena": ("nube", paso_faena),
     "provincias": ("nube", paso_provincias), "agricola": ("nube", paso_agricola),
+    "actividad": ("nube", paso_actividad),
     "energia": ("energia", paso_energia),
 }
 
