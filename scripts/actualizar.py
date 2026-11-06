@@ -683,12 +683,32 @@ def ymTxt(m):  # "2026-07" -> "jul-2026"
     return mes_txt(m)
 
 
+
+INDEC_FTP = "https://www.indec.gob.ar/ftp/cuadros/economia/"
+
+
+def paso_sonda(E: Estado):
+    """Diagnóstico: imprime la estructura de los cuadros de INDEC (no guarda nada)."""
+    for f in ["sh_emae_actividad_base2004.xls", "sh_emae_mensual_base2004.xls"]:
+        raw = get(INDEC_FTP + f).content
+        x = pd.ExcelFile(io.BytesIO(raw))
+        print(f"== {f}: hojas {x.sheet_names}")
+        for h in x.sheet_names[:3]:
+            df = pd.read_excel(x, h, header=None)
+            print(f"-- hoja {h}: {df.shape}")
+            with pd.option_context("display.max_columns", 30, "display.width", 250):
+                print(df.head(8).to_string()[:3000])
+                print(df.tail(6).to_string()[:2500])
+    raise RuntimeError("sonda: sólo diagnóstico")
+
+
 # ---------------------------------------------------------------- orquestación
 PASOS = {
     "siacam": ("nube", paso_siacam), "mercado": ("nube", paso_mercado), "precios": ("nube", paso_precios),
     "comercio": ("nube", paso_comercio), "emae": ("nube", paso_emae), "faena": ("nube", paso_faena),
     "provincias": ("nube", paso_provincias), "agricola": ("nube", paso_agricola),
     "actividad": ("nube", paso_actividad),
+    "sonda": ("manual", paso_sonda),
     "energia": ("energia", paso_energia),
 }
 
@@ -696,7 +716,7 @@ PASOS = {
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("pasos", nargs="*", help=f"pasos sueltos: {', '.join(PASOS)}")
-    ap.add_argument("--grupo", choices=["nube", "energia", "todo"], default="nube")
+    ap.add_argument("--grupo", choices=["nube", "energia", "manual", "todo"], default="nube")
     a = ap.parse_args()
     if set(a.pasos) - set(PASOS):
         ap.error(f"pasos desconocidos: {', '.join(set(a.pasos) - set(PASOS))}")
