@@ -3,6 +3,7 @@ name: Actualizar datos
 on:
   schedule:
     - cron: "0 9 1 * *"   # día 1 de cada mes, 06:00 de Argentina: cierra el mes anterior
+    - cron: "0 9 * * 1"   # lunes 06:00 de Argentina: sólo el tablero de actividad (EMAE, INDEC, Series de Tiempo)
   workflow_dispatch:      # botón «Run workflow» para correrlo a mano
     inputs:
       pasos:
@@ -31,7 +32,7 @@ jobs:
       - run: pip install -r scripts/requirements.txt
       - name: Bajar fuentes y regenerar data/auto
         env:
-          PASOS: ${{ github.event.inputs.pasos }}
+          PASOS: ${{ github.event.schedule == '0 9 * * 1' && 'actividad' || github.event.inputs.pasos }}
         run: python scripts/actualizar.py ${PASOS:---grupo nube}
       - name: Guardar cambios en el repo
         run: |

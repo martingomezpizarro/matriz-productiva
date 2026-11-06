@@ -529,6 +529,9 @@ def paso_energia(E: Estado):
     return f"{mes_txt(ym)}: {prod['pet']:,} bbl/d".replace(",", ".")
 
 
+INDEC_FTP = "https://www.indec.gob.ar/ftp/cuadros/economia/"
+
+
 # ---------------------------------------------------------------- Actividad: tablero mensual, EMAE y PIB por sector
 # Todo sale de la API de Series de Tiempo (datos.gob.ar). Cada fila del tablero se baja por separado:
 # si una serie deja de publicarse, esa fila queda afuera y el resto sigue.
@@ -603,12 +606,28 @@ def desestacionalizar(s: pd.Series):
     return (r.trend + r.resid).apply(math.exp)
 
 
+# filas del tablero que salen del EMAE: se reemplazan por los cuadros de INDEC cuando están disponibles
+EMAE_FILA = {"emae": "tot", "minas": "C", "agro": "A", "pesca": "B"}
+
+
 def paso_actividad(E: Estado):
     ipc = serie(IPC, "2015-01-01")[IPC].dropna()
+    try:
+        ind = emae_indec()
+        print(f"   EMAE de INDEC hasta {ym(ind.index.max())}")
+    except Exception as e:  # si el cuadro cambia de formato, se sigue con la API
+        ind = None
+        print(f"   EMAE de INDEC no disponible: {e}")
     filas, fallas = [], []
     for k, g, n, u, sid, said, real, org in MONITOR:
+        sid_cita = None
         try:
-            if sid.startswith("viz:"):
+            if ind is not None and k in EMAE_FILA:
+                s = ind[EMAE_FILA[k]].dropna()
+                if k == "emae":
+                    said, s_sa = None, ind["sa"].dropna()
+                sid_cita = INDEC_FTP + ("sh_emae_mensual_base2004.xls" if k == "emae" else "sh_emae_actividad_base2004.xls")
+            elif sid.startswith("viz:"):
                 s = pd.Series({pd.Timestamp(m + "-01"): v for m, v in E.viz[sid[4:]]}).sort_index()
             else:
                 s = serie(sid, "2014-01-01")[sid].dropna()
@@ -617,7 +636,9 @@ def paso_actividad(E: Estado):
             if real:
                 s = (s / ipc.reindex(s.index) * ipc.iloc[-1]).dropna()
             sa, tipo = None, None
-            if said:
+            if ind is not None and k == "emae":
+                sa, tipo = s_sa, "oficial"
+            elif said:
                 sa = serie(said, "2014-01-01")[said].dropna()
                 tipo = "oficial"
             else:
@@ -625,7 +646,7 @@ def paso_actividad(E: Estado):
                 tipo = "propia" if sa is not None else None
             if s.index.max() < pd.Timestamp(HOY) - pd.DateOffset(months=15):
                 raise ValueError(f"serie discontinuada (último dato {ym(s.index.max())})")
-            filas.append({"k": k, "g": g, "n": n, "u": u, "id": sid, "org": org, "real": real, "sa": tipo,
+            filas.append({"k": k, "g": g, "n": n, "u": u, "id": sid, "url": sid_cita, "org": org, "real": real, "sa": tipo,
                           "s": [[ym(i), r1(v, 2)] for i, v in s[s.index >= "2016-01-01"].items()],
                           "d": [[ym(i), r1(v, 2)] for i, v in sa[sa.index >= "2016-01-01"].items()] if sa is not None else None})
         except Exception as e:
@@ -636,9 +657,12 @@ def paso_actividad(E: Estado):
 
     # EMAE por sector, mensual
     ids = ",".join(s[3] for s in SECTORES)
-    em = serie(ids, "2016-01-01")
-    tot = serie("143.3_NO_PR_2004_A_21,143.3_NO_PR_2004_A_31", "2016-01-01")
-    em = em.join(tot).dropna(how="all")
+    if ind is not None:
+        em = ind[ind.index >= "2016-01-01"].rename(columns={**{s[0]: s[3] for s in SECTORES}, "tot": "143.3_NO_PR_2004_A_21", "sa": "143.3_NO_PR_2004_A_31"})
+    else:
+        em = serie(ids, "2016-01-01")
+        tot = serie("143.3_NO_PR_2004_A_21,143.3_NO_PR_2004_A_31", "2016-01-01")
+        em = em.join(tot).dropna(how="all")
     # INDEC deja huecos en algunas ramas (construcción, servicios comunitarios); se exigen completas sólo
     # las que el sitio usa en los aportes (agro, minas, industria, comercio) y el total.
     clave = [s[3] for s in SECTORES if s[0] in ("A", "C", "D", "G")] + ["143.3_NO_PR_2004_A_21", "143.3_NO_PR_2004_A_31"]
@@ -668,14 +692,18 @@ def paso_actividad(E: Estado):
              "fx": {str(i.year): r1(v, 2) for i, v in fx.items()},
              "sectores": [{"k": s[0], "n": s[1], "s": s[2], "w": s[5], "pib": bool(s[4] and s[0] in pib["sec"])} for s in SECTORES]}
     E.sucio.add("act")
-    E.fuente("actEmae", f"INDEC – EMAE por sector de actividad, base 2004, a {ymTxt(emae['meses'][-1])} (Series de Tiempo, datasets 11 y 143)",
-             DS + ",".join([s[3] for s in SECTORES]))
+    if ind is not None:
+        E.fuente("actEmae", f"INDEC – EMAE por sector de actividad, base 2004, a {ymTxt(emae['meses'][-1])} (cuadros del EMAE)",
+                 INDEC_FTP + "sh_emae_actividad_base2004.xls")
+    else:
+        E.fuente("actEmae", f"INDEC – EMAE por sector de actividad, base 2004, a {ymTxt(emae['meses'][-1])} (Series de Tiempo, datasets 11 y 143)",
+                 DS + ",".join([s[3] for s in SECTORES]))
     E.fuente("actPib", f"INDEC – Valor agregado bruto por sector a precios corrientes, a {pib['trim'][-1]} (Series de Tiempo, dataset 8)",
              DS + ",".join(pids))
     E.fuente("actFx", "BCRA – Tipo de cambio de valuación (peso por dólar), promedio anual (Series de Tiempo)", DS + FX_A3500)
     for f in filas:
         if not f["id"].startswith("viz:"):
-            E.fuente("act_" + f["k"], f"{f['org']} – {f['n']}, a {ymTxt(f['s'][-1][0])} (Series de Tiempo)", DS + f["id"])
+            E.fuente("act_" + f["k"], f"{f['org']} – {f['n']}, a {ymTxt(f['s'][-1][0])}" + (" (cuadros de INDEC)" if f["url"] else " (Series de Tiempo)"), f["url"] or DS + f["id"])
     return f"{len(filas)} series del tablero a {max(f['s'][-1][0] for f in filas)}; EMAE a {emae['meses'][-1]}; VAB a {pib['trim'][-1]}" + (f"; sin datos: {len(fallas)}" if fallas else "")
 
 
@@ -684,22 +712,48 @@ def ymTxt(m):  # "2026-07" -> "jul-2026"
 
 
 
-INDEC_FTP = "https://www.indec.gob.ar/ftp/cuadros/economia/"
 
 
-def paso_sonda(E: Estado):
-    """Diagnóstico: imprime la estructura de los cuadros de INDEC (no guarda nada)."""
-    for f in ["sh_emae_actividad_base2004.xls", "sh_emae_mensual_base2004.xls"]:
-        raw = get(INDEC_FTP + f).content
-        x = pd.ExcelFile(io.BytesIO(raw))
-        print(f"== {f}: hojas {x.sheet_names}")
-        for h in x.sheet_names[:3]:
-            df = pd.read_excel(x, h, header=None)
-            print(f"-- hoja {h}: {df.shape}")
-            with pd.option_context("display.max_columns", 30, "display.width", 250):
-                print(df.head(8).to_string()[:3000])
-                print(df.tail(6).to_string()[:2500])
-    raise RuntimeError("sonda: sólo diagnóstico")
+
+MESES_IDX = {m: i + 1 for i, m in enumerate(MESES)}
+
+
+def indec_tabla(nombre, hoja=0):
+    """Lee un cuadro mensual de INDEC (col 0 = año en enero, col 1 = mes) y devuelve (DataFrame con índice
+    de fechas, fila de encabezados)."""
+    raw = get(INDEC_FTP + nombre).content
+    df = pd.read_excel(io.BytesIO(raw), sheet_name=hoja, header=None)
+    hdr = df.iloc[2].tolist()
+    anio, filas = None, []
+    for _, r in df.iterrows():
+        a, m = r.iloc[0], r.iloc[1]
+        if isinstance(a, (int, float)) and not pd.isna(a) and 1990 < a < 2100:
+            anio = int(a)
+        if anio and isinstance(m, str) and norm(m).split(" ")[0] in MESES_IDX:
+            filas.append((pd.Timestamp(anio, MESES_IDX[norm(m).split(" ")[0]], 1), r.iloc[2:].tolist()))
+    if len(filas) < 120:
+        raise ValueError(f"{nombre}: formato inesperado ({len(filas)} meses)")
+    out = pd.DataFrame([v for _, v in filas], index=[f for f, _ in filas]).apply(pd.to_numeric, errors="coerce")
+    return out, hdr[2:]
+
+
+def emae_indec():
+    """EMAE por letra, total y desestacionalizado, directo de los cuadros de INDEC (salen antes que en la API)."""
+    let, hdr = indec_tabla("sh_emae_actividad_base2004.xls", "Tabla Letras")
+    cols = {}
+    for i, h in enumerate(hdr):
+        h = str(h).strip()
+        m = re.match(r"^([A-O])\s*-", h)
+        if m:
+            cols[m.group(1)] = let.columns[i]
+        elif "impuesto" in norm(h):
+            cols["T"] = let.columns[i]
+    if len(cols) < 14:
+        raise ValueError(f"EMAE por letra: columnas no reconocidas {hdr}")
+    df = pd.DataFrame({k: let[c] for k, c in cols.items()})
+    tot, _ = indec_tabla("sh_emae_mensual_base2004.xls")
+    df["tot"], df["sa"] = tot.iloc[:, 0], tot.iloc[:, 2]
+    return df.dropna(subset=["tot", "A", "C"])
 
 
 # ---------------------------------------------------------------- orquestación
@@ -708,7 +762,6 @@ PASOS = {
     "comercio": ("nube", paso_comercio), "emae": ("nube", paso_emae), "faena": ("nube", paso_faena),
     "provincias": ("nube", paso_provincias), "agricola": ("nube", paso_agricola),
     "actividad": ("nube", paso_actividad),
-    "sonda": ("manual", paso_sonda),
     "energia": ("energia", paso_energia),
 }
 
@@ -716,7 +769,7 @@ PASOS = {
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("pasos", nargs="*", help=f"pasos sueltos: {', '.join(PASOS)}")
-    ap.add_argument("--grupo", choices=["nube", "energia", "manual", "todo"], default="nube")
+    ap.add_argument("--grupo", choices=["nube", "energia", "todo"], default="nube")
     a = ap.parse_args()
     if set(a.pasos) - set(PASOS):
         ap.error(f"pasos desconocidos: {', '.join(set(a.pasos) - set(PASOS))}")
