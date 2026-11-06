@@ -169,4 +169,11 @@ Object.assign(SRC, {
   agagEQ26: { t:"Argenta Silver – Comunicado del 22-ene-2026 con el recurso NI 43-101 de El Quevar (Yaxtché)", u:"https://www.stockwatch.com/News/Item/Z-C!AGAG-3777060/C/AGAG?fmt=orig" },
   frdEDM26: { t:"Fredonia Mining – Comunicado del 2-nov-2026 con el resumen de la PEA de El Dorado Monserrat", u:"https://www.bnnbloomberg.ca/press-releases/2026/11/02/fredonia-confirms-continuity-of-goldsilver-mineralization-and-the-potential-expansion-of-the-conceptual-edm-mine-plan-at-herradura-hill/" },
   cneaDO66: { t:"CNEA – Distrito Uranífero del Tonco / Yacimiento «Don Otto» (Gerencia de Materias Primas, 1966)", u:"https://nuclea.cnea.gob.ar/bitstreams/9cf86172-82e2-403d-a512-5559a2ae55b0/download" },
+  // --- 6-nov-2026 ---
+  rtLi25:   { t:"Rio Tinto – Lithium Mineral Resources and Ore Reserves (Form 6-K, 4-dic-2025): Cauchari", u:"https://www.sec.gov/Archives/edgar/data/863064/000086306426000002/ex04d04lithium1initialrp.htm" },
+  smGold22: { t:"Secretaría de Minería – Argentina Gold Portfolio 2022: ficha del proyecto Suyai", u:"https://www.argentina.gob.ar/sites/default/files/2022/05/portfolio_gold_secmin_2022.pdf" },
+  ccdTarPEA:{ t:"Cascadero Copper – Positive Preliminary Economic Assessment on the Taron Cesium Project (comunicado, 15-may-2024)", u:"https://www.newsfilecorp.com/release/209256/Cascadero-Copper-Announces-Positive-Preliminary-Economic-Assessment-on-the-Taron-Cesium-Project-in-Argentina" },
+  ccdCMC26: { t:"Cascadero Copper – Announces Sale of Cascadero Minerals Corporation (comunicado, sep-2026)", u:"https://www.miningstockeducation.com/2026/09/cascadero-copper-announces-sale-of-cascadero-minerals-corporation/" },
+  jagLS26:  { t:"Jaguar Uranium – Maiden Mineral Resource Estimate at Laguna Salada (comunicado, 13-oct-2026)", u:"https://www.webull.com/news/15740561076331520" },
+  pnnHY24:  { t:"Power Minerals – Half Year Report al 31-dic-2023 (ASX, 15-mar-2024): recurso y PEA de Rincón", u:"https://announcements.asx.com.au/asxpdf/20240315/pdf/061kbnfzg8whj3.pdf" },
 });

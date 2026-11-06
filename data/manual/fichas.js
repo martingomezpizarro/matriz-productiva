@@ -679,5 +679,43 @@ const TEC = {
     prod:"Preconcentrado de uranio con 5% a 10% de U₃O₈",
     nums:[["Reservas (mitad sur, hasta el nivel 0)","≈ 200.000 t con ley media de 0,15% de U₃O₈","cneaDO66"],["Extensión del yacimiento","2.100 m de corrida en el flanco este del sinclinal del Tonco","cneaDO66"],["Labores","3.200 m de galerías, piques y chimeneas; galería principal ≈ 100 m bajo el afloramiento","cneaDO66"],["Lixiviación","Extracción de más de 90% con 19 kg de ácido por tonelada; primera etapa prevista de 36.000 t","cneaDO66"]],
     nota:"Datos del informe de la CNEA de 1966, cuando el yacimiento estaba en preparación y explotación; fue el primero de Sudamérica en usar lixiviación en pilas para uranio. La cartera oficial lo lista hoy en factibilidad.",
-    src:["cneaDO66"] }
+    src:["cneaDO66"] },
+  // --- 6-nov-2026 ---
+  "mi-cauchari-jv": {
+    met:"Litio en salmuera en el salar de Olaroz-Cauchari (Puna de Jujuy): la salmuera se extrae por pozos desde los acuíferos del salar.",
+    proc:TEC_GEN["mi-li"].proc,
+    prod:"Carbonato de litio",
+    nums:[["Recurso medido + indicado","1.740 Mm³ de salmuera con 480 mg/l de litio: 4,5 Mt de carbonato de litio equivalente (LCE)","rtLi25"],["Recurso inferido","590 Mm³ con 470 mg/l: 1,5 Mt LCE","rtLi25"],["Recurso total","2.330 Mm³ con 480 mg/l: 6,0 Mt LCE","rtLi25"],["Reservas probadas + probables","420 Mm³ con 500 mg/l: 1,1 Mt LCE (ley de corte 350 mg/l)","rtLi25"],["Recuperación media de proceso","60%: 0,7 Mt LCE recuperables","rtLi25"],["Participación","100% Rio Tinto","rtLi25"]],
+    nota:"Recursos y reservas al 30-jun-2025 informados por Rio Tinto (ex proyecto Cauchari de Allkem/Arcadium Lithium); cifras in situ.",
+    src:["rtLi25"] },
+  "mi-suyai": {
+    met:"Oro y plata epitermal de baja sulfuración: vetas de cuarzo-adularia-sericita en andesitas jurásicas, con buzamiento de 25° a 35°, en un corredor de 5 × 2 km a 9 km en línea recta de Esquel (Chubut).",
+    proc:["Mina subterránea por vetas","Chancado y molienda","Lixiviación del mineral","Recuperación del metal","Fundición de doré"],
+    prod:"Doré de oro y plata",
+    nums:[["Recurso indicado","4,7 Mt con 15,13 g/t de oro y 23 g/t de plata: 2,29 Moz de oro y 3,52 Moz de plata","smGold22"],["Recurso inferido","0,9 Mt con 9,9 g/t de oro y 21 g/t de plata: 274.000 oz de oro y 575.000 oz de plata","smGold22"],["Producción media prevista","250.000 oz de oro por año","smGold22"],["Inversión (capex)","US$ 220 M","smGold22"],["Vida útil","8 años","smGold22"],["Superficie","36.702 ha","smGold22"]],
+    nota:"Datos de la ficha oficial de la Secretaría de Minería (portafolio de oro 2022), que compila informes de Yamana Gold y de Meridian Gold (2003). La cartera SIACAM lo lista hoy en factibilidad, con Pan American Silver (60%) y CAM (40%).",
+    src:["smGold22"] },
+  "mi-taron-cesium": {
+    met:"Cesio en depósito epitermal de la Puna salteña, explotado a cielo abierto y tratado por lixiviación ácida a alta presión (HPAL).",
+    proc:["Mina a cielo abierto (perforación, voladura, carga y acarreo con contratista)","Chancado giratorio con rechazo de ganga y molienda en molino de bolas con hidrociclones","Lixiviación en dos circuitos de autoclaves en paralelo (HPAL)","Cristalización de alumbre de cesio con sulfato de aluminio","Purificación con hidróxido de bario en dos etapas","Ácido fórmico sobre hidróxido de cesio: salmuera de formiato de cesio"],
+    prod:"Salmuera de formiato de cesio al 80% (se usa como fluido de perforación de alta densidad)",
+    nums:[["Recurso inferido (JORC, 31-ene-2024)","23,85 Mt con 2.131 ppm de cesio: 50.810 t de cesio contenido (ley de corte 1.239 ppm)","ccdTarPEA"],["Escala y vida útil (PEA)","Hasta 1,75 Mt/año de mineral durante 14 años","ccdTarPEA"],["Cesio recuperado en la vida útil","41.051 t","ccdTarPEA"],["Inversión (capex)","US$ 596 M en la vida útil: US$ 478 M iniciales, de ellos US$ 428 M para la planta HPAL","ccdTarPEA"],["Valor presente neto (10%, después de impuestos)","US$ 79 M, con TIR de 14% y repago en 5 años","ccdTarPEA"]],
+    nota:"Evaluación económica preliminar (PEA) basada en recursos inferidos; no demuestra viabilidad económica. En la venta de Cascadero Minerals a Lumina Copper (First Quantum), acordada el 1-sep-2026, Cascadero Copper conserva las siete propiedades de Taron.",
+    hitos:[["15-may-2024","Cascadero publica la PEA de Taron"],["1-sep-2026","Acuerdo de venta de Cascadero Minerals: Taron queda en Cascadero Copper"]],
+    src:["ccdTarPEA","ccdCMC26"] },
+  "mi-laguna-salada": {
+    met:"Uranio y vanadio en gravas superficiales tipo caliche (y zonas ligadas a una discordancia) en la meseta de Chubut; mineralización a muy poca profundidad.",
+    proc:["Minado a cielo abierto de muy baja profundidad (hasta 5–8 m en Buried Lake y Pampa de Arroqui)","Beneficio físico: concentración de la grava en una fracción fina de alta ley","Recuperación del uranio y el vanadio (método todavía no definido)","Concentrado de uranio (U₃O₈) y óxido de vanadio"],
+    prod:"Concentrado de uranio (U₃O₈) con vanadio (V₂O₅) como coproducto",
+    nums:[["Recurso indicado","21,1 Mt con 90 ppm de U₃O₈ y 665 ppm de V₂O₅: 4,2 Mlb de U₃O₈ y 31,1 Mlb de V₂O₅","jagLS26"],["Recurso inferido","34 Mt con 137 ppm de U₃O₈ y 755 ppm de V₂O₅: 10,1 Mlb de U₃O₈ y 57,3 Mlb de V₂O₅","jagLS26"],["Ley de corte","NSR de US$ 12,08/t (≈ 100 ppm de U₃O₈)","jagLS26"],["Recuperaciones supuestas","84,9% de U₃O₈ y 59,5% de V₂O₅","jagLS26"],["Superficie","210.284 ha en 28 concesiones; el recurso ocupa ≈ 4,3%","jagLS26"]],
+    nota:"Primer recurso mineral del proyecto (NI 43-101 y S-K 1300, fecha efectiva 5-oct-2026). Los métodos de minería y de proceso todavía no están definidos.",
+    hitos:[["5-oct-2026","Fecha efectiva del primer recurso mineral"],["19-oct-2026","Presentación de los informes técnicos en SEDAR+ y EDGAR"]],
+    src:["jagLS26"] },
+  "mi-rincon-salta-lithium": {
+    met:"Litio en salmuera en el salar de Rincón (Puna de Salta), dentro del proyecto Salta de Power Minerals.",
+    proc:TEC_GEN["mi-li"].proc,
+    prod:"Carbonato de litio equivalente (LCE) de alta pureza, grado batería",
+    nums:[["Recurso medido + indicado (JORC)","157.131 t de LCE con 258 mg/l de litio","pnnHY24"],["Recurso inferido","135.433 t de LCE con 276 mg/l de litio","pnnHY24"],["Producción prevista (PEA)","7.061 t/año de LCE","pnnHY24"],["Vida útil inicial","14 años","pnnHY24"],["Valor presente neto (antes de impuestos)","US$ 501,85 M, con TIR de 42% y repago en 3 años","pnnHY24"]],
+    nota:"Evaluación económica preliminar (PEA) de noviembre de 2023; el recurso de Rincón es parte de las 714.872 t de LCE del proyecto Salta.",
+    src:["pnnHY24"] }
 };
