@@ -639,13 +639,17 @@ def paso_actividad(E: Estado):
     em = serie(ids, "2016-01-01")
     tot = serie("143.3_NO_PR_2004_A_21,143.3_NO_PR_2004_A_31", "2016-01-01")
     em = em.join(tot).dropna(how="all")
-    em = em[em[[s[3] for s in SECTORES]].notna().all(axis=1)]
+    # INDEC deja huecos en algunas ramas (construcción, servicios comunitarios); se exigen completas sólo
+    # las que el sitio usa en los aportes (agro, minas, industria, comercio) y el total.
+    clave = [s[3] for s in SECTORES if s[0] in ("A", "C", "D", "G")] + ["143.3_NO_PR_2004_A_21", "143.3_NO_PR_2004_A_31"]
+    em = em[em[clave].notna().all(axis=1)]
     if len(em) < 60:
-        raise ValueError("EMAE sectorial demasiado corto")
+        raise ValueError(f"EMAE sectorial demasiado corto ({len(em)} meses completos)")
     emae = {"meses": [ym(i) for i in em.index],
             "tot": [r1(v, 2) for v in em["143.3_NO_PR_2004_A_21"]],
             "sa": [r1(v, 2) for v in em["143.3_NO_PR_2004_A_31"]],
-            "sec": {s[0]: [r1(v, 2) for v in em[s[3]]] for s in SECTORES}}
+            "sec": {s[0]: [r1(v, 2) for v in em[s[3]]] for s in SECTORES if em[s[3]].notna().mean() > 0.5},
+            "w04": 485115.2}
 
     # VAB a precios corrientes por sector, trimestral (las letras que INDEC dejó de abrir quedan en «Resto»)
     pids = [s[4] for s in SECTORES if s[4]] + [PIB_PM]
