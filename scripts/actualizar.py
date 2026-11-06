@@ -579,7 +579,7 @@ SECTORES = [
     ("T", "Impuestos netos de subsidios y resto", None, "11.3_IF_2004_M_25", None, 485115.2 - 409384.6),
 ]
 PIB_PM = "8.2_PIBPM_2004_T_38"
-FX_A3500 = "175.1_DR_REFE500_0_0_25"
+FX_A3500 = "92.1_TCV_0_0_21"  # BCRA, tipo de cambio de valuación, mensual
 
 
 def ym(ts) -> str:
@@ -660,7 +660,9 @@ def paso_actividad(E: Estado):
             pib["sec"][s[0]] = [r1(v, 0) for v in pb[s[4]]]
 
     # Tipo de cambio mayorista promedio anual (para pasar a dólares el VAB del año base de la proyección)
-    fx = serie(FX_A3500, "2016-01-01", collapse="year", collapse_aggregation="avg")[FX_A3500].dropna()
+    fxm = serie(FX_A3500, "2016-01-01")[FX_A3500].dropna()
+    fxg = fxm.groupby(fxm.index.year).agg(["mean", "count"])
+    fx = pd.Series({pd.Timestamp(f"{y}-01-01"): f["mean"] for y, f in fxg.iterrows() if f["count"] == 12})
 
     E.act = {"actualizado": HOY.isoformat(), "monitor": filas, "fallas": fallas, "emae": emae, "pib": pib,
              "fx": {str(i.year): r1(v, 2) for i, v in fx.items()},
@@ -670,7 +672,7 @@ def paso_actividad(E: Estado):
              DS + ",".join([s[3] for s in SECTORES]))
     E.fuente("actPib", f"INDEC – Valor agregado bruto por sector a precios corrientes, a {pib['trim'][-1]} (Series de Tiempo, dataset 8)",
              DS + ",".join(pids))
-    E.fuente("actFx", "BCRA – Tipo de cambio de referencia Com. A 3500, promedio anual (Series de Tiempo)", DS + FX_A3500)
+    E.fuente("actFx", "BCRA – Tipo de cambio de valuación (peso por dólar), promedio anual (Series de Tiempo)", DS + FX_A3500)
     for f in filas:
         if not f["id"].startswith("viz:"):
             E.fuente("act_" + f["k"], f"{f['org']} – {f['n']}, a {ymTxt(f['s'][-1][0])} (Series de Tiempo)", DS + f["id"])

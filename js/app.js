@@ -571,19 +571,29 @@ document.getElementById("tbody").addEventListener("click",ev=>{
   const tr=ev.target.closest("[data-asset]"); if(!tr) return;
   st.sel=tr.dataset.asset; render(); openAsset(byId[tr.dataset.asset],"res");
 });
+// Estadísticas y actividad unificadas: «Panorama» (toda la economía) y una pestaña por sector.
+const STAB = [["pan","Panorama"],["og","Oil & Gas"],["mi","Minería"],["ag","Agro y ganadería"]];
+function statSector(s){
+  const d=STATS[s];
+  const tiles=d.kpis.map(k=>`<div class="tile"><span class="l">${k.l}</span><span class="v">${k.v}<small>${k.u}</small></span><span class="p">${k.p}</span><a href="${SRC[k.s].u}" target="_blank" rel="noopener" title="${SRC[k.s].t}">Fuente: ${SRC[k.s].t.split(" – ")[0]} ↗</a></div>`).join("");
+  const charts=d.charts.map(c=>{
+    const mx=Math.max(...c.rows.map(r=>r[1]));
+    return `<div class="chart"><h3>${c.t}</h3><div class="sub">${c.sub}</div><div class="bars">${c.rows.map(([n,v,id])=>`<button class="bar" ${id?`data-asset="${id}"`:"tabindex=\"-1\""} title="${n}: ${fmt(v)} ${c.u}${id?" · ver en el mapa":""}"><span class="nm">${n}</span><span class="tr"><span class="bf" style="width:${v/mx*82}%"></span><span class="vl">${fmt(v)}${c.u==="%"?"%":""}</span></span></button>`).join("")}</div><div class="src">${(c.srcs||[c.s]).map(srcLink).join(" · ")}</div></div>`;
+  }).join("");
+  return `<section class="statsec" style="--c:${cvar(s)}"><h2><i></i>${SECT[s].n} · actividad</h2>${actSectorHTML(s)}</section>
+    <section class="statsec" style="--c:${cvar(s)}"><h2><i></i>${SECT[s].n} · estructura</h2><div class="tiles">${tiles}</div><div class="charts">${charts}</div>${vizCards(s)}</section>`;
+}
 function renderStats(){
   const el=document.getElementById("statWrap");
-  el.innerHTML = `<div><p class="eyebrow">Estadísticas sectoriales</p><p class="note" style="max-width:68ch">Cifras publicadas más recientes, cada una con su período y su fuente. Tocá una barra con nombre de área para verla en el mapa.</p></div>` +
-  Object.entries(STATS).map(([s,d])=>{
-    const tiles=d.kpis.map(k=>`<div class="tile"><span class="l">${k.l}</span><span class="v">${k.v}<small>${k.u}</small></span><span class="p">${k.p}</span><a href="${SRC[k.s].u}" target="_blank" rel="noopener" title="${SRC[k.s].t}">Fuente: ${SRC[k.s].t.split(" – ")[0]} ↗</a></div>`).join("");
-    const charts=d.charts.map(c=>{
-      const mx=Math.max(...c.rows.map(r=>r[1]));
-      return `<div class="chart"><h3>${c.t}</h3><div class="sub">${c.sub}</div><div class="bars">${c.rows.map(([n,v,id])=>`<button class="bar" ${id?`data-asset="${id}"`:"tabindex=\"-1\""} title="${n}: ${fmt(v)} ${c.u}${id?" · ver en el mapa":""}"><span class="nm">${n}</span><span class="tr"><span class="bf" style="width:${v/mx*82}%"></span><span class="vl">${fmt(v)}${c.u==="%"?"%":""}</span></span></button>`).join("")}</div><div class="src">${(c.srcs||[c.s]).map(srcLink).join(" · ")}</div></div>`;
-    }).join("");
-    return `<section class="statsec" style="--c:${cvar(s)}"><h2><i></i>${SECT[s].n}</h2><div class="tiles">${tiles}</div><div class="charts">${charts}</div>${vizCards(s)}</section>`;
-  }).join("") + `<section class="statsec x"><h2><i></i>Visión transversal</h2><p class="note" style="max-width:72ch;margin-top:-8px">Los tres sectores comparados entre sí y con el resto de la economía.</p>${vizCards("x")}</section>`;
+  if(!st.stab){ try{ st.stab=localStorage.getItem("mp-stab"); }catch(e){} if(!STAB.some(([k])=>k===st.stab)) st.stab="pan"; }
+  const s=st.stab;
+  el.innerHTML = `<div class="sthead"><div><p class="eyebrow">Actividad y estadísticas</p><p class="note" style="max-width:72ch">Cómo viene la economía mes a mes, cuánto pesa cada sector en el PIB y, en cada pestaña, el detalle de Oil &amp; Gas, minería y agro. Todo con fuente oficial; tocá cualquier gráfico para ver los valores.</p></div>
+    <div class="seg sttabs" role="tablist" aria-label="Sección">${STAB.map(([k,n])=>`<button role="tab" data-stab="${k}" aria-pressed="${k===s}" aria-selected="${k===s}">${k!=="pan"?`<i style="background:${cvar(k)}"></i>`:""}${n}</button>`).join("")}</div></div>` +
+    (s==="pan" ? actPanoramaHTML() + `<section class="statsec x"><h2><i></i>Los tres sectores en el comercio exterior y la bolsa</h2><p class="note" style="max-width:72ch;margin-top:-8px">Los tres sectores comparados entre sí y con el resto de la economía.</p>${vizCards("x")}</section>`
+               : statSector(s));
+  el.querySelectorAll("[data-stab]").forEach(b=>b.onclick=()=>{ st.stab=b.dataset.stab; try{ localStorage.setItem("mp-stab",st.stab); }catch(e){} tipOff(); renderStats(); el.scrollTop=0; });
   el.querySelectorAll("[data-asset]").forEach(b=>b.onclick=()=>{ setView("map"); select(b.dataset.asset); });
-  requestAnimationFrame(drawViz);
+  requestAnimationFrame(()=>{ drawViz(); drawAct(el); });
   countUp(el, ".tile .v");
 }
 function setView(v){
@@ -1235,7 +1245,7 @@ function drawViz(){
   Object.values(VIZ_DEF).flat().forEach(c=>{ const el=document.getElementById("vz-"+c.id); if(!el) return; el.innerHTML="";
     try{ c.f(el); }catch(e){ console.error(c.id,e); el.innerHTML=`<p class="note">No se pudo dibujar este gráfico.</p>`; } });
 }
-let vizT; window.addEventListener("resize",()=>{ if(st.view!=="stats") return; clearTimeout(vizT); vizT=setTimeout(drawViz,200); });
+let vizT; window.addEventListener("resize",()=>{ if(st.view!=="stats") return; clearTimeout(vizT); vizT=setTimeout(()=>{ drawViz(); drawAct(document.getElementById("statWrap")); },200); });
 
 const side=document.getElementById("side"), bl=document.getElementById("btnLayers");
 // Panel de capas: en el celular es una hoja que sube desde abajo; en la computadora se puede ocultar
@@ -1300,7 +1310,7 @@ try{ const v=localStorage.getItem("mp-view"); if(v==="table"||v==="co"||v==="sta
 // Se abre con …/#admin (queda recordado en este navegador y aparece el botón «Admin»).
 // Sólo muestra estado y atajos: las acciones piden el login de GitHub o de Claude.
 const REPO = "martingomezpizarro/matriz-productiva";
-const PASO_N = { siacam:"Minería – cartera SIACAM", mercado:"Cotizaciones (Yahoo Finance)", precios:"Precios internacionales", comercio:"Comercio exterior (INDEC)", emae:"Actividad (EMAE)", faena:"Faena (MAGyP)", provincias:"Producción por provincia", agricola:"Estimaciones agrícolas (MAGyP)", energia:"Energía (Secretaría de Energía)" };
+const PASO_N = { siacam:"Minería – cartera SIACAM", mercado:"Cotizaciones (Yahoo Finance)", precios:"Precios internacionales", comercio:"Comercio exterior (INDEC)", emae:"Actividad (EMAE)", faena:"Faena (MAGyP)", provincias:"Producción por provincia", agricola:"Estimaciones agrícolas (MAGyP)", energia:"Energía (Secretaría de Energía)", actividad:"Tablero de actividad, EMAE y PIB por sector" };
 const fichaIncompleta = a => a.st!=="exp" && (!TEC[a.id] || !TEC[a.id].nums);   // sin ficha propia (aunque muestre datos oficiales automáticos)
 function openAdmin(){
   try{ localStorage.setItem("mp-admin","1"); }catch(e){}
@@ -1339,4 +1349,4 @@ try{ if(localStorage.getItem("mp-admin")==="1") document.getElementById("btnAdmi
 window.addEventListener("hashchange",()=>{ if(location.hash==="#admin") openAdmin(); });
 if(location.hash==="#admin") openAdmin();
 if(location.hash==="#empresas") setView("co");
-if(location.hash==="#estadisticas") setView("stats");
+if(location.hash==="#estadisticas"||location.hash==="#actividad") setView("stats");

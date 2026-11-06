@@ -14,11 +14,38 @@
 #admin .ok{color:var(--op)}#admin .err{color:var(--og)}#admin .x{float:right;border:0;background:none;font-size:24px;color:var(--ink);cursor:pointer;line-height:1}
 #admin .kp{display:flex;gap:22px;flex-wrap:wrap}#admin .kp div b{font:700 28px var(--f-display);display:block}#admin .kp div span{font-size:12px;color:var(--muted)}
 #admin details{font-size:13px}#admin summary{cursor:pointer;color:var(--muted)}#admin ul{margin:6px 0;padding-left:18px}
+
+/* ===== Actividad: pestañas, tablero (mapa de calor) y proyección ===== */
+.sthead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px 24px;flex-wrap:wrap;position:sticky;top:-22px;z-index:3;background:var(--panel);padding:8px 0 10px;margin:-8px 0 -18px;border-bottom:1px solid var(--line)}
+.sttabs button{display:inline-flex;align-items:center;gap:6px}
+.sttabs i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.acttab{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.acttab table{border-collapse:separate;border-spacing:0;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+.acttab th{font-size:11px;font-weight:600;color:var(--muted);text-align:center;padding:6px 4px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0}
+.acttab th.mes{border-left:1px solid var(--line);color:var(--ink);text-transform:uppercase;letter-spacing:.05em}
+.acttab th.ind,.acttab td.ind{text-align:left;position:sticky;left:0;background:var(--panel);z-index:1;min-width:230px;max-width:300px;padding:6px 10px}
+.acttab tr.grp th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:10px 10px 4px;border-bottom:1px solid var(--line);position:static}
+.acttab tr.grp i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:6px}
+.acttab td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;min-width:52px}
+.acttab td.v{border-left:1px solid var(--line)}.acttab td.mo{border-left:1px dashed var(--line)}
+.acttab td.ind .nm{display:block;font-size:12.5px;font-weight:500;white-space:normal}
+.acttab td.ind .u{display:block;font-size:10.5px;color:var(--muted);white-space:normal}
+.acttab td.ind a{color:var(--muted);text-decoration:none}
+.acttab tr.row{cursor:pointer}.acttab tr.row:hover td.ind,.acttab tr.row:focus-visible td.ind{background:var(--bg)}
+.acttab tr.det td{background:var(--bg);padding:10px 14px;text-align:left}
+.pgrid{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:22px;align-items:start}
+.pctl{display:flex;flex-direction:column;gap:14px}
+.psl{display:flex;flex-direction:column;gap:4px;font-size:12px}
+.psl>span{color:var(--muted)}.psl b{color:var(--ink);font-variant-numeric:tabular-nums}
+.psl small{font-size:11px;color:var(--faint)}
+.psl input[type=range]{width:100%;accent-color:var(--ink)}
+.pctl>[data-reset]{align-self:flex-start}
+@media (max-width: 860px){ .pgrid{grid-template-columns:1fr} .acttab th.ind,.acttab td.ind{min-width:170px} }
 </style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/pie.css?v=20261105c">
+<link rel="stylesheet" href="css/pie.css?v=20261106a">
 <style>
 /* Layout: tablero de una pantalla — panel de capas a la izquierda, mapa al centro, ficha deslizable sobre el mapa. */
 :root{
@@ -688,7 +715,7 @@ body.gl-full .vtip{z-index:80}
       <button id="vMap" aria-pressed="true">Mapa</button>
       <button id="vTab" aria-pressed="false">Tabla</button>
       <button id="vCo" aria-pressed="false">Empresas</button>
-      <button id="vSt" aria-pressed="false">Estadísticas</button>
+      <button id="vSt" aria-pressed="false" title="Actividad mensual, PIB por sector y estadísticas de cada sector">Actividad</button>
       <button id="vGl" aria-pressed="false" title="Qué pesa la Argentina en cada empresa con proyectos RIGI">Circuito<span class="xs-hide"> global</span></button>
     </div>
     <button class="btn-admin" id="btnAdmin" hidden aria-label="Administración" title="Administración"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
@@ -763,25 +790,27 @@ body.gl-full .vtip{z-index:80}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@14.4.0/dist/motion.js"></script>
-<script src="data/geo/departamentos.js?v=20261105c"></script>
-<script src="data/geo/provincias.js?v=20261105c"></script>
-<script src="data/manual/fuentes.js?v=20261105c"></script>
-<script src="data/auto/fuentes-auto.js?v=20261105c"></script>
-<script src="data/manual/empresas.js?v=20261105c"></script>
-<script src="data/manual/activos.js?v=20261105c"></script>
-<script src="data/auto/mercado.js?v=20261105c"></script>
-<script src="data/manual/estadisticas.js?v=20261105c"></script>
-<script src="data/manual/fichas.js?v=20261105c"></script>
-<script src="data/manual/rigi.js?v=20261105c"></script>
-<script src="data/auto/siacam.js?v=20261105c"></script>
-<script src="data/auto/viz.js?v=20261105c"></script>
-<script src="data/auto/produccion.js?v=20261105c"></script>
-<script src="data/auto/meta.js?v=20261105c"></script>
-<script src="data/geo/mundo.js?v=20261105c"></script>
-<script src="data/manual/circuito.js?v=20261105c"></script>
-<script src="js/app.js?v=20261105c"></script>
-<script src="js/circuito.js?v=20261105c"></script>
-<script src="js/sitio.config.js?v=20261105c"></script>
-<script src="js/pie.js?v=20261105c"></script>
+<script src="data/geo/departamentos.js?v=20261106a"></script>
+<script src="data/geo/provincias.js?v=20261106a"></script>
+<script src="data/manual/fuentes.js?v=20261106a"></script>
+<script src="data/auto/fuentes-auto.js?v=20261106a"></script>
+<script src="data/manual/empresas.js?v=20261106a"></script>
+<script src="data/manual/activos.js?v=20261106a"></script>
+<script src="data/auto/mercado.js?v=20261106a"></script>
+<script src="data/manual/estadisticas.js?v=20261106a"></script>
+<script src="data/manual/fichas.js?v=20261106a"></script>
+<script src="data/manual/rigi.js?v=20261106a"></script>
+<script src="data/auto/siacam.js?v=20261106a"></script>
+<script src="data/auto/viz.js?v=20261106a"></script>
+<script src="data/auto/produccion.js?v=20261106a"></script>
+<script src="data/auto/meta.js?v=20261106a"></script>
+<script src="data/geo/mundo.js?v=20261106a"></script>
+<script src="data/manual/circuito.js?v=20261106a"></script>
+<script src="js/app.js?v=20261106a"></script>
+<script src="js/circuito.js?v=20261106a"></script>
+<script src="data/auto/actividad.js?v=20261106a"></script>
+<script src="js/actividad.js?v=20261106a"></script>
+<script src="js/sitio.config.js?v=20261106a"></script>
+<script src="js/pie.js?v=20261106a"></script>
 
 </body></html>
