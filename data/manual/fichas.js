@@ -81,6 +81,14 @@ const TEC = {
     nums:[["Poliducto a Bahía Blanca","600 km","mega"],["Plan de inversión 2023–2028","US$ 650 M (US$ 360 M en el RIGI); +27% de producción","mega"],["Accionistas","YPF 38% · Petrobras 34% · Dow 28%","mega"]],
     src:["mega"]
   },
+  "og-tgsngl": {
+    met:"Cadena de líquidos del gas natural (NGL): se separan del gas rico de Vaca Muerta en Neuquén, viajan por poliducto hasta la costa y se fraccionan en productos para exportar.",
+    proc:["Gasoducto de segregación (≈ 100 km) que lleva gas rico a Tratayén","Ampliación de la planta Tratayén: extracción criogénica de líquidos","Poliducto de NGL hasta Bahía Blanca","Planta fraccionadora: separa propano, butano y gasolina natural","Almacenaje y terminal marítima para carga de buques"],
+    prod:"Propano, butano y gasolina natural para exportación",
+    nums:[["Inversión","≈ US$ 3.000 M (decisión final de inversión en el 2T 2026)","tgs2Q26"],["Exportaciones esperadas","≈ US$ 1.200 M por año","tgs2Q26"],["Inicio de operación","Marzo de 2030","tgs2Q26"],["Gasoducto de segregación","≈ 100 km","tgs2Q26"]],
+    hitos:[["2T 2026","Decisión final de inversión"],["Oct-2026","Ministerio de Economía anuncia la aprobación del Comité Evaluador del RIGI (resolución pendiente)"],["Mar-2030","Puesta en marcha prevista"]],
+    nota:"El RIGI se tramita con dos vehículos: Procesadora de Gas del Sur (Tratayén) y Midstream de Gas del Sur (poliducto y Bahía Blanca).", src:["tgs2Q26"]
+  },
   "og-mega2": {
     met:"Planta fraccionadora: separa los líquidos que llegan por el poliducto en productos puros.",
     proc:["Recepción de NGL","Torres de fraccionamiento","Etano → Dow (petroquímica)","Propano, butano y gasolina → buques de exportación"],

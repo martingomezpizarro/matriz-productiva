@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-07",
+  actualizado: "2026-11-08",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -102,6 +102,9 @@ const RIGI = {
   "og-arglng": { st:"presentado", vpu:"Argentina LNG (YPF con Eni y XRG)", total:51000,
     cap:"Proyecto integrado de GNL: desarrollo upstream en Neuquén (≈ US$ 5.000 M), gasoductos dedicados, plantas de tratamiento y fraccionamiento de líquidos, y dos unidades flotantes de licuefacción (FLNG) de 12 MTPA en conjunto frente a Río Negro, en el Golfo San Matías. ≈ US$ 29.000 M hasta 2031, año previsto de arranque de los FLNG; exportaciones de ≈ US$ 10.000 M por año durante unas dos décadas. Solicitud presentada el 13-ago-2026, sin resolución todavía",
     verif:"empresa", src:["ypfArgLNG"] },
+  "og-tgsngl": { st:"en_evaluacion", vpu:"TGS: Procesadora de Gas del Sur (Tratayén) y Midstream de Gas del Sur (poliducto y Bahía Blanca)", total:3000, op:"2030-03",
+    cap:"Proyecto integrado de NGL: gasoducto de segregación de 100 km, ampliación de la planta Tratayén, poliducto a Bahía Blanca, fraccionadora, almacenaje y terminal marítima; exportaciones de ≈ US$ 1.200 M por año. El Ministerio de Economía anunció el 19-oct-2026 que el Comité Evaluador aprobó los dos vehículos; falta la resolución en el Boletín Oficial. Monto y fechas de la empresa",
+    verif:"empresa", src:["tgs2Q26"] },
   "og-bdt": { st:"presentado", vpu:"YPF S.A. (operador, 65%) con Vista Energy Argentina (35%)", total:8729,
     cap:"Petróleo no convencional con gas asociado en Bajo del Toro y Bajo del Toro Norte: 440 pozos en la vida del proyecto, meseta de ≈ 80.000 bbl/d de petróleo y 3 MMm³/d de gas entre 2033 y 2040, y exportaciones por ≈ US$ 25.000 M entre 2027 y 2055. Primer RIGI del «Hub Norte» de YPF; solicitud presentada el 30-oct-2026, sin resolución todavía",
     verif:"empresa", src:["ypfBdT"] },

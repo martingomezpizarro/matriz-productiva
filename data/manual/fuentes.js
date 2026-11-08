@@ -175,5 +175,6 @@ Object.assign(SRC, {
   ccdTarPEA:{ t:"Cascadero Copper – Positive Preliminary Economic Assessment on the Taron Cesium Project (comunicado, 15-may-2024)", u:"https://www.newsfilecorp.com/release/209256/Cascadero-Copper-Announces-Positive-Preliminary-Economic-Assessment-on-the-Taron-Cesium-Project-in-Argentina" },
   ccdCMC26: { t:"Cascadero Copper – Announces Sale of Cascadero Minerals Corporation (comunicado, sep-2026)", u:"https://www.miningstockeducation.com/2026/09/cascadero-copper-announces-sale-of-cascadero-minerals-corporation/" },
   jagLS26:  { t:"Jaguar Uranium – Maiden Mineral Resource Estimate at Laguna Salada (comunicado, 13-oct-2026)", u:"https://www.webull.com/news/15740561076331520" },
+  tgs2Q26:  { t:"TGS – Reporte de resultados 2T 2026 (FID del proyecto integrado de NGL)", u:"https://www.tgs.com.ar/wp-content/uploads/2026/08/2Q-2026.pdf" },
   pnnHY24:  { t:"Power Minerals – Half Year Report al 31-dic-2023 (ASX, 15-mar-2024): recurso y PEA de Rincón", u:"https://announcements.asx.com.au/asxpdf/20240315/pdf/061kbnfzg8whj3.pdf" },
 });
