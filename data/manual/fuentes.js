@@ -177,4 +177,13 @@ Object.assign(SRC, {
   jagLS26:  { t:"Jaguar Uranium – Maiden Mineral Resource Estimate at Laguna Salada (comunicado, 13-oct-2026)", u:"https://www.webull.com/news/15740561076331520" },
   tgs2Q26:  { t:"TGS – Reporte de resultados 2T 2026 (FID del proyecto integrado de NGL)", u:"https://www.tgs.com.ar/wp-content/uploads/2026/08/2Q-2026.pdf" },
   pnnHY24:  { t:"Power Minerals – Half Year Report al 31-dic-2023 (ASX, 15-mar-2024): recurso y PEA de Rincón", u:"https://announcements.asx.com.au/asxpdf/20240315/pdf/061kbnfzg8whj3.pdf" },
+  // --- 9-nov-2026 ---
+  magPtos:  { t:"MAGyP – Subsecretaría de Mercados Agropecuarios: características de los puertos cerealeros argentinos", u:"https://www.magyp.gob.ar/sitio/areas/ss_mercados_agropecuarios/infraestructura/_archivos/000010_Puertos/900000_Caracter%C3%ADsticas%20de%20los%20Puertos%20Cerealeros%20Argentinos.php" },
+  magAlm:   { t:"MAGyP – Subsecretaría de Mercados Agropecuarios: capacidad de almacenaje y embarque de los puertos", u:"https://www.magyp.gob.ar/sitio/areas/ss_mercados_agropecuarios/infraestructura/_archivos/000010_Puertos/_capacidad_almacenaje.php" },
+  bcrRank18:{ t:"BCR – Cambios de la última década en el ranking de empresas procesadoras de oleaginosas (Informativo Semanal, 20-abr-2018)", u:"https://www.bcr.com.ar/es/print/pdf/node/72592" },
+  mnvMapa:  { t:"Minerva Foods – Relación con Inversores: estructura operativa y capacidades por país", u:"https://ri.minervafoods.com/en/?p=1988" },
+  mnvEng25: { t:"Minerva Foods – Relatório de Engajamento com Partes Interessadas, Argentina 2023/2024", u:"https://minervafoods.com/wp-content/uploads/2025/02/Relatorio-Engajamento-ARGENTINA-port.pdf" },
+  dnu2_26:  { t:"Boletín Oficial – Decreto DNU 2/2026: Acuerdo Modificatorio del Acta de Farallón Negro y nuevo esquema de YMAD (5-ene-2026)", u:"https://www.boletinoficial.gob.ar/pdf/aviso/primera/337088/20260601" },
+  rnSG13:   { t:"Gobierno de Río Negro – Avances con Minería de Nación por la situación de los fletes marítimos (23-may-2013)", u:"https://rionegro.gov.ar/articulo/4331/avances-en-mineria-de-nacion-por-la-situacion-de-los-fletes-maritimos" },
+  segSG21:  { t:"SEGEMAR / Secretaría de Minería – Reconocimiento de procesos productivos y muestreo de productos exportables, Mina Sierra Grande (2021)", u:"https://repositorio.segemar.gob.ar/handle/308849217/4379" },
 });

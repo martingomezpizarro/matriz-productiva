@@ -725,5 +725,36 @@ const TEC = {
     prod:"Carbonato de litio equivalente (LCE) de alta pureza, grado batería",
     nums:[["Recurso medido + indicado (JORC)","157.131 t de LCE con 258 mg/l de litio","pnnHY24"],["Recurso inferido","135.433 t de LCE con 276 mg/l de litio","pnnHY24"],["Producción prevista (PEA)","7.061 t/año de LCE","pnnHY24"],["Vida útil inicial","14 años","pnnHY24"],["Valor presente neto (antes de impuestos)","US$ 501,85 M, con TIR de 42% y repago en 3 años","pnnHY24"]],
     nota:"Evaluación económica preliminar (PEA) de noviembre de 2023; el recurso de Rincón es parte de las 714.872 t de LCE del proyecto Salta.",
-    src:["pnnHY24"] }
+    src:["pnnHY24"] },
+  "ag-ramallo": {
+    met:"Complejo industrial-portuario de Bunge sobre el Paraná (km 326, margen derecha), aguas abajo del Gran Rosario: terminal de granos, subproductos y aceites, planta de molienda de soja y planta de fertilizantes, con desvío ferroviario propio.",
+    proc:["Descarga de camiones y trenes (desvío ferroviario, descargas simultáneas)","Calado, acondicionamiento y almacenaje en silos","Molienda de soja: extracción del aceite por solvente y harina/pellets","Almacenaje de fertilizantes sólidos y líquidos recibidos por barcaza","Carga de buques por cuatro torres en el muelle principal"],
+    prod:"Granos, harina y aceite de soja para exportación; fertilizantes para el mercado interno",
+    nums:[["Almacenaje","400.000 t de granos, 90.000 t de subproductos y 25.000 t de aceites","magPtos"],["Fertilizantes","250.000 t de sólidos y 25.000 t de líquidos","magPtos"],["Capacidad de molienda","3.000 t/día de soja","magAlm"],["Muelle principal","248 m; buques de hasta 270 m de eslora y 44 pies al pie del muelle (37 pies en la Hidrovía)","magPtos"],["Ritmo de embarque","3.000 t/h de granos y 550 t/h de aceites; segundo muelle de descarga de barcazas a 1.000 t/h","magPtos"]],
+    hitos:[["2005","Inauguración de la terminal (Terminal Puerto Ramallo S.A.)"]],
+    nota:"Las capacidades son de las tablas del Ministerio de Agricultura, que no indican fecha. La BCR registra que la planta de molienda arrancó con 3.000 t/24 h. Conviene verificar si la molienda sigue activa: el sitio no tiene todavía una fuente oficial sobre su estado actual.",
+    src:["magPtos","magAlm","bcrRank18"] },
+  "ag-swift": {
+    met:"Planta de alimentos industrializados de Swift Argentina (Minerva Foods) en Villa Gobernador Gálvez, en el Gran Rosario: elabora productos cárnicos a partir de carne vacuna; la faena del grupo se hace en otras plantas.",
+    proc:["Recepción de carne y materias primas de las plantas de faena","Picado, formulado y mezclado","Moldeado y cocción o conservación (hamburguesas, patés y conservas)","Congelado y envasado","Despacho al mercado interno y exportación"],
+    prod:"Hamburguesas, patés y otros alimentos industrializados de carne vacuna",
+    nums:[["Capacidad de procesamiento","162 t/día","mnvMapa"],["Minerva en Argentina","5 plantas de faena con 5.050 cabezas/día y 2 de industrializados (Rosario y Pilar)","mnvMapa"]],
+    nota:"El informe de engajamento de Minerva para Argentina (2023/2024) ubica en Villa Gobernador Gálvez la producción de industrializados y en Venado Tuerto la faena y el desposte.",
+    src:["mnvMapa","mnvEng25"] },
+  "mi-farallon-negro": {
+    met:"Mina de vetas de oro y plata en Catamarca, en producción según la cartera oficial; la explota YMAD, empresa interestadual de Catamarca y la Universidad Nacional de Tucumán.",
+    proc:TEC_GEN["mi-au"].proc,
+    prod:TEC_GEN["mi-au"].prod,
+    nums:[["Accionistas de YMAD","Provincia de Catamarca 60% y Universidad Nacional de Tucumán 40% (DNU 2/2026)","dnu2_26"],["Directorio","Presidente y dos vocales designados por Catamarca; dos vocales por la UNT","dnu2_26"],["Origen","Acta de Farallón Negro (7-jun-1958) y Ley 14.771","dnu2_26"]],
+    hitos:[["7-jun-1958","Acta de Farallón Negro entre la Nación, Catamarca y la UNT"],["15-dic-2025","Acuerdo Modificatorio del Acta"],["5-ene-2026","DNU 2/2026 en el Boletín Oficial: la Nación se retira de YMAD"]],
+    nota:"No hay todavía una cifra de producción con fuente oficial o de la empresa; los kilos de oro por mes que circulan en la prensa no se cargan.",
+    src:["dnu2_26"] },
+  "mi-sierra-grande": {
+    met:"Mina de hierro en Sierra Grande, Río Negro, con planta de concentración y embarque por Punta Colorada. La opera MCC Minera Sierra Grande S.A. (China Metallurgical Group, según la cartera oficial, que la ubica en etapa de reingeniería).",
+    proc:["Extracción del mineral de hierro","Chancado y molienda","Concentración del mineral","Transporte del concentrado al puerto de Punta Colorada","Carga de buques para exportación"],
+    prod:"Concentrado de hierro para exportación",
+    nums:[["Producción","400.000 t de concentrado de hierro en 2012","rnSG13"],["Empleo","540 puestos directos (2013)","rnSG13"],["Inversión acumulada","$ 450 M (2013)","rnSG13"]],
+    hitos:[["2012","400.000 t de concentrado"],["2021","Auditoría de procesos y muestreo del concentrado exportable por SEGEMAR y la Secretaría de Minería"]],
+    nota:"Datos del gobierno de Río Negro de 2013; no hay cifras oficiales recientes de producción.",
+    src:["rnSG13","segSG21"] }
 };

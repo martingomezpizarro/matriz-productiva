@@ -87,7 +87,7 @@ const PTS = [
 
   // ---------- AGRO · Carne ----------
   { id:"ag-mag", s:"ag", e:"carne", n:"Mercado Agroganadero de Cañuelas", prov:"Buenos Aires", ll:[-35.08,-58.72], st:"op", emp:[["mag","Operador"]], prod:"Comercialización de hacienda", d:"Principal mercado concentrador de hacienda; referencia de precios del ganado.", src:["senasa"], prec:PL },
-  { id:"ag-swift", s:"ag", e:"carne", n:"Swift – Villa Gobernador Gálvez", prov:"Santa Fe", ll:[-33.020,-60.635], st:"op", emp:[["minerva","Operador"]], prod:"Faena y procesamiento bovino", d:"Planta frigorífica exportadora.", src:["senasa"], prec:PL },
+  { id:"ag-swift", s:"ag", e:"carne", n:"Swift – Villa Gobernador Gálvez", prov:"Santa Fe", ll:[-33.020,-60.635], st:"op", emp:[["minerva","Operador"]], prod:"Alimentos industrializados de carne vacuna (hamburguesas, patés)", d:"Planta de industrializados de Swift Argentina (Minerva Foods).", src:["senasa","mnvMapa"], prec:PL },
   { id:"ag-sjorge", s:"ag", e:"carne", n:"Minerva – San Jorge", prov:"Santa Fe", ll:[-31.900,-61.860], st:"op", emp:[["minerva","Operador"]], prod:"Faena y procesamiento bovino", d:"Ex planta de Quickfood.", src:["senasa"], prec:PL },
   { id:"ag-arre", s:"ag", e:"carne", n:"ArreBeef – Pérez Millán", prov:"Buenos Aires", ll:[-33.770,-60.090], st:"op", emp:[["arrebeef","Operador"]], prod:"Faena bovina exportadora", d:"Frigorífico exportador del norte bonaerense.", src:["senasa"], prec:PL },
   { id:"ag-gorina", s:"ag", e:"carne", n:"Frigorífico Gorina", prov:"Buenos Aires", ll:[-34.910,-58.050], st:"op", emp:[["gorina","Operador"]], prod:"Faena bovina exportadora", d:"Frigorífico exportador en el partido de La Plata.", src:["senasa"], prec:PL },
