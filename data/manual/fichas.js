@@ -756,5 +756,27 @@ const TEC = {
     nums:[["Producción","400.000 t de concentrado de hierro en 2012","rnSG13"],["Empleo","540 puestos directos (2013)","rnSG13"],["Inversión acumulada","$ 450 M (2013)","rnSG13"]],
     hitos:[["2012","400.000 t de concentrado"],["2021","Auditoría de procesos y muestreo del concentrado exportable por SEGEMAR y la Secretaría de Minería"]],
     nota:"Datos del gobierno de Río Negro de 2013; no hay cifras oficiales recientes de producción.",
-    src:["rnSG13","segSG21"] }
+    src:["rnSG13","segSG21"] },
+  "mi-cauchari": {
+    met:"Litio en salmuera en el salar de Caucharí (Puna de Jujuy, ≈ 250 km de San Salvador de Jujuy): la salmuera se bombea desde los acuíferos del salar y el litio se separa por extracción directa (DLE), sin pozas de evaporación.",
+    proc:["Pozos de bombeo de salmuera","Extracción directa de litio (DLE): adsorción o intercambio iónico selectivo","Reinyección de la salmuera agotada","Purificación y concentración del eluido","Precipitación de carbonato de litio, secado y envasado"],
+    prod:"Carbonato de litio (Li₂CO₃)",
+    nums:[["Producción prevista","40.000 t/año de carbonato de litio equivalente (LCE) por extracción directa","smLi24"],["Vida útil prevista","30 años","smLi24"],["Ley de litio","493 mg/l (recurso medido, 2023)","smLi24"],["Superficie","3.980 ha","smLi24"],["Etapa","Prefactibilidad; inversión (capex) sin dato oficial","smLi24"],["Operador","Minerales Australes S.A.","smLi24"]],
+    nota:"Ficha de la Secretaría de Minería (portafolio de litio 2024), que todavía atribuía el proyecto a Lake Resources; la cartera SIACAM lo lista hoy en prefactibilidad con Austroid Corp. como controlante (100%). No se carga el tonelaje de recursos porque la tabla oficial no indica unidad ni categoría con claridad.",
+    src:["smLi24","siacam"] },
+  "mi-martin-bronce": {
+    met:"Cobre sedimentario estratoligado (tipo Kupferschiefer) en conglomerados y areniscas del extremo noroeste de la Sierra de Santa Bárbara (Palma Sola, Yungas jujeñas, ≈ 140 km al noreste de San Salvador de Jujuy). Mina a cielo abierto con arranque mecánico, sin voladuras, y beneficio hidrometalúrgico de los óxidos.",
+    proc:["Destape y arranque mecánico del mineral (sin voladura)","Acopio del mineral oxidado","Lixiviación con ácido cítrico (proceso patentado; recuperación en ≈ 24 h)","Cementación del cobre de la solución","Secado, envasado y exportación vía Chile"],
+    prod:"Cemento de cobre (> 80% Cu) con alto contenido de plata; la empresa apunta además a producir nanocobre de alta pureza",
+    nums:[["Recurso estimado","2,43 Mt con 0,92% CuEq (corte 0,5% CuEq)","momMB26"],["Medido + indicado","1,79 Mt con 0,96% CuEq (0,70% Cu)","momMB26"],["Exploración","23 pozos y 1.302 m perforados","momMB26"],["Superficie","6.000 ha de área minera dentro de 40.000 ha de tenencia","momMB26"],["Inversión prevista","US$ 300 M en tres etapas: I US$ 25 M (ejecutada), II US$ 75 M y III US$ 200 M","momMB26"],["Comercialización","Acuerdo de compra (offtake) con Trafigura; exporta el 100% vía Chile","momMB26"]],
+    hitos:[["2020","Fundación de MOM Mining para poner en marcha la mina"]],
+    nota:"Datos del folleto institucional 2026 de MOM Mining, publicado por la Cancillería. La estimación de recursos es preliminar (firmada por persona calificada bajo CIM 2014) y la certificación NI 43-101 está en curso; no hay reservas declaradas ni una cifra de producción anual publicada.",
+    src:["momMB26","siacam"] },
+  "mi-la-providencia": {
+    met:"Plata epitermal de alta sulfuración en la Puna de Jujuy, entre 4.200 y 4.700 m de altura (≈ 260 km de San Salvador de Jujuy). Mina en operación de Hanaq Argentina S.A. (Hanaq Group).",
+    proc:TEC_GEN["mi-au"].proc,
+    prod:"Plata (mineral principal según la cartera oficial)",
+    nums:[["Etapa","En operación","smAg24"],["Tipo de depósito","Epitermal de alta sulfuración","smAg24"],["Inversión (capex)","US$ 10 M","smAg24"],["Superficie","Siete concesiones: 17.035 ha (el recuadro de la ficha indica 12.843 ha)","smAg24"],["Altura","4.200 a 4.700 m s. n. m.","smAg24"]],
+    nota:"Ficha de la Secretaría de Minería (portafolio de plata 2024). No informa recursos, método de explotación ni producción, por lo que el proceso es el genérico de oro y plata y el producto debe confirmarse con la empresa.",
+    src:["smAg24","siacam"] }
 };

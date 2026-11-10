@@ -186,4 +186,8 @@ Object.assign(SRC, {
   dnu2_26:  { t:"Boletín Oficial – Decreto DNU 2/2026: Acuerdo Modificatorio del Acta de Farallón Negro y nuevo esquema de YMAD (5-ene-2026)", u:"https://www.boletinoficial.gob.ar/pdf/aviso/primera/337088/20260601" },
   rnSG13:   { t:"Gobierno de Río Negro – Avances con Minería de Nación por la situación de los fletes marítimos (23-may-2013)", u:"https://rionegro.gov.ar/articulo/4331/avances-en-mineria-de-nacion-por-la-situacion-de-los-fletes-maritimos" },
   segSG21:  { t:"SEGEMAR / Secretaría de Minería – Reconocimiento de procesos productivos y muestreo de productos exportables, Mina Sierra Grande (2021)", u:"https://repositorio.segemar.gob.ar/handle/308849217/4379" },
+  // --- 10-nov-2026 ---
+  smLi24:   { t:"Secretaría de Minería – Portfolio of Advanced Projects: Lithium 2024 (ficha del proyecto Caucharí, Minerales Australes)", u:"https://argentina.gob.ar/sites/default/files/portfolio_lithium_2024.pdf" },
+  smAg24:   { t:"Secretaría de Minería – Portfolio of Advanced Projects: Silver 2024 (ficha del proyecto Providencia, Hanaq)", u:"https://argentina.gob.ar/sites/default/files/portfolio_silver_2024.pdf" },
+  momMB26:  { t:"MOM Mining – Folleto institucional 2026 del proyecto Martín Bronce (publicado por Cancillería)", u:"https://esing.cancilleria.gob.ar/userfiles/mom_minign_martin_bronce_brouchure.pdf" },
 });
