@@ -67,6 +67,7 @@ const EMP = {
   quequen:   { n: "Consorcio de Gestión del Puerto Quequén", tipo: "Ente público no estatal", t: [], w: null },
   profertil: { n: "Profertil", tipo: "Privada", t: [], w: "https://www.profertil.com.ar" },
   mag:       { n: "Mercado Agroganadero (MAG)", tipo: "Privada", t: [], w: "https://www.mercadoagroganadero.com.ar" },
+  quickfood: { n: "Quickfood (MBRF – ex Marfrig)", tipo: "Controlada por MBRF Global Foods (fusión de Marfrig y BRF)", t: [["BVMF","MBRF3"]] },
   minerva:   { n: "Minerva Foods (Swift Argentina)", tipo: "Cotiza", t: [["BVMF","BEEF3"]], w: "https://www.minervafoods.com" },
   arrebeef:  { n: "ArreBeef", tipo: "Privada", t: [], w: null },
   gorina:    { n: "Frigorífico Gorina", tipo: "Privada", t: [], w: null },

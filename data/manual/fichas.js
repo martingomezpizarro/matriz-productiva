@@ -778,5 +778,21 @@ const TEC = {
     prod:"Plata (mineral principal según la cartera oficial)",
     nums:[["Etapa","En operación","smAg24"],["Tipo de depósito","Epitermal de alta sulfuración","smAg24"],["Inversión (capex)","US$ 10 M","smAg24"],["Superficie","Siete concesiones: 17.035 ha (el recuadro de la ficha indica 12.843 ha)","smAg24"],["Altura","4.200 a 4.700 m s. n. m.","smAg24"]],
     nota:"Ficha de la Secretaría de Minería (portafolio de plata 2024). No informa recursos, método de explotación ni producción, por lo que el proceso es el genérico de oro y plata y el producto debe confirmarse con la empresa.",
-    src:["smAg24","siacam"] }
+    src:["smAg24","siacam"] },
+  "ag-sjorge": {
+    met:"Frigorífico de ciclo completo de Quickfood S.A. en San Jorge (centro-oeste de Santa Fe): faena de hacienda vacuna, desposte y elaboración de hamburguesas congeladas de la marca Paty en la misma planta.",
+    proc:["Recepción de hacienda en corrales","Faena (playa de matadero)","Desposte y selección de cortes y recortes","Picado, formulado y moldeado de hamburguesas (8 líneas)","Congelado, envasado y cámaras de frío","Despacho al mercado interno y exportación"],
+    prod:"Hamburguesas vacunas congeladas Paty, además de los cortes y subproductos de la faena",
+    nums:[["Capacidad de faena","1.100 cabezas por día","qfEPD24"],["Líneas de hamburguesas","8","qfEPD24"],["Producción de hamburguesas","3.250 t/mes (≈ 39.000 t/año)","qfEPD24"],["Período de los datos","Frigorífico: año 2021; ganadería: jul-2020 a jun-2021","qfEPD24"]],
+    hitos:[["2-jul-2024","Publicación de la Declaración Ambiental de Producto de la hamburguesa Paty, verificada por el INTI (válida hasta jul-2029)"]],
+    nota:"Hasta esta revisión el mapa atribuía la planta a Minerva Foods; según la declaración ambiental de la propia empresa, la opera Quickfood S.A. (grupo Marfrig, que en 2025 se fusionó con BRF en MBRF). El total anual es la cuenta mensual por 12.",
+    src:["qfEPD24","senasa"] },
+  "mi-canadon-del-moro": {
+    met:"Proyecto de oro y plata en Cerro Mesa, en la Línea Sur de Río Negro (≈ 90 km de Ingeniero Jacobacci), de Southern Copper Argentina. Está en evaluación económica preliminar (PEA): todavía no hay método de explotación definido.",
+    proc:["Campañas de perforación de exploración","Estimación de recursos","Evaluación económica preliminar (PEA)","Monitoreo ambiental: muestreos participativos de agua con la comunidad y el Estado provincial"],
+    prod:"Oro y plata (la cartera SIACAM lo registra como proyecto de plata)",
+    nums:[["Etapa","Evaluación económica preliminar (PEA)","rnCdM24"],["Ubicación","Cerro Mesa, ≈ 90 km de Ingeniero Jacobacci","rnCdM24"],["Campaña de perforación","Prevista para dic-2024; el segundo muestreo de agua (feb-2025) fue el último de esa campaña","rnCdM25"]],
+    hitos:[["14-nov-2024","Primer muestreo participativo de agua"],["dic-2024","Campaña de perforación prevista por la empresa"],["feb-2025","Segundo muestreo participativo de agua, último de la campaña"]],
+    nota:"El gobierno de Río Negro no publicó recursos, metros perforados ni inversión; la empresa no difundió todavía resultados del proyecto.",
+    src:["rnCdM24","rnCdM25","siacam"] }
 };

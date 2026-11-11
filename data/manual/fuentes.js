@@ -190,4 +190,8 @@ Object.assign(SRC, {
   smLi24:   { t:"Secretaría de Minería – Portfolio of Advanced Projects: Lithium 2024 (ficha del proyecto Caucharí, Minerales Australes)", u:"https://argentina.gob.ar/sites/default/files/portfolio_lithium_2024.pdf" },
   smAg24:   { t:"Secretaría de Minería – Portfolio of Advanced Projects: Silver 2024 (ficha del proyecto Providencia, Hanaq)", u:"https://argentina.gob.ar/sites/default/files/portfolio_silver_2024.pdf" },
   momMB26:  { t:"MOM Mining – Folleto institucional 2026 del proyecto Martín Bronce (publicado por Cancillería)", u:"https://esing.cancilleria.gob.ar/userfiles/mom_minign_martin_bronce_brouchure.pdf" },
+  // --- 11-nov-2026 ---
+  qfEPD24:  { t:"Quickfood S.A. – Declaración Ambiental de Producto de la hamburguesa Paty, planta San Jorge (EPD-IES-0006436, verificada por el INTI, publicada el 2-jul-2024)", u:"https://epd.inti.gob.ar/assets/uploads/libreria/IES-0006436001-Es.pdf" },
+  rnCdM24:  { t:"Gobierno de Río Negro – Realizan muestreo participativo de agua en un nuevo proyecto metalífero (Cañadón del Moro, 15-nov-2024)", u:"https://rionegro.gov.ar/articulo/51933/realizan-muestreo-participativo-de-agua-en-un-nuevo-proyecto-metalifero" },
+  rnCdM25:  { t:"Gobierno de Río Negro – Nuevo muestreo participativo de agua en el proyecto minero Cañadón del Moro (13-feb-2025)", u:"https://rionegro.gov.ar/articulo/52890/nuevo-muestreo-participativo-de-agua-en-el-proyecto-minero-canadon-del-moro" },
 });
