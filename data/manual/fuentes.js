@@ -194,4 +194,9 @@ Object.assign(SRC, {
   qfEPD24:  { t:"Quickfood S.A. – Declaración Ambiental de Producto de la hamburguesa Paty, planta San Jorge (EPD-IES-0006436, verificada por el INTI, publicada el 2-jul-2024)", u:"https://epd.inti.gob.ar/assets/uploads/libreria/IES-0006436001-Es.pdf" },
   rnCdM24:  { t:"Gobierno de Río Negro – Realizan muestreo participativo de agua en un nuevo proyecto metalífero (Cañadón del Moro, 15-nov-2024)", u:"https://rionegro.gov.ar/articulo/51933/realizan-muestreo-participativo-de-agua-en-un-nuevo-proyecto-metalifero" },
   rnCdM25:  { t:"Gobierno de Río Negro – Nuevo muestreo participativo de agua en el proyecto minero Cañadón del Moro (13-feb-2025)", u:"https://rionegro.gov.ar/articulo/52890/nuevo-muestreo-participativo-de-agua-en-el-proyecto-minero-canadon-del-moro" },
+  // --- 12-nov-2026 ---
+  jujFol22: { t:"Gobierno de Jujuy, Secretaría de Minería e Hidrocarburos – Folleto de la minería de Jujuy 2022 (tablas de proyectos vigentes y en evaluación en producción)", u:"https://www.mineriajujuy.gob.ar/site/files_information/folletos/Folleto_MDEyP-SMeH_Jujuy_2022_es.pdf" },
+  jujBO660: { t:"Boletín Oficial de Jujuy N° 122 (anexo) – Res. 660-DPRH/2021, permiso de uso de agua a Espíritu de los Andes S.A., proyecto Ajedrez – mina Catalina II", u:"https://boletinoficial.jujuy.gob.ar/?p=226382" },
+  smOro25:  { t:"Secretaría de Minería de la Nación – Informe sectorial del oro 2025 (empresas operadoras de las minas con producción de oro)", u:"https://www.argentina.gob.ar/sites/default/files/informe_sectorial_oro_20252410.pdf" },
+  jujInsp26:{ t:"Ministerio de Minería de Jujuy – Inspección ambiental a proyectos de oro aluvial en Rinconada (3-feb-2026)", u:"https://www.mineriajujuy.gob.ar/site/detail_news.php?id=278" },
 });

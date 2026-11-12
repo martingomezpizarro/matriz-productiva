@@ -794,5 +794,29 @@ const TEC = {
     nums:[["Etapa","Evaluación económica preliminar (PEA)","rnCdM24"],["Ubicación","Cerro Mesa, ≈ 90 km de Ingeniero Jacobacci","rnCdM24"],["Campaña de perforación","Prevista para dic-2024; el segundo muestreo de agua (feb-2025) fue el último de esa campaña","rnCdM25"]],
     hitos:[["14-nov-2024","Primer muestreo participativo de agua"],["dic-2024","Campaña de perforación prevista por la empresa"],["feb-2025","Segundo muestreo participativo de agua, último de la campaña"]],
     nota:"El gobierno de Río Negro no publicó recursos, metros perforados ni inversión; la empresa no difundió todavía resultados del proyecto.",
-    src:["rnCdM24","rnCdM25","siacam"] }
+    src:["rnCdM24","rnCdM25","siacam"] },
+  "mi-ajedrez": {
+    met:"Oro aluvial en la quebrada del río Ajedrez, distrito Orosmayo (departamento Rinconada, Puna de Jujuy): se explota la grava aurífera a cielo abierto y el oro se separa por gravedad, sin químicos.",
+    proc:["Destape y extracción del aluvión (grava aurífera) con equipos de movimiento de suelos, tipo cantera","Clasificación y harneado de la grava","Concentración gravimétrica (canaletas, jigs) y por centrifugado, sin cianuro ni otros reactivos","Limpieza del concentrado y secado del oro","Restitución de la grava lavada y restauración del terreno"],
+    prod:"Oro aluvial en concentrado gravimétrico",
+    nums:[["Etapa","Explotación (en producción según la cartera provincial y SIACAM)","jujFol22"],["Expediente provincial","MT0655-026-2021, en evaluación (titular según la tabla provincial: Luis Losi S.A.)","jujFol22"],["Agua autorizada","5.105 m³ por mes de agua superficial del río Ajedrez para la explotación de oro aluvial (permiso precario de un año, retroactivo a ene-2021)","jujBO660"],["Mina en producción 2025","Figura entre las minas de oro con producción del país en 2025","smOro25"]],
+    hitos:[["1-jul-2021","Res. 660-DPRH/2021: permiso de uso de agua para la etapa de explotación (proyecto Ajedrez, con la mina Catalina II)"],["3-feb-2026","Inspección ambiental del Ministerio de Minería de Jujuy a «Mina Nueva Ajedrez» (Luis Losi S.A.): exploración, restauración y un invernáculo de forrajes"]],
+    nota:"La cartera SIACAM atribuye Ajedrez a Espíritu de los Andes S.A.; las tablas provinciales y la inspección de 2026 nombran a Luis Losi S.A. como titular de la mina. El folleto provincial grafica la producción de 2021 de Ajedrez y Córdoba (45 y 312 onzas), pero el texto no permite asignar cada valor a cada mina, así que no se carga. No hay datos oficiales de inversión ni de capacidad.",
+    src:["jujFol22","jujBO660","smOro25","jujInsp26","siacam"] },
+  "mi-mina-catalina-ii": {
+    met:"Oro aluvial en el distrito Orosmayo (departamento Rinconada, Jujuy), dentro del proyecto Ajedrez de Espíritu de los Andes S.A.: explotación a cielo abierto de grava aurífera con concentración gravimétrica, sin químicos.",
+    proc:["Destape y extracción del aluvión (grava aurífera) con equipos de movimiento de suelos, tipo cantera","Clasificación y harneado de la grava","Concentración gravimétrica (canaletas, jigs) y por centrifugado, sin cianuro ni otros reactivos","Limpieza del concentrado y secado del oro","Restitución de la grava lavada y restauración del terreno"],
+    prod:"Oro aluvial en concentrado gravimétrico",
+    nums:[["Etapa","Explotación vigente (expediente MT0655-146-2015) y una ampliación en evaluación (MT0655-166-2021)","jujFol22"],["Agua autorizada","5.105 m³ por mes de agua superficial del río Ajedrez, compartidos con el proyecto Ajedrez (permiso precario de un año, retroactivo a ene-2021)","jujBO660"],["Mina en producción 2025","Figura entre las minas de oro con producción del país en 2025","smOro25"]],
+    hitos:[["2015","Expediente de explotación MT0655-146-2015"],["1-jul-2021","Res. 660-DPRH/2021: permiso de uso de agua para la explotación de oro aluvial"]],
+    nota:"No hay cifras oficiales de producción, inversión ni empleo de la mina.",
+    src:["jujFol22","jujBO660","smOro25","siacam"] },
+  "mi-cordoba": {
+    met:"Oro aluvial en el departamento Rinconada (Puna de Jujuy), a unos 15 km al norte de Ajedrez: extracción a cielo abierto de grava aurífera y concentración gravimétrica.",
+    proc:["Destape y extracción del aluvión (grava aurífera) con equipos de movimiento de suelos, tipo cantera","Clasificación y harneado de la grava","Concentración gravimétrica (canaletas, jigs) y por centrifugado, sin cianuro ni otros reactivos","Limpieza del concentrado y secado del oro","Restitución de la grava lavada y restauración del terreno"],
+    prod:"Oro aluvial en concentrado gravimétrico",
+    nums:[["Etapa","Explotación vigente (expediente MT0655-119-2019) y un nuevo expediente en evaluación (MT0655-035-2022)","jujFol22"],["Titulares","Sociedad Minera Santa María S.A.; en la tabla de minas vigentes figura también Gasmarra Minería S.A.","jujFol22"],["Mina en producción 2025","Figura entre las minas de oro con producción del país en 2025 (controlante: Sociedad Minera Santa María, capital argentino)","smOro25"]],
+    hitos:[["2019","Expediente de explotación MT0655-119-2019"],["2022","Nuevo expediente MT0655-035-2022 en evaluación"]],
+    nota:"El folleto provincial grafica la producción de 2021 de Córdoba y Ajedrez (45 y 312 onzas) sin que el texto permita asignar cada valor; no se carga. La distancia a Ajedrez sale de las coordenadas oficiales.",
+    src:["jujFol22","smOro25","siacam"] }
 };
