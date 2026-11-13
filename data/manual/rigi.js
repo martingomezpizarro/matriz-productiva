@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-12",
+  actualizado: "2026-11-13",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -58,6 +58,7 @@ const RIGI_SRC = {
   bo1771_26: { t: "Boletín Oficial – Res. ME 1771/2026 (Los Toldos II Este), 9-oct-2026", u: BO("2026-10-09") },
   bo1808_26: { t: "Boletín Oficial – Res. ME 1808/2026 (Bajo del Choique – La Invernada), 19-oct-2026", u: BO("2026-10-19") },
   bo1854_26: { t: "Boletín Oficial – Res. ME 1854/2026 (Agua Rica, Glencore), 27-oct-2026", u: BO("2026-10-27") },
+  bo1976_26: { t: "Boletín Oficial – Res. ME 1976/2026 y 1977/2026 (proyecto NGL de TGS: Midstream de Gas del Sur y Procesadora de Gas del Sur), 13-nov-2026", u: BO("2026-11-13") },
   glc_ago25: { t: "Glencore – solicitudes RIGI de El Pachón y Agua Rica (ago-2025)", u: "https://www.glencore.com/media-and-insights/news/glencore-submits-RIGI-applications-in-respect-of-its-argentine-copper-projects" },
   ypfArgLNG: { t: "YPF – Argentina LNG presentó su solicitud de adhesión al RIGI (comunicado, 13-ago-2026)", u: "https://argentina-lng.ypf.com/assets/pdf/ENG-Argentina-LNG-Adhesion-RIGI.pdf" },
   ypfBdT:    { t: "YPF – Comunicado: solicitud de adhesión al RIGI del proyecto Bajo del Toro (30-oct-2026)", u: "https://novedades.ypf.com/noticias.html" },
@@ -102,9 +103,10 @@ const RIGI = {
   "og-arglng": { st:"presentado", vpu:"Argentina LNG (YPF con Eni y XRG)", total:51000,
     cap:"Proyecto integrado de GNL: desarrollo upstream en Neuquén (≈ US$ 5.000 M), gasoductos dedicados, plantas de tratamiento y fraccionamiento de líquidos, y dos unidades flotantes de licuefacción (FLNG) de 12 MTPA en conjunto frente a Río Negro, en el Golfo San Matías. ≈ US$ 29.000 M hasta 2031, año previsto de arranque de los FLNG; exportaciones de ≈ US$ 10.000 M por año durante unas dos décadas. Solicitud presentada el 13-ago-2026, sin resolución todavía",
     verif:"empresa", src:["ypfArgLNG"] },
-  "og-tgsngl": { st:"en_evaluacion", vpu:"TGS: Procesadora de Gas del Sur (Tratayén) y Midstream de Gas del Sur (poliducto y Bahía Blanca)", total:3000, op:"2030-03",
-    cap:"Proyecto integrado de NGL: gasoducto de segregación de 100 km, ampliación de la planta Tratayén, poliducto a Bahía Blanca, fraccionadora, almacenaje y terminal marítima; exportaciones de ≈ US$ 1.200 M por año. El Ministerio de Economía anunció el 19-oct-2026 que el Comité Evaluador aprobó los dos vehículos; falta la resolución en el Boletín Oficial. Monto y fechas de la empresa",
-    verif:"empresa", src:["tgs2Q26"] },
+  "og-tgsngl": { st:"aprobado", res:"1976/2026 y 1977/2026", bo:"2026-11-13", vpu:"Procesadora de Gas del Sur S.A. (PGS) y Midstream de Gas del Sur S.A. (MGS), vehículos de TGS", tipo:"Dos proyectos únicos aprobados por separado",
+    comp:3244, adh:"2026-10-14", limite:"2027-09-30", op:"2030-02-01",
+    cap:"PGS (US$ 1.394,7 M): ramales de captación de 24\" desde Sierra Chata y Fortín de Piedra que confluyen en un ducto de 30\" hasta la planta Tratayén, que llega a 1.200 MMpc/d de gas rico con la reconversión de dos módulos criogénicos y dos nuevos; obra iniciada en may-2026; plazo de inversión mínima 30-sep-2027. MGS (US$ 1.849,6 M): poliducto de 577 km y 20\" de Tratayén a General Daniel Cerri (Bahía Blanca), fraccionadora de 90.000 bbl/d de propano, butano y gasolina natural, tres ductos de transferencia de 16 km, almacenaje, despacho y conexión al puerto; plazo de inversión mínima 31-jul-2027. Ambos con 20% de proveedores locales, operación desde el 1-feb-2030 y vida útil de 30 años",
+    verif:"bo_extracto", src:["bo1976_26","tgs2Q26"] },
   "og-bdt": { st:"presentado", vpu:"YPF S.A. (operador, 65%) con Vista Energy Argentina (35%)", total:8729,
     cap:"Petróleo no convencional con gas asociado en Bajo del Toro y Bajo del Toro Norte: 440 pozos en la vida del proyecto, meseta de ≈ 80.000 bbl/d de petróleo y 3 MMm³/d de gas entre 2033 y 2040, y exportaciones por ≈ US$ 25.000 M entre 2027 y 2055. Primer RIGI del «Hub Norte» de YPF; solicitud presentada el 30-oct-2026, sin resolución todavía",
     verif:"empresa", src:["ypfBdT"] },

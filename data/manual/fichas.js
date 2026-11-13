@@ -85,9 +85,9 @@ const TEC = {
     met:"Cadena de líquidos del gas natural (NGL): se separan del gas rico de Vaca Muerta en Neuquén, viajan por poliducto hasta la costa y se fraccionan en productos para exportar.",
     proc:["Gasoducto de segregación (≈ 100 km) que lleva gas rico a Tratayén","Ampliación de la planta Tratayén: extracción criogénica de líquidos","Poliducto de NGL hasta Bahía Blanca","Planta fraccionadora: separa propano, butano y gasolina natural","Almacenaje y terminal marítima para carga de buques"],
     prod:"Propano, butano y gasolina natural para exportación",
-    nums:[["Inversión","≈ US$ 3.000 M (decisión final de inversión en el 2T 2026)","tgs2Q26"],["Exportaciones esperadas","≈ US$ 1.200 M por año","tgs2Q26"],["Inicio de operación","Marzo de 2030","tgs2Q26"],["Gasoducto de segregación","≈ 100 km","tgs2Q26"]],
-    hitos:[["2T 2026","Decisión final de inversión"],["Oct-2026","Ministerio de Economía anuncia la aprobación del Comité Evaluador del RIGI (resolución pendiente)"],["Mar-2030","Puesta en marcha prevista"]],
-    nota:"El RIGI se tramita con dos vehículos: Procesadora de Gas del Sur (Tratayén) y Midstream de Gas del Sur (poliducto y Bahía Blanca).", src:["tgs2Q26"]
+    nums:[["Inversión RIGI","US$ 3.244 M: PGS US$ 1.394,7 M y MGS US$ 1.849,6 M","bo1976_26"],["Planta Tratayén","1.200 MMpc/d de gas rico (dos módulos criogénicos reconvertidos y dos nuevos)","bo1976_26"],["Poliducto","577 km y 20\" (Tratayén – General Daniel Cerri)","bo1976_26"],["Fraccionadora","90.000 bbl/d de propano, butano y gasolina natural","bo1976_26"],["Exportaciones esperadas","≈ US$ 1.200 M por año","tgs2Q26"],["Inicio de operación","1-feb-2030 (según las resoluciones)","bo1976_26"]],
+    hitos:[["2T 2026","Decisión final de inversión"],["May-2026","Inicio de obra de la captación y la planta (PGS)"],["14-oct-2026","Fecha de adhesión al RIGI de PGS y MGS"],["13-nov-2026","Res. ME 1976/2026 y 1977/2026 en el Boletín Oficial: RIGI aprobado"],["Feb-2030","Puesta en marcha prevista"]],
+    nota:"El RIGI se aprobó con dos vehículos: Procesadora de Gas del Sur (captación y Tratayén) y Midstream de Gas del Sur (poliducto, fraccionadora y Bahía Blanca).", src:["bo1976_26","tgs2Q26"]
   },
   "og-mega2": {
     met:"Planta fraccionadora: separa los líquidos que llegan por el poliducto en productos puros.",
