@@ -648,8 +648,16 @@ tbody tr:hover{background:var(--bg)}
   .app.side-off .side.open{display:flex}
   .top{gap:8px 10px}
   .search{flex:1 1 90px;min-width:0}
-  .top .seg{order:3;width:auto;flex:1 1 230px}
+  /* las cinco vistas siempre a la vista: sin barra que haya que deslizar */
+  .top .seg{order:3;flex:1 1 calc(100% - 54px);width:auto;min-width:0;display:grid;grid-template-columns:repeat(5,auto);justify-content:stretch;overflow:visible}
+  .top .seg button{padding:7px 2px;font-size:13px;text-align:center;min-width:0;overflow:hidden;text-overflow:ellipsis}
   .top .btn-layers{order:4;flex:none;padding:7px 10px}
+}
+@media (max-width: 520px){
+  .top .btn-layers{width:42px;height:42px;padding:0;justify-content:center;font-size:0;gap:0;align-self:center}
+  .glhint{display:none}
+  .top .btn-layers::before{margin:0}
+  .top .seg button{font-size:12.5px}
 }
 
 /* ===== Circuito: mapa más alto, pantalla completa, toques ===== */
@@ -673,25 +681,61 @@ tbody tr:hover{background:var(--bg)}
 .glpop .pacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .glpop .pacts button{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 10px;font-size:12px;cursor:pointer;color:var(--ink);min-height:32px}
 .glpop .pacts button:hover{border-color:var(--ink)}
-.glsum{display:none}
 .glmapbox.full{position:fixed;inset:0;z-index:60;border-radius:0;border:0;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);background:var(--sea)}
 .glmapbox.full #glMap{flex:1;min-height:0;display:flex;flex-direction:column}
 .glmapbox.full .glmap{flex:1;height:auto;min-height:0}
 .glmapbox.full .glzoom{top:calc(10px + env(safe-area-inset-top,0px));right:calc(10px + env(safe-area-inset-right,0px))}
 .glmapbox.full .glzoom button{width:38px;height:38px}
-.glmapbox.full .gllegend{max-height:22vh;overflow:auto;flex:none}
-.glmapbox.full .glsum{display:flex;position:absolute;left:calc(10px + env(safe-area-inset-left,0px));top:calc(10px + env(safe-area-inset-top,0px));right:64px;max-width:420px;align-items:center;gap:10px;background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:var(--shadow);font-size:12px;z-index:4}
-.glsum>div{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.glsum>div b{font-size:14px;display:flex;align-items:center;gap:6px}
-.glsum>div>i{display:none}
-.glsum>div b::before{content:"";width:9px;height:9px;border-radius:2px;background:var(--c)}
-.glsum span{color:var(--muted)}
-.glsum span b{display:inline;font-size:12px;color:var(--ink)}
-.glsum span b::before{display:none}
-.glsum button{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 11px;font-size:12px;cursor:pointer;color:var(--ink)}
 body.gl-full{overflow:hidden}
 body.gl-full .vtip{z-index:80}
 .vtip{z-index:70}
+/* ===== Circuito: globo terráqueo ===== */
+.glmapbox{background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--ink) 4%,var(--panel)),color-mix(in srgb,var(--ink) 11%,var(--panel)))}
+.glmapbox.full{background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--ink) 4%,var(--panel)),color-mix(in srgb,var(--ink) 13%,var(--panel)))}
+.glmap{cursor:grab}.glmap.drag{cursor:grabbing}
+.glmap .sphere{fill:var(--sea);stroke:color-mix(in srgb,var(--ink) 22%,transparent);stroke-width:1}
+.glmap .ctry{stroke-width:.5}
+.glmap .shade{pointer-events:none}
+.glhint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);margin:0;font-size:12px;color:var(--muted);background:color-mix(in srgb,var(--panel) 88%,transparent);padding:4px 10px;border-radius:999px;pointer-events:none;white-space:nowrap;animation:mpFade .4s ease .8s both}
+/* referencias plegables, flotando sobre el globo */
+.glleg{position:absolute;left:10px;bottom:10px;z-index:5;max-width:calc(100% - 20px);display:flex;flex-direction:column-reverse;align-items:flex-start;gap:6px}
+.glmapbox.full .glleg{left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.gllegbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:500;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.1);min-height:34px}
+.gllegbtn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.gllegbody{width:min(420px,calc(100vw - 40px));max-height:min(52vh,360px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:10px 12px 12px;animation:mpFade .2s ease both}
+.gllegh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:13px}
+.gllegh .x{border:0;background:none;width:28px;height:28px;border-radius:6px;font-size:18px;cursor:pointer;color:var(--muted)}
+.glleg .gllegend{padding:0;border:0;background:none}
+.glcapas label{display:inline-flex;gap:6px;align-items:center;cursor:pointer;min-height:28px}
+.glleg:has(.gllegbody:not([hidden]))~.glhint,.glmapbox:has(.gllegbody:not([hidden])) .glhint{display:none}
+/* etiquetas con porcentaje y panel de la empresa sobre el globo */
+.glmap text .shv{font-weight:700;fill:var(--ink)}
+.glmap .arlab{display:none}
+.glmap.zin .arlab{display:inline}
+.glsum{display:flex;flex-direction:column;position:absolute;left:10px;top:10px;right:56px;max-width:400px;max-height:calc(100% - 66px);background:color-mix(in srgb,var(--panel) 95%,transparent);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);font-size:12px;z-index:4;overflow:hidden}
+.glmapbox.full .glsum{display:flex;left:calc(10px + env(safe-area-inset-left,0px));top:calc(10px + env(safe-area-inset-top,0px));right:64px;max-width:420px;max-height:calc(100% - 80px);padding:0;gap:0}
+.gshead{display:flex;align-items:center;gap:10px;padding:8px 10px}
+.gshead>div{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.gshead b{font-size:14px;display:flex;align-items:center;gap:6px}
+.gshead b i{width:9px;height:9px;border-radius:2px;background:var(--c);flex:none}
+.gshead span{color:var(--muted)}.gshead span b{display:inline;font-size:12px;color:var(--ink)}
+.gsx{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 11px;font-size:12px;cursor:pointer;color:var(--ink);min-height:32px}
+.gsx[aria-expanded="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.gsbody{overflow:auto;padding:4px 10px 10px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.gsbody .eyebrow{margin-top:8px}
+.gsn{margin:0 0 2px;color:var(--muted);font-size:11px}
+.gsbody ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.gsbody li>button,.gsbody li>.row0{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;border:0;background:none;padding:6px 4px;border-radius:6px;text-align:left;cursor:pointer;color:var(--ink);font-size:12.5px;min-height:36px}
+.gsbody li>.row0{cursor:default;color:var(--muted)}
+.gsbody li>button:hover{background:var(--bg)}
+.gsbody li i{width:9px;height:9px;border-radius:2px}
+.gsbody li i.dia{transform:rotate(45deg) scale(.85)}
+.gsbody .n{min-width:0;display:flex;flex-direction:column}
+.gsbody .n small{color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gsbody .v{font-variant-numeric:tabular-nums;font-weight:600;text-align:right;white-space:nowrap}
+.gsbody .v small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.gsgo{align-self:flex-start;margin-top:8px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;color:var(--ink);min-height:32px}
+.glhint{bottom:56px}
 /* selector de empresa del laboratorio */
 .vsel{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px}
 .vsel span{font-weight:600}
@@ -719,7 +763,7 @@ body.gl-full .vtip{z-index:80}
       <button id="vGl" aria-pressed="false" title="Qué pesa la Argentina en cada empresa con proyectos RIGI">Circuito<span class="xs-hide"> global</span></button>
     </div>
     <button class="btn-admin" id="btnAdmin" hidden aria-label="Administración" title="Administración"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
-    <button class="btn-layers" id="btnLayers" aria-expanded="false">Capas</button>
+    <button class="btn-layers" id="btnLayers" aria-expanded="false" aria-label="Capas">Capas</button>
   </header>
 
   <aside class="side" id="side">

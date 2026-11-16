@@ -67,9 +67,17 @@ function calc(k, pr=GL.pr){
     crec: base>0 ? total/base-1 : null };
 }
 
+// Activos de la empresa fuera de la Argentina, con su peso hoy y con los proyectos argentinos a régimen.
+function mundoRows(k){
+  const c=CIR_EMP[k], r=calc(k), m=(typeof CIR_MSH!=="undefined"&&CIR_MSH[k])||{};
+  return (c.mundo||[]).map(([n,ll,pr,nt])=>{ const d=m[n]||null; let sh=null, shP=null;
+    if(r&&d&&d.v!=null){ sh=r.base>0?d.v/r.base:null; shP=r.total>0?d.v/r.total:null; }
+    return {n,ll,pr,nt,d,sh,shP}; });
+}
+const shTxt = x => x.d&&x.d.fuera ? "otro producto" : x.d&&x.d.con ? "con "+x.d.con : x.sh==null ? "s/d" : x.sh===0 ? "sin ingresos" : pct(x.sh, x.sh<.1?1:0)+(x.d.est?"≈":"");
 // ---------- mapa del mundo ----------
 const GW=1000, GH=520;
-let gProj, gPath, gSvg, gRoot, gZoom, gK=1, gU=1, gH2=GH;   // gU: unidades del viewBox por píxel de pantalla
+let gProj, gPath, gSvg, gRoot, gZoom, gK=1, gR0=240, gRot=[50,12,0], gPrev=null;   // globo: radio base en px, rotación [−lon, −lat]
 const ICO_FULL='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
 const ICO_EXIT='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
 const ICO_GLOBE='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg>';
@@ -80,26 +88,42 @@ function onTap(sel, fn){
         if(Math.hypot(ev.clientX-s[0],ev.clientY-s[1])<10){ ev.stopPropagation(); fn(ev); } });
 }
 function llOf(id, fb){ const a=byId[id]; if(a&&a.ll) return a.ll; if(a&&a.path) return a.path[Math.floor(a.path.length/2)]; return fb; }
-function arcD(a,b){ // gran círculo [lat,lon] → path proyectado
-  return gPath({type:"LineString", coordinates:[[a[1],a[0]],[b[1],b[0]]]});
-}
+// Arco por gran círculo; d = {a:[lon,lat], b:[lon,lat], t:0..1} (t < 1 mientras se dibuja la animación)
+function arcGeo(d){ const e=d.t>=1?d.b:(d.ip||(d.ip=d3.geoInterpolate(d.a,d.b)))(Math.max(.001,d.t)); return {type:"LineString",coordinates:[d.a,e]}; }
+const arcDat=(a,b)=>({a:[a[1],a[0]], b:[b[1],b[0]], t:1});
+const gCenter=()=>[-gRot[0],-gRot[1]];
+const gVis=ll=>d3.geoDistance([ll[1],ll[0]],gCenter())<Math.PI/2-.02;
 function buildMap(el){
   const land=topojson.feature(MUNDO, MUNDO.objects.countries);
-  gProj=d3.geoNaturalEarth1().fitExtent([[6,6],[GW-6,GH-6]], {type:"Sphere"});
+  // Globo terráqueo: proyección ortográfica que se gira arrastrando y se acerca con la rueda o pellizcando.
+  gProj=d3.geoOrthographic().clipAngle(90).precision(.4).rotate(gRot);
   gPath=d3.geoPath(gProj);
-  el.innerHTML=`<svg class="glmap" viewBox="0 0 ${GW} ${GH}" role="img" aria-label="Mapa mundial: casas matrices de las empresas, sus otros activos y los destinos de lo que se produce en la Argentina"></svg>
-    <div class="glzoom"><button data-gz="full" class="gzfull" aria-label="Pantalla completa" title="Pantalla completa">${ICO_FULL}</button><button data-gz="in" aria-label="Acercar" title="Acercar">+</button><button data-gz="out" aria-label="Alejar" title="Alejar">−</button><button data-gz="ar" aria-label="Ver Sudamérica" title="Ver Sudamérica" style="font-size:11px">AR</button><button data-gz="all" aria-label="Ver todo el mundo" title="Ver todo el mundo">${ICO_GLOBE}</button></div>
+  el.innerHTML=`<svg class="glmap" viewBox="0 0 ${GW} ${GH}" role="img" aria-label="Globo terráqueo: casas matrices de las empresas, sus otros activos y los destinos de lo que se produce en la Argentina. Arrastrá para girarlo."><defs><radialGradient id="glShade" cx="42%" cy="38%" r="62%"><stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset=".72" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></radialGradient></defs></svg>
+    <div class="glzoom"><button data-gz="full" class="gzfull" aria-label="Pantalla completa" title="Pantalla completa">${ICO_FULL}</button><button data-gz="in" aria-label="Acercar" title="Acercar">+</button><button data-gz="out" aria-label="Alejar" title="Alejar">−</button><button data-gz="ar" aria-label="Ir a la Argentina" title="Ir a la Argentina" style="font-size:11px">AR</button><button data-gz="all" aria-label="Ver el globo entero" title="Ver el globo entero">${ICO_GLOBE}</button></div>
     <div class="glpop" id="glPop" hidden></div>
-    <div class="glsum" id="glSum"></div>`;
+    <div class="glsum" id="glSum"></div>
+    <p class="glhint" id="glHint">Arrastrá para girar el globo</p>`;
   gSvg=d3.select(el).select("svg");
   gRoot=gSvg.append("g");
-  gRoot.append("path").attr("class","grat").attr("d",gPath(d3.geoGraticule10()));
+  gRoot.append("path").datum({type:"Sphere"}).attr("class","geo sphere");
+  gRoot.append("path").datum(d3.geoGraticule10()).attr("class","geo grat");
   gRoot.append("g").selectAll("path").data(land.features).join("path")
-    .attr("class",d=>"ctry"+(d.id==="032"?" ar":"")).attr("d",gPath).append("title").text(d=>d.properties.name);
+    .attr("class",d=>"geo ctry"+(d.id==="032"?" ar":"")).append("title").text(d=>d.properties.name);
+  gRoot.append("circle").attr("class","shade").attr("fill","url(#glShade)");
   ["gProdArc","gCapArc","gAct","gDst","gArP","gHq","gLab"].forEach(n=>gRoot.append("g").attr("class",n));
-  gZoom=d3.zoom().scaleExtent([1,16]).clickDistance(8).on("zoom",ev=>{
-    gK=ev.transform.k; gRoot.attr("transform",ev.transform); glRescale();
-  });
+  gPrev=d3.zoomIdentity;
+  gZoom=d3.zoom().scaleExtent([1,14]).clickDistance(8)
+    .on("start",ev=>{ if(ev.sourceEvent){ gSvg.interrupt("fly"); const h=document.getElementById("glHint"); if(h) h.hidden=true; gSvg.classed("drag",true); } })
+    .on("end",()=>gSvg.classed("drag",false))
+    .on("zoom",ev=>{
+      const t=ev.transform;
+      // arrastre = girar; el punto bajo el dedo sigue al dedo. Con la rueda o el pellizco sólo cambia la escala.
+      if(ev.sourceEvent && Math.abs(t.k-gPrev.k)<1e-6){
+        const R=gR0*t.k, dg=180/Math.PI;
+        gRot=[gRot[0]+(t.x-gPrev.x)/R*dg, Math.max(-88,Math.min(88,gRot[1]-(t.y-gPrev.y)/R*dg)), 0];
+      }
+      gK=t.k; gPrev=t; glProject();
+    });
   gSvg.call(gZoom).on("dblclick.zoom",null);
   onTap(gSvg, ()=>glPopOff());   // tocar el fondo cierra la ventanita
   el.querySelectorAll("[data-gz]").forEach(b=>b.onclick=()=>{
@@ -107,21 +131,38 @@ function buildMap(el){
     if(z==="full") return glFull();
     if(z==="in") gSvg.transition().duration(350).call(gZoom.scaleBy,1.6);
     else if(z==="out") gSvg.transition().duration(350).call(gZoom.scaleBy,1/1.6);
-    else if(z==="all") gSvg.transition().duration(500).call(gZoom.transform,d3.zoomIdentity);
-    else glZoomTo([[-75,-56],[-52,-20]]);
+    else if(z==="all") glGo([gCenter()[0],-12],1,900);
+    else glGo([-65,-38],3.4,1000);
   });
   glFit();
 }
-// El viewBox copia la proporción real del recuadro (no deja franjas vacías en pantalla completa o en el celular)
-// y los marcadores se dibujan en píxeles de pantalla, del mismo tamaño en cualquier dispositivo.
+// El dibujo usa píxeles reales del recuadro: el globo llena el lado corto y los marcadores miden lo mismo en cualquier pantalla.
 function glFit(){
   if(!gSvg) return; const n=gSvg.node(), w=n.clientWidth, h=n.clientHeight; if(!w||!h) return;
-  const H2=GW*h/w, top=(GH-H2)/2; gH2=H2;
-  gSvg.attr("viewBox",`0 ${top} ${GW} ${H2}`);
-  gZoom.translateExtent([[0,Math.min(0,top)],[GW,Math.max(GH,top+H2)]]);
-  gU=GW/w; glRescale();
+  gR0=Math.min(w,h)/2-12; gSvg.attr("viewBox",`0 0 ${w} ${h}`); gProj.translate([w/2,h/2]); glProject();
 }
-function glRescale(){ const s=gU/gK; gRoot.selectAll(".sz").attr("transform",function(){ return this.dataset.t+` scale(${s})`; }); }
+// Reproyecta todo con la rotación y la escala actuales; oculta lo que queda del otro lado del globo.
+function glProject(){
+  if(!gProj||!gRoot) return;
+  gProj.scale(gR0*gK).rotate(gRot);
+  gSvg.classed("zin",gK>=2.4);   // los nombres de los proyectos argentinos aparecen al acercarse
+  const [cx,cy]=gProj.translate();
+  gRoot.selectAll(".geo").attr("d",d=>gPath(d));
+  gRoot.select(".shade").attr("cx",cx).attr("cy",cy).attr("r",gR0*gK);
+  gRoot.selectAll(".arc").attr("d",d=>gPath(arcGeo(d))||"");
+  gRoot.selectAll(".sz").each(function(ll){ const on=gVis(ll); this.style.display=on?"":"none";
+    if(on){ const q=gProj([ll[1],ll[0]]); this.setAttribute("transform",`translate(${q[0]},${q[1]})`); } });
+}
+// Vuelo de cámara: gira el globo hasta un centro [lon, lat] y ajusta el acercamiento.
+// En viajes largos se aleja un poco a mitad de camino para que se entienda el recorrido.
+function glGo(c, k, dur=1100){
+  if(!gSvg) return;
+  const c0=gCenter(), k0=gK, ip=d3.geoInterpolate(c0,c), far=Math.min(1,d3.geoDistance(c0,c)/1.4);
+  gSvg.interrupt("fly").transition("fly").duration(REDUCED?0:dur).ease(d3.easeCubicInOut).tween("fly",()=>t=>{
+    const p=ip(t); gRot=[-p[0],-p[1],0];
+    gK=Math.max(1,(k0+(k-k0)*t)*(1-.35*far*Math.sin(Math.PI*t)));
+    const z=d3.zoomIdentity.scale(gK); gSvg.node().__zoom=z; gPrev=z; glProject(); });
+}
 function glFull(on){
   const box=document.querySelector(".glmapbox"); if(!box) return;
   on = on==null ? !box.classList.contains("full") : on;
@@ -158,15 +199,10 @@ function projPop(ev, id, nm){
     <div class="pbtns">${owners.map(k=>{ const pp=CIR_EMP[k].ar.find(p=>p.id===id); return `<button data-pk="${k}" aria-current="${k===GL.sel}" style="--c:${cvar(CIR_EMP[k].sec)}"><i></i>${esc(CIR_EMP[k].n)}${pp&&pp.part!=null?` <small>${nfx(pp.part,pp.part%1?1:0)}%</small>`:""}</button>`; }).join("")}</div>
     <div class="pacts">${a?`<button data-onmap2="${id}">Ver en el mapa de la Argentina</button>`:""}${CIR_VAL[id]?`<button data-val="${id}">Valuar el proyecto</button>`:""}</div>`);
 }
-function glZoomTo([[lo0,la0],[lo1,la1]]){
-  const [x0,y0]=gProj([lo0,la1]), [x1,y1]=gProj([lo1,la0]);
-  const k=Math.min(12, 0.9/Math.max((x1-x0)/GW,(y1-y0)/GH));
-  const t=d3.zoomIdentity.translate(GW/2,GH/2).scale(k).translate(-(x0+x1)/2,-(y0+y1)/2);
-  gSvg.transition().duration(650).call(gZoom.transform,t);
-}
-function marker(sel, ll, cls){ // grupo que no escala con el zoom
-  const [x,y]=gProj([ll[1],ll[0]]);
-  return sel.append("g").attr("class","sz "+(cls||"")).attr("data-t",`translate(${x},${y})`).attr("transform",`translate(${x},${y}) scale(${gU/gK})`);
+function marker(sel, ll, cls){ // grupo en píxeles de pantalla; glProject lo ubica y lo oculta si queda del otro lado
+  const g=sel.append("g").datum(ll).attr("class","sz "+(cls||""));
+  if(gProj){ const q=gProj([ll[1],ll[0]]); g.attr("transform",`translate(${q[0]},${q[1]})`).style("display",gVis(ll)?null:"none"); }
+  return g;
 }
 function drawMap(){
   const keys=glKeys();
@@ -178,10 +214,12 @@ function drawMap(){
     c.ar.forEach(p=>{ const ll=llOf(p.id); if(!ll||seen.has(p.id)) return; seen.add(p.id); caps.push({k,c,p,ll}); }); });
   const gC=gRoot.select(".gCapArc").html(""); let capN=0;
   if(GL.capas.cap) caps.sort((a,b)=>(a.k===sel)-(b.k===sel)).forEach(o=>{
-    const pth=gC.append("path").attr("class","arc cap"+(o.k===sel?" on":"")).attr("data-k",o.k).attr("d",arcD(o.c.hq.ll,o.ll)).style("--c",cvar(o.c.sec));
-    if(o.k===sel && GL.anim==="sel" && !REDUCED){ const ip=d3.geoInterpolate([o.c.hq.ll[1],o.c.hq.ll[0]],[o.ll[1],o.ll[0]]);
-      pth.attr("d",gPath({type:"LineString",coordinates:[ip(0),ip(.001)]})).transition().delay(150+capN++*90).duration(900).ease(d3.easeCubicOut)
-        .attrTween("d",()=>t=>gPath({type:"LineString",coordinates:[ip(0),ip(Math.max(.001,t))]})); }
+    const dat=arcDat(o.c.hq.ll,o.ll);
+    const pth=gC.append("path").datum(dat).attr("class","arc cap"+(o.k===sel?" on":"")).attr("data-k",o.k).style("--c",cvar(o.c.sec));
+    if(o.k===sel && GL.anim==="sel" && !REDUCED){ dat.t=0;
+      pth.transition().delay(350+capN++*90).duration(900).ease(d3.easeCubicOut)
+        .tween("grow",function(){ const el=this; return t=>{ dat.t=t; el.setAttribute("d",gPath(arcGeo(dat))||""); }; }); }
+    pth.attr("d",gPath(arcGeo(dat))||"");
   });
   // producto: Argentina → destinos
   const gP=gRoot.select(".gProdArc").html(""), gD=gRoot.select(".gDst").html("");
@@ -190,29 +228,35 @@ function drawMap(){
     if(GL.sec!=="all" && (GL.sec==="mi") !== ["li","cu","au"].includes(cd.k)) return;
     const hi=kindsSel.has(cd.k);
     cd.dest.forEach(([n,ll])=>{
-      gP.append("path").attr("class","arc prod"+(hi?" flow":"")).attr("d",arcD(cd.orig,ll)).style("stroke",PCOL[cd.k]).style("stroke-opacity",hi?.95:.35);
+      gP.append("path").datum(arcDat(cd.orig,ll)).attr("class","arc prod"+(hi?" flow":"")).attr("d",d=>gPath(arcGeo(d))||"").style("stroke",PCOL[cd.k]).style("stroke-opacity",hi?.95:.35);
       const m=marker(gD,ll); m.append("circle").attr("r",3).attr("fill",PCOL[cd.k]).attr("class","gas");
       if(hi) m.append("text").attr("class","dst").attr("x",5).attr("y",3).text(n);
     });
   });
   // otros activos de la empresa elegida
   const gA=gRoot.select(".gAct").html("");
-  if(GL.capas.act) (cs.mundo||[]).forEach(([n,ll,pr,nt])=>{
+  if(GL.capas.act) mundoRows(sel).forEach(x=>{ const {n,ll,pr,nt,d}=x;
     const m=marker(gA,ll,"gact");
     m.append("path").attr("d",d3.symbol(d3.symbolDiamond,70)()).attr("class","gas").attr("fill",sc);
-    m.append("text").attr("x",7).attr("y",4).text(n);
+    const st=shTxt(x), lab=m.append("text").attr("x",7).attr("y",4).text(n.replace(/ \(.*\)$/,""));
+    if(st!=="s/d"&&st!=="sin ingresos") lab.append("tspan").attr("class","shv").text(" "+st);
     m.append("circle").attr("r",11).attr("class","hit");
-    const info=`<b>${esc(n)}</b><div class="r"><span>${esc(pr)}</span></div><div style="color:var(--muted);font-size:12px">${esc(nt||"")} · ${esc(cs.n)}</div>`;
+    const info=`<b>${esc(n)}</b><div class="r"><span>${esc(pr)}</span></div><div style="color:var(--muted);font-size:12px">${esc(nt||"")} · ${esc(cs.n)}</div>`
+      + (d&&!d.fuera&&!d.con&&x.sh!=null ? `<div style="margin-top:6px;font-size:12px">Peso en ${esc(cs.n)}: <b>${pct(x.sh,1)}</b> hoy → <b>${pct(x.shP,1)}</b> con los proyectos argentinos${d.est?" (estimación)":""}</div>` : "")
+      + (d ? `<div style="color:var(--muted);font-size:11px;margin-top:4px">${esc(d.t)}</div>` : `<div style="color:var(--muted);font-size:11px;margin-top:4px">La empresa no publica el dato por activo</div>`);
     m.on("mousemove",ev=>{ if(ev.pointerType!=="touch") tipOn(ev,info); }).on("mouseleave",tipOff);
     onTap(m, ev=>glPop(ev, info));
   });
   // proyectos argentinos
-  const gR=gRoot.select(".gArP").html("");
+  const gR=gRoot.select(".gArP").html(""), rSel=calc(sel);
   const seenP=new Set();
   caps.forEach(o=>{ if(seenP.has(o.p.id)) return; seenP.add(o.p.id);
     const on=CIR_EMP[sel].ar.some(p=>p.id===o.p.id);
     const m=marker(gR,o.ll); if(on) m.append("circle").attr("r",4.2).attr("class","glpulse").style("--c",sc);
     m.append("circle").attr("r",on?4.6:3.6).attr("class","arp"+(on?" on":"")).style("--c",sc);
+    if(on){ const it=rSel&&rSel.items.find(x=>x.p.id===o.p.id), pp=CIR_EMP[sel].ar.find(p=>p.id===o.p.id);
+      const t=m.append("text").attr("class","arlab").attr("x",7).attr("y",4).text((pp?pp.n:o.p.n).replace(/ \(.*\)$/,""));
+      if(it&&it.sh) t.append("tspan").attr("class","shv").text(" "+pct(it.sh,1)); }
     m.append("circle").attr("r",12).attr("class","hit");
     m.on("mousemove",ev=>{ const a=byId[o.p.id]; const who=keys.filter(k=>CIR_EMP[k].ar.some(p=>p.id===o.p.id)).map(k=>CIR_EMP[k].n);
       tipOn(ev,`<b>${esc(a?a.n:o.p.n)}</b><div style="color:var(--muted);font-size:12px">${a?esc(a.prov):""}</div><div style="font-size:12px;margin-top:4px">${who.map(esc).join(" · ")}</div><div style="color:var(--muted);font-size:11px;margin-top:4px">Tocá para ver las empresas</div>`); })
@@ -238,30 +282,49 @@ function drawMap(){
   glSum();
   if(GL.anim==="sel") glFly(cs);
 }
-// Resumen de la empresa elegida, visible en pantalla completa
+// Panel de la empresa elegida sobre el globo: peso de la Argentina y de cada activo en el mundo.
 function glSum(){
   const el=document.getElementById("glSum"); if(!el) return;
-  const c=CIR_EMP[GL.sel], r=calc(GL.sel);
+  const k=GL.sel, c=CIR_EMP[k], r=calc(k), sc=cvar(c.sec), rows=mundoRows(k);
+  const metN=r?(c.metN||MET[c.met].l):"";
   const dato = !r ? "" : c.local ? `Proyectos RIGI: <b>${pct(r.rigiSh)}</b> del total proyectado` : `Argentina: <b>${pct(r.hoySh,1)}</b> hoy → <b>${pct(r.proySh,1)}</b> a régimen`;
-  el.style.setProperty("--c",cvar(c.sec));
-  el.innerHTML=`<div><i></i><b>${esc(c.n)}</b><span>${esc(c.hq.c)}${dato?" · "+dato:""}</span></div><button data-sumgo>Ver ficha</button>`;
+  const fly=ll=>`data-fly="${ll[0]},${ll[1]}"`;
+  const arRows=(r?r.items:c.ar.map(p=>({p,kind:prodKind(p),sh:null}))).map(x=>{ const ll=llOf(x.p.id);
+    return `<li><button ${ll?fly(ll):"disabled"}><i style="background:${PCOL[x.kind]}"></i><span class="n">${esc(x.p.n)}<small>${x.p.rigi&&x.p.rigi!=="no"?esc(RIGI_EST[x.p.rigi]||"RIGI"):x.p.rigi==="no"?"fuera del RIGI":""}</small></span><span class="v">${x.sh?pct(x.sh,1):"s/d"}</span></button></li>`; }).join("");
+  const listed=rows.reduce((s,x)=>s+(x.sh||0),0);
+  const resto = r&&!c.local&&rows.some(x=>x.sh!=null) ? Math.max(0,1-r.hoySh-listed) : null;
+  const mRows=rows.map(x=>`<li><button ${fly(x.ll)}><i class="dia" style="background:${sc}"></i><span class="n">${esc(x.n)}<small>${esc(x.pr)}${x.nt?" · "+esc(x.nt):""}</small></span><span class="v">${x.sh?`${pct(x.sh,1)}${x.d.est?"≈":""}<small>→ ${pct(x.shP,1)}</small>`:esc(shTxt(x))}</span></button></li>`).join("");
+  const srcs=[...new Set(rows.map(x=>x.d&&x.d.s).filter(s=>s&&SRC[s]))];
+  el.style.setProperty("--c",sc);
+  el.innerHTML=`<div class="gshead"><div><b><i></i>${esc(c.n)}</b><span>${esc(c.hq.c)}${dato?" · "+dato:""}</span></div>
+      <button class="gsx" aria-expanded="${!!GL.sumOpen}">${GL.sumOpen?"Cerrar":"Detalle"}</button></div>
+    <div class="gsbody" ${GL.sumOpen?"":"hidden"}>
+      <p class="eyebrow">En la Argentina${r&&!c.local?` · hoy ${pct(r.hoySh,1)} → ${pct(r.proySh,1)}`:""}</p>
+      <p class="gsn">Peso de cada proyecto en ${r?esc(metN):"la empresa"} con todo a régimen</p>
+      <ul>${arRows}</ul>
+      <p class="eyebrow">Resto del mundo</p>
+      ${rows.length?`<p class="gsn">Peso hoy${r?` en ${esc(metN)}`:""} → con los proyectos argentinos a régimen</p><ul>${mRows}${resto!=null&&resto>.005?`<li><span class="row0"><i class="dia" style="background:var(--line)"></i><span class="n">Resto de la empresa (operaciones no listadas)</span><span class="v">${pct(resto,1)}</span></span></li>`:""}</ul>`
+        :`<p class="gsn">${c.local?"Toda su actividad productiva está en la Argentina.":"Sin otros activos cargados."}</p>`}
+      ${srcs.length?`<div class="glsrc">${srcs.map(s=>`<a href="${SRC[s].u}" target="_blank" rel="noopener">${esc(SRC[s].t.split(":")[0])} ↗</a>`).join("")}</div>`:""}
+      <button class="gsgo" data-sumgo>Ver la ficha completa</button>
+    </div>`;
+  const tg=el.querySelector(".gsx"); tg.onclick=()=>{ GL.sumOpen=!GL.sumOpen; glSum(); };
+  el.querySelectorAll("[data-fly]").forEach(b=>b.onclick=()=>{ const [la,lo]=b.dataset.fly.split(",").map(Number); glGo([lo,la],Math.max(gK,3.2),900); });
   el.querySelector("[data-sumgo]").onclick=()=>{ glFull(false); requestAnimationFrame(()=>document.getElementById("glCard")?.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"})); };
 }
-// Vuelo de cámara: encuadra casa matriz, proyectos y otros activos de la empresa elegida.
+// Vuelo de cámara: gira el globo para encuadrar casa matriz, proyectos y otros activos de la empresa elegida.
 function glFly(c){
-  const pts=[c.hq.ll, ...c.ar.map(p=>llOf(p.id)).filter(Boolean), ...(GL.capas.act?(c.mundo||[]).map(x=>x[1]):[])].map(ll=>gProj([ll[1],ll[0]]));
+  const toP=ll=>[ll[1],ll[0]];
+  const ar=c.ar.map(p=>llOf(p.id)).filter(Boolean).map(toP);
+  const pts=[toP(c.hq.ll), ...ar, ...(GL.capas.act?(c.mundo||[]).map(x=>toP(x[1])):[])];
   if(!pts.length) return;
-  const xs=pts.map(p=>p[0]), ys=pts.map(p=>p[1]);
-  let [x0,x1,y0,y1]=[Math.min(...xs),Math.max(...xs),Math.min(...ys),Math.max(...ys)];
-  const pad=40; x0-=pad; x1+=pad; y0-=pad; y1+=pad;
-  // en recuadros verticales (celular) el mapa llena el alto en vez de dejar franjas de mar arriba y abajo
-  const kFit=Math.min(5, .92/Math.max((x1-x0)/GW,(y1-y0)/GH)), k=Math.max(1, gH2/GH, kFit);
-  // si no entra todo, el encuadre se corre hacia los proyectos argentinos sin dejar afuera la casa matriz si se puede
-  let cx=(x0+x1)/2;
-  if(k>kFit*1.05){ const ar=c.ar.map(p=>llOf(p.id)).filter(Boolean).map(ll=>gProj([ll[1],ll[0]])[0]);
-    if(ar.length){ const ax=ar.reduce((s,v)=>s+v,0)/ar.length, half=GW/k/2*.9; cx=Math.min(Math.max(cx,ax-half),ax+half); } }
-  const t=d3.zoomIdentity.translate(GW/2,GH/2).scale(k).translate(-cx,-(y0+y1)/2);
-  gSvg.transition().duration(REDUCED?0:1100).ease(d3.easeCubicInOut).call(gZoom.transform,t);
+  let ctr=d3.geoCentroid({type:"MultiPoint",coordinates:pts});
+  if(!isFinite(ctr[0])||!isFinite(ctr[1])) ctr=pts[0];
+  let maxD=Math.max(...pts.map(p=>d3.geoDistance(ctr,p)));
+  // si no entra todo en la cara visible, el centro se corre hacia los proyectos argentinos
+  if(maxD>1.25 && ar.length){ const arC=d3.geoCentroid({type:"MultiPoint",coordinates:ar}); ctr=d3.geoInterpolate(arC,ctr)(.55); maxD=Math.max(...pts.map(p=>d3.geoDistance(ctr,p))); }
+  const k=Math.max(1,Math.min(5, .86/Math.sin(Math.min(Math.PI/2,maxD+.08))));
+  glGo(ctr,k);
 }
 function calcKinds(k){ return [...new Set(CIR_EMP[k].ar.map(prodKind))]; }
 
@@ -336,7 +399,7 @@ function card(k){
       return `<p class="note" style="margin:0">Costo de producción oficial: <b>${co.u.startsWith("US$/lb")?"US$ "+nfx(co.v,2):"US$ "+nfx(co.v,co.v<100?2:0)} ${esc(co.u.replace("US$",""))}</b> — ${esc(co.t)}. ${mg!=null?`Con el precio del escenario (${co.pk==="cu"?"US$ "+nfx(px,2):"US$ "+nfx(px,px<100?2:0)}), el margen es de <b>${pct(mg)}</b> del precio.`:`Brent del escenario: US$ ${nfx(px)}.`} <a href="${SRC[co.s].u}" target="_blank" rel="noopener">Fuente ↗</a></p>`; })():""}
     ${tab}
     ${c.claves&&c.claves.length?`<div><p class="eyebrow" style="margin-bottom:6px">Lectura</p><ul class="glclaves">${c.claves.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`:""}
-    ${c.mundo&&c.mundo.length?`<div><p class="eyebrow" style="margin-bottom:6px">El resto de su negocio en el mundo</p><div class="glmundo">${c.mundo.map(([n,,p,nt])=>`<span title="${esc(nt||"")}"><b>${esc(n)}</b> · ${esc(p)}</span>`).join("")}</div></div>`:""}
+    ${c.mundo&&c.mundo.length?`<div><p class="eyebrow" style="margin-bottom:6px">El resto de su negocio en el mundo${r?` · peso hoy en ${esc(c.metN||MET[c.met].l)}`:""}</p><div class="glmundo">${mundoRows(k).map(x=>`<span title="${esc((x.d&&x.d.t)||x.nt||"")}"><b>${esc(x.n)}</b> · ${esc(x.pr)}${shTxt(x)!=="s/d"?` · <b>${esc(shTxt(x))}</b>`:""}</span>`).join("")}</div></div>`:""}
     <div class="glsrc"><p class="eyebrow">Fuentes</p>${srcs.map(s=>`<a href="${SRC[s].u}" target="_blank" rel="noopener">${esc(SRC[s].t)} ↗</a>`).join("")}</div>
   </div>`;
 }
@@ -404,15 +467,22 @@ function renderCircuito(){
       <div class="glgrid">
         <div class="glsec" style="gap:10px">
           <div class="glmapbox"><div id="glMap"></div>
-            <div class="gllegend">
-              <span><i class="sq"></i>Casa matriz</span>
-              <span><i style="background:var(--ink);opacity:.4"></i>Capital: casa matriz → proyecto</span>
-              <span><i class="dt" style="background:var(--ink)"></i>Proyecto en la Argentina</span>
-              <span><svg width="10" height="10" viewBox="-5 -5 10 10"><path d="${d3.symbol(d3.symbolDiamond,40)()}" fill="var(--muted)"/></svg>Otros activos de la empresa elegida</span>
-              ${Object.keys(CIR_PROD).map(k=>`<span><i style="background:${PCOL[k]}"></i>${esc(CIR_PROD[k].n)} → destino</span>`).join("")}
-            </div>
-            <div class="gllegend" style="border-top:0;padding-top:0">
-              ${[["cap","Flujos de capital"],["prod","Destinos de exportación"],["act","Otros activos"]].map(([k,n])=>`<label style="display:inline-flex;gap:5px;align-items:center;cursor:pointer"><input type="checkbox" data-gc="${k}" ${GL.capas[k]?"checked":""}>${n}</label>`).join("")}
+            <div class="glleg" id="glLeg">
+              <button class="gllegbtn" aria-expanded="false" aria-controls="glLegBody"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span>Referencias y capas</span></button>
+              <div class="gllegbody" id="glLegBody" hidden>
+                <div class="gllegh"><b>Cómo leer el globo</b><button class="x" data-legx aria-label="Ocultar las referencias">×</button></div>
+                <div class="gllegend">
+                  <span><i class="sq"></i>Casa matriz</span>
+                  <span><i style="background:var(--ink);opacity:.4"></i>Capital: casa matriz → proyecto</span>
+                  <span><i class="dt" style="background:var(--ink)"></i>Proyecto en la Argentina</span>
+                  <span><svg width="10" height="10" viewBox="-5 -5 10 10"><path d="${d3.symbol(d3.symbolDiamond,40)()}" fill="var(--muted)"/></svg>Otros activos de la empresa elegida</span>
+                  ${Object.keys(CIR_PROD).map(k=>`<span><i style="background:${PCOL[k]}"></i>${esc(CIR_PROD[k].n)} → destino</span>`).join("")}
+                </div>
+                <p class="eyebrow" style="margin:10px 0 6px">Capas</p>
+                <div class="gllegend glcapas">
+                  ${[["cap","Flujos de capital"],["prod","Destinos de exportación"],["act","Otros activos"]].map(([k,n])=>`<label><input type="checkbox" data-gc="${k}" ${GL.capas[k]?"checked":""}>${n}</label>`).join("")}
+                </div>
+              </div>
             </div>
           </div>
           <div id="glRank"></div>
@@ -424,6 +494,11 @@ function renderCircuito(){
       <div id="glCad"></div>
       ${methSec()}`;
     buildMap(document.getElementById("glMap"));
+    // Referencias plegables: cerradas por defecto, se recuerda si el usuario las deja abiertas
+    { const lb=w.querySelector(".gllegbtn"), body=w.querySelector("#glLegBody");
+      const setLeg=o=>{ body.hidden=!o; lb.setAttribute("aria-expanded",o); lb.classList.toggle("on",o); try{ localStorage.setItem("mp-gl-leg",o?"1":"0"); }catch(e){} };
+      lb.onclick=()=>setLeg(body.hidden); w.querySelector("[data-legx]").onclick=()=>setLeg(false);
+      try{ if(localStorage.getItem("mp-gl-leg")==="1" && window.innerWidth>860) setLeg(true); }catch(e){} }
     w.querySelectorAll("[data-gs]").forEach(b=>b.onclick=()=>{ GL.sec=b.dataset.gs; w.querySelectorAll("[data-gs]").forEach(x=>x.setAttribute("aria-pressed",x===b));
       if(GL.sec!=="all" && CIR_EMP[GL.sel].sec!==GL.sec) GL.sel=glKeys().find(k=>CIR_EMP[k].met)||glKeys()[0]; glRefresh(); });
     w.querySelectorAll("[data-gp]").forEach(b=>b.onclick=()=>{ GL.pr=b.dataset.gp; glSave(); w.querySelectorAll("[data-gp]").forEach(x=>x.setAttribute("aria-pressed",x===b)); glRefresh(); });

@@ -46,6 +46,12 @@ const CIR_PROD = {
 };
 
 const CIR_SRC = {
+  rt25seg: { t:"Rio Tinto – Resultados 2025, información financiera por unidad de negocio (Pilbara US$ 25.847 M, aluminio 16.112, Oyu Tolgoi 4.992, Escondida 30% 4.582, Kennecott 2.766, litio 944)", u:"https://announcements.asx.com.au/asxpdf/20260219/pdf/06whs6pphd7pxk.pdf" },
+  glenFY25:{ t:"Glencore – Informe de producción 2025: cobre propio por activo (KCC 188,7 kt, Mutanda 59,1, Collahuasi 177,7, Antamina 130,1, Antapaccay 135,9, Mount Isa 54,1)", u:"https://www.glencore.com/.rest/api/v1/documents/static/a8114247-02e8-4bd8-bc04-81f411ba631c/GLEN_2025-FY-Production-Report.pdf" },
+  bhpOR26: { t:"BHP – Revisión operativa del ejercicio al 30-jun-2026: cobre por activo (Escondida 1.261,2 kt, Spence 212,6, Copper South Australia 320,7, Antamina 151,5)", u:"https://www.bhp.com/-/media/documents/media/reports-and-presentations/2026/260716_bhpoperationalreviewfortheyearended30june2026.pdf" },
+  brkMDA25:{ t:"Barrick – MD&A 2025: producción atribuible por mina (Nevada 1.591 koz, Pueblo Viejo 379, Kibali 303, Loulo-Gounkoto 29, Veladero 230) y 151 kt de cobre en Lumwana", u:"https://s25.q4cdn.com/322814910/files/doc_financial/quarterly_results/2025/q4/Barrick_Q4_2025_MD-A.pdf" },
+  lunMDA25:{ t:"Lundin Mining – MD&A 2025: ingresos por operación (Candelaria US$ 1.769 M, Caserones 1.618,9, Chapada 665,3)", u:"https://mb.cision.com/Main/18388/4310463/3944258.pdf" },
+  muxPR25: { t:"McEwen – Resultados 2025: producción por operación (Gold Bar 33.227 GEO, Fox 23.187, El Gallo 1.152)", u:"https://s21.q4cdn.com/390685383/files/doc_news/archive/2026/Q4-YE_2025_Results_PR.pdf" },
   rt25:    { t:"Rio Tinto – Resultados 2025: ingresos US$ 57.600 M, EBITDA subyacente US$ 25.400 M, 57 kt LCE (46 kt atribuibles)", u:"https://www.riotinto.com/en/invest/reports" },
   rtH126:  { t:"Rio Tinto – Resultados 1S 2026: 27,3 kt LCE (+53%), primera producción de Fénix 1B y Sal de Vida", u:"https://www.sec.gov/Archives/edgar/data/0000863064/000086306426000035/ex991results.htm" },
   rtRinc:  { t:"Rio Tinto – Financiamiento de US$ 1.175 M para Rincón (US$ 2.500 M de inversión, 60 kt/año, producción desde 2028)", u:"https://www.sec.gov/Archives/edgar/data/863064/000086306426000019/ex08d11mr_rinconfinancing.htm" },
@@ -484,3 +490,58 @@ const CIR_COSTO = {
   vista:   { v:4.4, u:"US$/boe", pk:"brent", t:"Costo de extracción (lifting) 2025", s:"visLC" },
   shandong:{ v:1620, u:"US$/oz", pk:"au", t:"AISC previsto de Veladero para 2025 (su único activo en el país)", s:"brkVel" }
 };
+
+// Peso de cada activo fuera de la Argentina, en la misma métrica que la base de la empresa (CIR_EMP[k].met).
+// v: valor del activo; est: estimación propia a partir de datos publicados; fuera: no entra en la métrica (otro producto);
+// con: el valor está sumado en otro activo de la lista. Activos sin dato publicado por activo no figuran.
+const CIR_MSH = {
+  riotinto: {
+    "Pilbara": { v:25847, t:"Ingresos 2025 de Pilbara", s:"rt25seg" },
+    "Simandou": { v:0, t:"Primer embarque en diciembre de 2025: sin ingresos en el año", s:"rt25seg" },
+    "Oyu Tolgoi": { v:4992, t:"Ingresos 2025 (66%)", s:"rt25seg" },
+    "Escondida (30%)": { v:4582, t:"Ingresos 2025 de su 30%", s:"rt25seg" },
+    "Kennecott": { v:2766, t:"Ingresos 2025", s:"rt25seg" },
+    "Saguenay": { v:16112, t:"Todo el negocio de aluminio (Canadá, Australia y Nueva Zelanda), ingresos 2025", s:"rt25seg" },
+    "Nemaska / Bécancour": { v:0, t:"En desarrollo: sin ingresos en 2025", s:"rt25seg" },
+    "Jadar": { v:0, t:"Proyecto frenado: sin ingresos", s:"rt25seg" }
+  },
+  glencore: {
+    "Collahuasi (44%)": { v:177.7, t:"Cobre propio 2025 (44%)", s:"glenFY25" },
+    "Antamina (33,75%)": { v:130.1, t:"Cobre propio 2025 (33,75%)", s:"glenFY25" },
+    "Antapaccay": { v:135.9, t:"Cobre propio 2025", s:"glenFY25" },
+    "KCC y Mutanda": { v:247.8, t:"Cobre propio 2025 (KCC 188,7 kt + Mutanda 59,1 kt)", s:"glenFY25" },
+    "Mount Isa": { v:54.1, t:"Cobre propio 2025 (departamento de zinc; la mina de cobre cerró a mediados de año)", s:"glenFY25" },
+    "Cerrejón": { fuera:true, t:"Carbón: no entra en la métrica de cobre", s:"glenFY25" }
+  },
+  bhp: {
+    "Escondida (57,5%)": { v:1261.2, t:"Cobre del ejercicio 2026 (BHP la consolida al 100%)", s:"bhpOR26" },
+    "Spence": { v:212.6, t:"Cobre del ejercicio 2026 (Pampa Norte)", s:"bhpOR26" },
+    "Olympic Dam": { v:320.7, t:"Cobre del ejercicio 2026 (Copper South Australia)", s:"bhpOR26" },
+    "Antamina (33,75%)": { v:151.5, t:"Cobre del ejercicio 2026 (su 33,75%)", s:"bhpOR26" },
+    "Pilbara (WAIO)": { fuera:true, t:"Mineral de hierro: no entra en la métrica de cobre", s:"bhpOR26" },
+    "Jansen": { fuera:true, t:"Potasa, en construcción: no entra en la métrica de cobre", s:"bhpOR26" }
+  },
+  lundin: {
+    "Candelaria": { v:1769.0, t:"Ingresos 2025", s:"lunMDA25" },
+    "Caserones": { v:1618.9, t:"Ingresos 2025", s:"lunMDA25" },
+    "Chapada": { v:665.3, t:"Ingresos 2025", s:"lunMDA25" }
+  },
+  mcewen: {
+    "Gold Bar": { v:114, est:true, t:"33.227 GEO de 57.566 vendidos en EE.UU., Canadá y México: parte proporcional de los US$ 197,6 M", s:"muxPR25" },
+    "Fox Complex y Stock": { v:80, est:true, t:"23.187 GEO: parte proporcional de los US$ 197,6 M", s:"muxPR25" },
+    "El Gallo / Fénix": { v:4, est:true, t:"1.152 GEO: parte proporcional de los US$ 197,6 M", s:"muxPR25" }
+  },
+  barrick: {
+    "Nevada Gold Mines (61,5%)": { v:5457, est:true, t:"1.591 koz atribuibles × ≈ US$ 3.430/oz (mismo criterio que Veladero)", s:"brkMDA25" },
+    "Pueblo Viejo": { v:1300, est:true, t:"379 koz atribuibles (60%) × ≈ US$ 3.430/oz", s:"brkMDA25" },
+    "Kibali": { v:1039, est:true, t:"303 koz atribuibles (45%) × ≈ US$ 3.430/oz", s:"brkMDA25" },
+    "Loulo-Gounkoto": { v:99, est:true, t:"29 koz en 2025: la operación estuvo suspendida casi todo el año", s:"brkMDA25" },
+    "Reko Diq": { v:0, t:"En construcción: sin ingresos", s:"brkMDA25" },
+    "Lumwana": { v:1475, est:true, t:"151 kt de cobre; ingresos de cobre consolidados de Barrick en 2025", s:"brkMDA25" }
+  },
+  posco: {
+    "Pohang": { v:24656, est:true, t:"Acero de POSCO (Pohang y Gwangyang juntas): KRW 35,0 de 69,1 billones de ventas en 2025", s:"pos25" },
+    "Gwangyang": { con:"Pohang", t:"Incluida en el acero de POSCO junto con Pohang", s:"pos25" }
+  }
+};
+
