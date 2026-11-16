@@ -45,7 +45,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/pie.css?v=20261106b">
+<link rel="stylesheet" href="css/pie.css?v=20261116b">
 <style>
 /* Layout: tablero de una pantalla — panel de capas a la izquierda, mapa al centro, ficha deslizable sobre el mapa. */
 :root{
@@ -736,6 +736,41 @@ body.gl-full .vtip{z-index:80}
 .gsbody .v small{display:block;font-weight:400;color:var(--muted);font-size:11px}
 .gsgo{align-self:flex-start;margin-top:8px;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;color:var(--ink);min-height:32px}
 .glhint{bottom:56px}
+/* IPI minero: petróleo, gas y minería por separado */
+.tile.conj{border-style:dashed;background:none}
+.ipcmp .iphead,.ipcmp .ipr{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center}
+.ipcmp .iphead{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.ipcmp .ipr{padding:6px 4px;border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent);font-size:13px;opacity:.72}
+.ipcmp .ipr.own,.ipcmp .ipr.tot{opacity:1}
+.ipcmp .ipr.tot .ipn{font-weight:600}
+.ipcmp .ipn{display:flex;align-items:center;gap:7px;min-width:0}
+.ipcmp .ipn i{width:9px;height:9px;border-radius:2px;background:var(--c);flex:none}
+.ipcmp .ipv,.ipcmp .ipl{display:flex;align-items:center;gap:6px;min-width:0}
+.ipcmp b{font-variant-numeric:tabular-nums;font-weight:600;font-size:12.5px;white-space:nowrap;min-width:48px;text-align:right}
+.ipb,.ipb1{position:relative;flex:1;height:10px;background:var(--bg);border-radius:3px;min-width:30px}
+.ipb::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--ink);opacity:.4}
+.ipb i{position:absolute;top:0;bottom:0;border-radius:2px;background:var(--c)}
+.ipb i.neg{background:color-mix(in srgb,var(--c) 45%,var(--panel));outline:1px solid var(--c);outline-offset:-1px}
+.ipb1 i{position:absolute;left:0;top:0;bottom:0;border-radius:2px;background:var(--c)}
+.ipb1 s{position:absolute;top:-3px;bottom:-3px;width:1.5px;background:var(--ink);text-decoration:none}
+@media (max-width: 640px){
+  .ipcmp .iphead{display:none}
+  .ipcmp .ipr{grid-template-columns:1fr 1fr 1fr;row-gap:4px}
+  .ipcmp .ipn{grid-column:1/-1}
+  .ipcmp .ipv:nth-of-type(2)::before{content:"Interanual";font-size:10px;color:var(--muted)}
+  .ipcmp .ipv:nth-of-type(3)::before{content:"Acumulado";font-size:10px;color:var(--muted)}
+  .ipcmp .ipl::before{content:"2016=100";font-size:10px;color:var(--muted)}
+  .ipcmp b{min-width:0;font-size:12px}
+  .ipcmp .ipv,.ipcmp .ipl{flex-wrap:wrap;gap:2px 6px}
+  .ipcmp .ipv::before,.ipcmp .ipl::before{flex-basis:100%}
+  .ipcmp .ipb,.ipcmp .ipb1{min-width:0;flex:1 1 30px}
+  .ipcmp b{text-align:left}
+}
+/* pestañas de Actividad en el celular: una sola línea por pestaña */
+@media (max-width: 640px){
+  .sttabs{display:grid!important;grid-template-columns:repeat(4,auto);width:100%}
+  .sttabs button{white-space:nowrap;padding:7px 6px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:0}
+}
 /* selector de empresa del laboratorio */
 .vsel{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px}
 .vsel span{font-weight:600}
@@ -834,27 +869,28 @@ body.gl-full .vtip{z-index:80}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@14.4.0/dist/motion.js"></script>
-<script src="data/geo/departamentos.js?v=20261106b"></script>
-<script src="data/geo/provincias.js?v=20261106b"></script>
-<script src="data/manual/fuentes.js?v=20261106b"></script>
-<script src="data/auto/fuentes-auto.js?v=20261106b"></script>
-<script src="data/manual/empresas.js?v=20261106b"></script>
-<script src="data/manual/activos.js?v=20261106b"></script>
-<script src="data/auto/mercado.js?v=20261106b"></script>
-<script src="data/manual/estadisticas.js?v=20261106b"></script>
-<script src="data/manual/fichas.js?v=20261106b"></script>
-<script src="data/manual/rigi.js?v=20261106b"></script>
-<script src="data/auto/siacam.js?v=20261106b"></script>
-<script src="data/auto/viz.js?v=20261106b"></script>
-<script src="data/auto/produccion.js?v=20261106b"></script>
-<script src="data/auto/meta.js?v=20261106b"></script>
-<script src="data/geo/mundo.js?v=20261106b"></script>
-<script src="data/manual/circuito.js?v=20261106b"></script>
-<script src="js/app.js?v=20261106b"></script>
-<script src="js/circuito.js?v=20261106b"></script>
-<script src="data/auto/actividad.js?v=20261106b"></script>
-<script src="js/actividad.js?v=20261106b"></script>
-<script src="js/sitio.config.js?v=20261106b"></script>
-<script src="js/pie.js?v=20261106b"></script>
+<script src="data/geo/departamentos.js?v=20261116b"></script>
+<script src="data/geo/provincias.js?v=20261116b"></script>
+<script src="data/manual/fuentes.js?v=20261116b"></script>
+<script src="data/auto/fuentes-auto.js?v=20261116b"></script>
+<script src="data/manual/empresas.js?v=20261116b"></script>
+<script src="data/manual/activos.js?v=20261116b"></script>
+<script src="data/auto/mercado.js?v=20261116b"></script>
+<script src="data/manual/estadisticas.js?v=20261116b"></script>
+<script src="data/manual/fichas.js?v=20261116b"></script>
+<script src="data/manual/rigi.js?v=20261116b"></script>
+<script src="data/auto/siacam.js?v=20261116b"></script>
+<script src="data/auto/viz.js?v=20261116b"></script>
+<script src="data/auto/produccion.js?v=20261116b"></script>
+<script src="data/auto/meta.js?v=20261116b"></script>
+<script src="data/geo/mundo.js?v=20261116b"></script>
+<script src="data/manual/circuito.js?v=20261116b"></script>
+<script src="js/app.js?v=20261116b"></script>
+<script src="js/circuito.js?v=20261116b"></script>
+<script src="data/auto/actividad.js?v=20261116b"></script>
+<script src="data/manual/ipimin.js?v=20261116b"></script>
+<script src="js/actividad.js?v=20261116b"></script>
+<script src="js/sitio.config.js?v=20261116b"></script>
+<script src="js/pie.js?v=20261116b"></script>
 
 </body></html>

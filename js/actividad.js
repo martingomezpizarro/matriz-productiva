@@ -280,11 +280,36 @@ function secTiles(s){
   const ytd=(()=>{ const yy=E.meses[n].slice(0,4), i0=E.meses.findIndex(m=>m.startsWith(yy)); const cur=d3.sum(a.slice(i0,n+1)), prev=d3.sum(a.slice(i0-12,n-11)); return pctv(cur,prev); })();
   const t=(l,v,u,p,src)=>`<div class="tile"><span class="l">${l}</span><span class="v">${v}<small>${u}</small></span><span class="p">${p}</span>${src}</div>`;
   const sL=k=>SRC[k]?`<a href="${SRC[k].u}" target="_blank" rel="noopener" title="${SRC[k].t}">Fuente: ${SRC[k].t.split(" – ")[0]} ↗</a>`:"";
-  const nota=s==="ag"?"":`<p class="note" style="max-width:76ch">En las cuentas nacionales el petróleo, el gas y la minería metalífera forman un solo sector («Explotación de minas y canteras»). El EMAE no los abre por separado; el tablero de abajo suma indicadores propios de cada rubro.</p>`;
-  return `<div class="tiles">${t(s==="ag"?"Agro en el PIB":"Minas y canteras en el PIB",nf(r[k]/r.pib*100,1),"%",`${r.y==="12m"?"Últimos 12 meses":r.y}, a precios corrientes`,sL("actPib"))}
+  if(s==="ag") return `<div class="tiles">${t("Agro en el PIB",nf(r[k]/r.pib*100,1),"%",`${r.y==="12m"?"Últimos 12 meses":r.y}, a precios corrientes`,sL("actPib"))}
     ${t("Actividad, variación interanual",sg(yoy),"%",`${mlab(E.meses[n])} (EMAE)`,sL("actEmae"))}
     ${t("Acumulado del año",sg(ytd),"%",`ene–${mlab(E.meses[n]).split("-")[0]} vs mismo período de ${+E.meses[n].slice(0,4)-1}`,sL("actEmae"))}
-    ${t(`Crecimiento promedio ${ventana(an,yl,6)}–${yl}`,sg(cagr(an,ventana(an,yl,6),yl)),"% anual","Índice EMAE en volumen",sL("actEmae"))}</div>${nota}`;
+    ${t(`Crecimiento promedio ${ventana(an,yl,6)}–${yl}`,sg(cagr(an,ventana(an,yl,6),yl)),"% anual","Índice EMAE en volumen",sL("actEmae"))}</div>`;
+  // Oil & Gas y Minería: el EMAE los junta; el IPI minero del INDEC los separa.
+  const I=typeof IPIMIN!=="undefined"?IPIMIN:null;
+  const mesI=I?mlab(I.mes):"";
+  const own = I ? I[s].map(x=>t(x.n, sg(x.a), "%", `${mesI} interanual · acumulado del año ${sg(x.y)}%${x.q?" · "+x.q:""}`, sL(I.s))).join("") : "";
+  const conj=`<div class="tile conj"><span class="l">Petróleo, gas y minería juntos (EMAE «minas y canteras»)</span><span class="v">${sg(yoy)}<small>%</small></span><span class="p">${mlab(E.meses[n])} interanual · acumulado ${sg(ytd)}% · ${nf(r[k]/r.pib*100,1)}% del PIB${r.y==="12m"?" (últimos 12 meses)":" ("+r.y+")"}</span>${sL("actEmae")}</div>`;
+  return `<div class="tiles">${own}</div>
+    ${I?ipiCompare(s):""}
+    <p class="note" style="max-width:78ch">En las cuentas nacionales el petróleo, el gas y la minería forman un solo sector («Explotación de minas y canteras»), por eso el EMAE da el mismo número en las dos pestañas. Las fichas de arriba usan el <b>índice de producción industrial minero</b> del INDEC, que sí los separa.</p>
+    <div class="tiles">${conj}</div>`;
+}
+// Comparación de los rubros del IPI minero: variación interanual, acumulada y nivel frente a 2016.
+function ipiCompare(s){
+  const I=IPIMIN, rows=[...I.og.map(x=>({...x,sec:"og"})),...I.mi.map(x=>({...x,sec:"mi"})),{...I.gral,k:"gral",sec:"x",tot:true}];
+  const mxA=Math.max(...rows.flatMap(x=>[Math.abs(x.a),Math.abs(x.y)])), mxI=Math.max(...rows.map(x=>x.i));
+  const bar=(v,mx)=>{ const w=Math.abs(v)/mx*50; return `<span class="ipb"><i class="${v<0?"neg":"pos"}" style="${v<0?`right:50%;width:${w}%`:`left:50%;width:${w}%`}"></i></span>`; };
+  const row=x=>`<div class="ipr${x.sec===s?" own":""}${x.tot?" tot":""}" style="--c:${x.sec==="x"?"var(--ink)":cvar(x.sec)}">
+      <span class="ipn"><i></i>${x.n}</span>
+      <span class="ipv">${bar(x.a,mxA)}<b>${sg(x.a)}%</b></span>
+      <span class="ipv">${bar(x.y,mxA)}<b>${sg(x.y)}%</b></span>
+      <span class="ipl"><span class="ipb1"><i style="width:${x.i/mxI*100}%"></i><s style="left:${100/mxI*100}%"></s></span><b>${nf(x.i,0)}</b></span></div>`;
+  return `<div class="vcard wide ipcmp"><h3>Petróleo, gas y minería, por separado<span class="tag">IPI minero</span></h3>
+    <p class="sub">Variación del volumen producido en ${mlab(I.mes)} frente al mismo mes de ${+I.mes.slice(0,4)-1}, en lo que va del año, y nivel frente a 2016 (= 100, la marca vertical)</p>
+    <div class="iphead"><span></span><span>Interanual</span><span>Acumulado del año</span><span>Nivel (2016 = 100)</span></div>
+    ${rows.map(row).join("")}
+    <p class="read">El litio produce casi 5 veces lo de 2016 y el petróleo crudo, 86% más; la minería metalífera está en menos de la mitad del nivel de 2016 (en 2018 dejó de producir Bajo La Alumbrera, la única mina de cobre en operación).</p>
+    ${srcRow(["ipiMin","ipiMinSerie"])}</div>`;
 }
 
 // ---------- montaje ----------

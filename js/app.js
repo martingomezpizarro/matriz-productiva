@@ -588,7 +588,7 @@ function renderStats(){
   if(!st.stab){ try{ st.stab=localStorage.getItem("mp-stab"); }catch(e){} if(!STAB.some(([k])=>k===st.stab)) st.stab="pan"; }
   const s=st.stab;
   el.innerHTML = `<div class="sthead"><div><p class="eyebrow">Actividad y estadísticas</p><p class="note" style="max-width:72ch">Cómo viene la economía mes a mes, cuánto pesa cada sector en el PIB y, en cada pestaña, el detalle de Oil &amp; Gas, minería y agro. Todo con fuente oficial; tocá cualquier gráfico para ver los valores.</p></div>
-    <div class="seg sttabs" role="tablist" aria-label="Sección">${STAB.map(([k,n])=>`<button role="tab" data-stab="${k}" aria-pressed="${k===s}" aria-selected="${k===s}">${k!=="pan"?`<i style="background:${cvar(k)}"></i>`:""}${n}</button>`).join("")}</div></div>` +
+    <div class="seg sttabs" role="tablist" aria-label="Sección">${STAB.map(([k,n])=>`<button role="tab" data-stab="${k}" aria-pressed="${k===s}" aria-selected="${k===s}">${k!=="pan"?`<i style="background:${cvar(k)}"></i>`:""}${n.replace(" y ganadería",'<span class="xs-hide"> y ganadería</span>')}</button>`).join("")}</div></div>` +
     (s==="pan" ? actPanoramaHTML() + `<section class="statsec x"><h2><i></i>Los tres sectores en el comercio exterior y la bolsa</h2><p class="note" style="max-width:72ch;margin-top:-8px">Los tres sectores comparados entre sí y con el resto de la economía.</p>${vizCards("x")}</section>`
                : statSector(s));
   el.querySelectorAll("[data-stab]").forEach(b=>b.onclick=()=>{ st.stab=b.dataset.stab; try{ localStorage.setItem("mp-stab",st.stab); }catch(e){} tipOff(); renderStats(); el.scrollTop=0; });
