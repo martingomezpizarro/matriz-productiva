@@ -9,6 +9,7 @@ const GL = { pr:"estudio", sec:"all", sel:"riotinto", capas:{cap:true, prod:true
 try{ const g=JSON.parse(localStorage.getItem("mp-gl")||"{}"); if(g.pr&&CIR_META.precios[g.pr]) GL.pr=g.pr; if(g.sel&&CIR_EMP[g.sel]) GL.sel=g.sel; }catch(e){}
 const glSave = ()=>{ try{ localStorage.setItem("mp-gl", JSON.stringify({pr:GL.pr, sel:GL.sel})); }catch(e){} };
 
+const SECSYM = { og:d3.symbolCircle, mi:d3.symbolTriangle, ag:d3.symbolCross };
 const PCOL = { li:"var(--c1)", cu:"var(--c2)", gas:"var(--c3)", au:"var(--c4)", ag:"var(--c4)", ure:"var(--c5)", oil:"var(--c6)" };
 const PNOM = k => (CIR_PROD[k]||CIR_PROD.au).n;
 const MET = {
@@ -253,7 +254,9 @@ function drawMap(){
   caps.forEach(o=>{ if(seenP.has(o.p.id)) return; seenP.add(o.p.id);
     const on=CIR_EMP[sel].ar.some(p=>p.id===o.p.id);
     const m=marker(gR,o.ll); if(on) m.append("circle").attr("r",4.2).attr("class","glpulse").style("--c",sc);
-    m.append("circle").attr("r",on?4.6:3.6).attr("class","arp"+(on?" on":"")).style("--c",sc);
+    // color y forma por sector del activo (Oil & Gas ●, minería ▲, agro ✚), para no depender sólo del color
+    const as=(byId[o.p.id]||{}).s||CIR_EMP[o.k].sec;
+    m.append("path").attr("d",d3.symbol(SECSYM[as]||d3.symbolCircle,on?72:46)()).attr("class","arp"+(on?" on":"")).style("--c",cvar(as));
     if(on){ const it=rSel&&rSel.items.find(x=>x.p.id===o.p.id), pp=CIR_EMP[sel].ar.find(p=>p.id===o.p.id);
       const t=m.append("text").attr("class","arlab").attr("x",7).attr("y",4).text((pp?pp.n:o.p.n).replace(/ \(.*\)$/,""));
       if(it&&it.sh) t.append("tspan").attr("class","shv").text(" "+pct(it.sh,1)); }
@@ -474,7 +477,7 @@ function renderCircuito(){
                 <div class="gllegend">
                   <span><i class="sq"></i>Casa matriz</span>
                   <span><i style="background:var(--ink);opacity:.4"></i>Capital: casa matriz → proyecto</span>
-                  <span><i class="dt" style="background:var(--ink)"></i>Proyecto en la Argentina</span>
+                  ${["og","mi","ag"].map(k=>`<span><svg width="11" height="11" viewBox="-5.5 -5.5 11 11"><path d="${d3.symbol(SECSYM[k],46)()}" fill="var(--${k})"/></svg>Proyecto en la Argentina · ${SECT[k].n}</span>`).join("")}
                   <span><svg width="10" height="10" viewBox="-5 -5 10 10"><path d="${d3.symbol(d3.symbolDiamond,40)()}" fill="var(--muted)"/></svg>Otros activos de la empresa elegida</span>
                   ${Object.keys(CIR_PROD).map(k=>`<span><i style="background:${PCOL[k]}"></i>${esc(CIR_PROD[k].n)} → destino</span>`).join("")}
                 </div>
