@@ -345,9 +345,9 @@ def clave(nm):
     return k or nm.lower()
 from collections import Counter
 _nombres = {}
-for a in ACT:
-    for nm in [a[8]] + [o[0] for o in (a[9] or [])]:
-        if isinstance(nm, str): _nombres.setdefault(clave(nm), Counter())[nm] += 1
+for a in ACT:  # el nombre de dueño pesa más que el de operador (suele venir mejor escrito)
+    for nm, w in [(a[8], 1)] + [(o[0], 3) for o in (a[9] or [])]:
+        if isinstance(nm, str): _nombres.setdefault(clave(nm), Counter())[nm] += w
 EMP, IDX = [], {}
 def ix(nm):
     if nm is None: return None

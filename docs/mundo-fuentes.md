@@ -48,7 +48,7 @@ Investigación del 16/17-nov-2026 para la página `mundo.html` (beta). Pregunta:
   - Mapa mundial con ≈ 15.000 activos; color y forma por sector; tamaño del punto según producción o capacidad; los activos argentinos con aro azul y por encima del resto.
   - Para cada tipo de activo: ranking por activo, por país y por empresa (producción atribuible según su participación), y ranking de eficiencia donde hay dato. La Argentina se intercala siempre aunque no esté en el top.
   - Ficha de cada activo con dueños y % (barras), operador, puesto mundial y link a GEM.wiki.
-  - Ficha de empresa: todos sus activos en el mundo, su puesto y **qué parte de su producción está en la Argentina** (p. ej. TotalEnergies ≈ 3%, BP ≈ 16%, Tecpetrol ≈ 67%).
+  - Ficha de empresa: todos sus activos en el mundo, su puesto y **qué parte de su producción está en la Argentina** (p. ej. TotalEnergies ≈ 3%, BP ≈ 2%, Chevron ≈ 2%, Tecpetrol ≈ 67%).
   - Agro por país: mapa coroplético y rankings de producción, rendimiento y exportaciones.
 - **Datos automáticos**: `scripts/mundo/mundo.py` + workflow `mundo-datos.yml` (día 2 de cada mes y cuando cambia el script). Si una fuente falla, conserva lo anterior.
 
@@ -59,7 +59,7 @@ Algunos resultados (datos de las fuentes, no estimaciones propias):
 | Producción de petróleo y gas (yacimientos) | 0,8% | 25° de 75 |
 | Capacidad de refinación | 0,6% | 31° de 102 |
 | Producción de soja (FAO 2024) | 12,1% | 3° |
-| Exportación de harina y aceite de soja (USDA) | 1° | 1° |
+| Exportación de harina y de aceite de soja (USDA, campaña 2024/25) | ≈ 30 Mt de harina y 7 Mt de aceite | 1° en ambas |
 
 ## Advertencias importantes
 
