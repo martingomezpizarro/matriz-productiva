@@ -298,7 +298,7 @@ def p_psd():
             d = df[df["Commodity_Description"] == com]
             if d.empty: continue
             cur = dt.date.today().year
-            yrs = sorted(y for y in d["Market_Year"].unique() if y <= cur - 1)
+            yrs = sorted(y for y in d["Market_Year"].unique() if y <= cur - 2)  # campaña cerrada (la del año pasado todavía es estimación)
             # último año con dato mayormente completo
             y = yrs[-1]
             dy = d[d["Market_Year"] == y]
@@ -333,14 +333,35 @@ for nombre, fn in [("goget", p_goget), ("giomt", p_giomt), ("gcmt", p_gcmt), ("c
     paso(nombre, fn)
 
 # tabla de empresas: los nombres se guardan una vez y los activos usan el índice
+# Las fuentes escriben la misma empresa de varias formas ("BP", "BP P.L.C.", "Bp Plc"): se unifican por una
+# clave sin mayúsculas, puntuación ni forma societaria, y se muestra el nombre más frecuente.
+SUF = r"(?<![\w-])(sa|sau|sab de cv|de cv|inc|incorporated|corp|corporation|co|company|ltd|limited|llc|plc|ag|se|nv|bv|asa|spa|gmbh|pjsc|ojsc|jsc|oao|pao|tbk|berhad|bhd|sl|srl|the|group|holdings?)(?![\w-])"
+def clave(nm):
+    k = re.sub(r"\(.*?\)", " ", nm.lower())
+    k = k.replace(".", "")
+    k = re.sub(r"[,&'’]", " ", k)
+    k = re.sub(SUF, " ", k)
+    k = re.sub(r"\s+", " ", k).strip()
+    return k or nm.lower()
+from collections import Counter
+_nombres = {}
+for a in ACT:
+    for nm in [a[8]] + [o[0] for o in (a[9] or [])]:
+        if isinstance(nm, str): _nombres.setdefault(clave(nm), Counter())[nm] += 1
 EMP, IDX = [], {}
 def ix(nm):
     if nm is None: return None
-    if nm not in IDX: IDX[nm] = len(EMP); EMP.append(nm)
-    return IDX[nm]
+    k = clave(nm)
+    if k not in IDX: IDX[k] = len(EMP); EMP.append(_nombres[k].most_common(1)[0][0] if k in _nombres else nm)
+    return IDX[k]
 for a in ACT:
     if isinstance(a[8], str): a[8] = ix(a[8])
-    a[9] = [[ix(o[0]) if isinstance(o[0], str) else o[0], o[1]] for o in (a[9] or [])]
+    m = {}
+    for o in (a[9] or []):
+        k = ix(o[0]) if isinstance(o[0], str) else o[0]
+        if k in m and m[k] is not None and o[1] is not None: m[k] += o[1]
+        elif k not in m: m[k] = o[1]
+    a[9] = [[k, (round(v, 2) if v is not None else None)] for k, v in m.items()]
 D["emp"] = EMP
 D["act"] = ACT
 # países presentes

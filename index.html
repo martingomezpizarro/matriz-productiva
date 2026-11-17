@@ -85,6 +85,7 @@ a{color:inherit}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;padding:2px;background:var(--panel)}
 .seg button{border:0;background:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:500;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg .segl{padding:6px 14px;border-radius:6px;font-weight:500;color:var(--muted);text-decoration:none}.seg .segl:hover{color:var(--ink)}.seg .segl sup{font-size:9px;margin-left:1px}
 .search{position:relative}
 .search input{width:240px;max-width:100%;padding:7px 10px 7px 30px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
 .search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--faint)}
@@ -796,6 +797,7 @@ body.gl-full .vtip{z-index:80}
       <button id="vCo" aria-pressed="false">Empresas</button>
       <button id="vSt" aria-pressed="false" title="Actividad mensual, PIB por sector y estadísticas de cada sector">Actividad</button>
       <button id="vGl" aria-pressed="false" title="Qué pesa la Argentina en cada empresa con proyectos RIGI">Circuito<span class="xs-hide"> global</span></button>
+      <a class="segl" href="mundo.html" title="Petróleo y gas y minería de todo el mundo: dueños, participaciones y rankings (beta)">Mundo<sup>β</sup></a>
     </div>
     <button class="btn-admin" id="btnAdmin" hidden aria-label="Administración" title="Administración"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     <button class="btn-layers" id="btnLayers" aria-expanded="false" aria-label="Capas">Capas</button>

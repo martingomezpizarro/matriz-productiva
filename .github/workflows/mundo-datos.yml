@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: "0 10 2 * *"   # día 2 de cada mes, 07:00 de Argentina
   push:
-    branches: [mundo]
+    branches: [main]
     paths: ["scripts/mundo/mundo.py", ".github/workflows/mundo-datos.yml"]
   workflow_dispatch:
 permissions:
