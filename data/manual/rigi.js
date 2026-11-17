@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-15",
+  actualizado: "2026-11-17",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -59,6 +59,7 @@ const RIGI_SRC = {
   bo1808_26: { t: "Boletín Oficial – Res. ME 1808/2026 (Bajo del Choique – La Invernada), 19-oct-2026", u: BO("2026-10-19") },
   bo1854_26: { t: "Boletín Oficial – Res. ME 1854/2026 (Agua Rica, Glencore), 27-oct-2026", u: BO("2026-10-27") },
   bo1976_26: { t: "Boletín Oficial – Res. ME 1976/2026 y 1977/2026 (proyecto NGL de TGS: Midstream de Gas del Sur y Procesadora de Gas del Sur), 13-nov-2026", u: BO("2026-11-13") },
+  bo1983_26: { t: "Boletín Oficial – Res. ME 1983/2026 (Parque Eólico La Rinconada, Vientos La Rinconada S.A.U.), 16-nov-2026", u: BO("2026-11-16") },
   glc_ago25: { t: "Glencore – solicitudes RIGI de El Pachón y Agua Rica (ago-2025)", u: "https://www.glencore.com/media-and-insights/news/glencore-submits-RIGI-applications-in-respect-of-its-argentine-copper-projects" },
   ypfArgLNG: { t: "YPF – Argentina LNG presentó su solicitud de adhesión al RIGI (comunicado, 13-ago-2026)", u: "https://argentina-lng.ypf.com/assets/pdf/ENG-Argentina-LNG-Adhesion-RIGI.pdf" },
   ypfBdT:    { t: "YPF – Comunicado: solicitud de adhesión al RIGI del proyecto Bajo del Toro (30-oct-2026)", u: "https://novedades.ypf.com/noticias.html" },
@@ -167,5 +168,13 @@ const RIGI = {
   "ag-fertilpampa": { st:"aprobado", res:"1468/2026", bo:"2026-09-07", vpu:"Fértil Pampa S.A.U. (Pampa Energía)", tipo:"Proyecto estratégico de exportación de largo plazo · Proyecto Único «Fertilizantes»",
     comp:2693, adh:"2026-08-03", min2a:1666, limite:"2029-12-01",
     cap:"Dos plantas de urea granulada de 3.000 t/día cada una y una planta de amoníaco de 3.450 t/día en el Puerto de Ingeniero White (≈ 80 ha), con gas de Vaca Muerta. Etapa 1 (jul-2026 a dic-2027, ingeniería y compras): US$ 1.105 M; etapa 2 (2028 a dic-2029, montaje y puesta en marcha): US$ 1.588 M",
-    verif:"bo_extracto", src:["bo1468_26"] }
+    verif:"bo_extracto", src:["bo1468_26"] },
+
+  // ---------------- ENERGÍA ELÉCTRICA ----------------
+  // Sin punto en el mapa: el mapa todavía no tiene un sector de generación eléctrica.
+  "en-rinconada": { n:"Parque Eólico La Rinconada", prov:"Buenos Aires", s:"en", e:"eol",
+    st:"aprobado", res:"1983/2026", bo:"2026-11-16", vpu:"Vientos La Rinconada S.A.U. (Grupo Techint)",
+    total:230.8, comp:218.3, adh:"2026-10-23", min2a:112.1, limite:"2027-03-31",
+    cap:"94,5 MW con 21 aerogeneradores en el partido de Olavarría (a ≈ 40 km de la ciudad), conectado a la E.T. La China (Transba); prioridad de despacho de 91,5 MW. Computables: US$ 110,6 M el primer año y US$ 1,4 M el segundo. La energía abastece a la planta Siderca (Tenaris) en Campana; no pidió libre disponibilidad de divisas de exportación",
+    verif:"bo_extracto", src:["bo1983_26"] }
 };
