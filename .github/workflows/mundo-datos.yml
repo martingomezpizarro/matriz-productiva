@@ -1,0 +1,32 @@
+name: Mundo - actualizar datos
+on:
+  schedule:
+    - cron: "0 10 2 * *"   # día 2 de cada mes, 07:00 de Argentina
+  push:
+    branches: [mundo]
+    paths: ["scripts/mundo/mundo.py", ".github/workflows/mundo-datos.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: mundo-datos
+  cancel-in-progress: false
+jobs:
+  mundo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install requests "pandas>=2.1" pycountry
+      - run: python scripts/mundo/mundo.py
+      - name: Guardar cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/auto/mundo.js
+          if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git commit -m "Datos mundiales actualizados $(date -u +%Y-%m-%d)"
+          git pull --rebase -q || true
+          git push
