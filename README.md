@@ -14,6 +14,7 @@ terminos.html         términos y condiciones de uso, fuentes y privacidad
 js/app.js             lógica del mapa, la tabla, las empresas y los gráficos
 js/sitio.config.js    datos del autor, links de colaboración y licencia (pie y términos)
 js/pie.js             pie de página institucional (barra + ventana «Acerca de»)
+js/mundo.js           página mundo.html (beta): activos de petróleo y gas y minería de todo el mundo, dueños, rankings
 js/circuito.js        vista «Circuito global»: mapa mundial y peso de la Argentina en cada empresa del RIGI
 js/actividad.js       vista «Actividad»: tablero mensual, PIB por sector, aportes al crecimiento y proyección 2030
 css/pie.css           estilos del pie
@@ -104,3 +105,18 @@ Lo que no sale de un portal con formato estable (plantas, ductos, RIGI, fichas t
 ---
 
 Proyecto de Martín Gómez Pizarro.
+
+### Mundo (beta) – `mundo.html`
+
+Mapa mundial con yacimientos de petróleo y gas, refinerías y minas (cobre, hierro, bauxita, carbón), sus dueños con el porcentaje de participación, rankings de tamaño y de eficiencia por activo, país y empresa, y el agro comparado por país (producción, rendimiento y exportaciones). La Argentina aparece resaltada en cada ranking.
+
+Lo genera `scripts/mundo/mundo.py` en `data/auto/mundo.js`, con el workflow `.github/workflows/mundo-datos.yml` (día 2 de cada mes, y cada vez que cambia el script). Fuentes:
+
+| Capa | Fuente | Qué aporta |
+|---|---|---|
+| Yacimientos de petróleo y gas | Global Energy Monitor – GOGET (CC BY 4.0) | producción por yacimiento, operador, dueños y casas matrices con % |
+| Minas de hierro y de carbón | Global Energy Monitor – GIOMT y GCMT (CC BY 4.0) | capacidad, producción, dotación, dueños con % |
+| Minas de cobre y bauxita, refinerías | Climate TRACE API v6 (CC BY 4.0) | mineral procesado o capacidad, intensidad de emisiones, dueños |
+| Agro por país | FAOSTAT (QCL) y USDA FAS PSD | producción, superficie, rendimiento y exportaciones |
+
+El análisis de fuentes y lo que falta está en `docs/mundo-fuentes.md`.

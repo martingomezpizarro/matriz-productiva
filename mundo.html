@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mundo · Matriz Productiva Argentina (beta)</title>
+<meta name="description" content="Petróleo y gas, minería y agro en todo el mundo: activos, dueños y participaciones, rankings de tamaño y eficiencia, con la Argentina resaltada.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#06182B">
+<link rel="stylesheet" href="css/pie.css?v=20261117b">
+<style>
+:root{
+  --bg:#EDF0EF; --panel:#F8FAF9; --ink:#16201E; --muted:#5B6865; --faint:#8A9693; --line:#D2D9D6;
+  --land:#E0E6E2; --sea:#D3DFE4; --border:#FFFFFF;
+  --og:#C2501C; --mi:#4C55C8; --ag:#2E8540; --ar:#0B5FA5;
+  --shadow:0 8px 28px rgba(18,30,28,.14);
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root{
+  --bg:#0F1514; --panel:#151C1B; --ink:#E4EBE8; --muted:#97A5A1; --faint:#6E7B78; --line:#28322F;
+  --land:#1D2725; --sea:#0B1113; --border:#0F1514;
+  --og:#E0682F; --mi:#7B83EA; --ag:#47A856; --ar:#5AA9E6; --shadow:0 10px 30px rgba(0,0,0,.5); color-scheme:dark }}
+*{box-sizing:border-box} html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 var(--f-body)}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[hidden]{display:none!important}
+.app{min-height:100%;display:grid;grid-template-columns:270px minmax(0,1fr) 380px;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;padding:12px 16px;height:100vh}
+header{grid-column:1/-1;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font:600 28px/1 var(--f-display);text-transform:uppercase;margin:0;letter-spacing:.01em}
+header .beta{font-size:11px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--muted)}
+header .sp{flex:1}
+header a.back{font-size:13px;text-decoration:none;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 12px}
+.search{position:relative}
+.search input{width:260px;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 10px}
+.sres{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);z-index:20;max-height:320px;overflow:auto}
+.sres button{display:block;width:100%;text-align:left;border:0;background:none;padding:7px 10px;cursor:pointer;font-size:13px}
+.sres button:hover,.sres button:focus{background:var(--bg)}
+.sres small{color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px}
+aside.ctl{padding:14px;overflow:auto}
+.eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.eyebrow:first-child{margin-top:0}
+.tabs{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.tabs button{flex:1;border:0;background:none;padding:7px 6px;cursor:pointer;font-size:13px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.tipo{display:flex;align-items:center;gap:8px;padding:5px 2px;font-size:13px;cursor:pointer}
+.tipo input{margin:0}
+.tipo .n{flex:1}
+.tipo .c{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}
+.sym{flex:none}
+.sec{font:600 15px var(--f-display);text-transform:uppercase;letter-spacing:.03em;margin:12px 0 2px;display:flex;align-items:center;gap:6px}
+.sec i{width:9px;height:9px;border-radius:2px;background:var(--c)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{border:1px solid var(--line);background:none;border-radius:999px;padding:3px 10px;font-size:12px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.note{font-size:12px;color:var(--muted)}
+main.mapbox{position:relative;overflow:hidden;background:var(--sea);border:1px solid var(--line);border-radius:12px;min-height:360px}
+main.mapbox canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:32px;height:32px;border:1px solid var(--line);background:var(--panel);border-radius:7px;cursor:pointer;font-size:15px;line-height:1}
+.leg{position:absolute;left:10px;bottom:10px;background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:12px;display:flex;flex-wrap:wrap;gap:4px 12px;max-width:calc(100% - 20px)}
+.leg span{display:inline-flex;align-items:center;gap:5px}
+.leg .ramp{display:inline-block;width:90px;height:8px;border-radius:2px}
+.tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);padding:8px 10px;font-size:12px;max-width:300px;z-index:30}
+.tip b{font-size:13px}
+aside.side{overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.side>*{flex:none}
+.side h2{font:600 24px/1.05 var(--f-display);text-transform:uppercase;margin:2px 0 4px}
+.side h3{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:6px 0}
+.kpis div{display:flex;flex-direction:column}
+.kpis b{font:600 24px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.kpis span{font-size:11px;color:var(--muted);line-height:1.25}
+.rk{display:grid;grid-template-columns:28px minmax(0,1fr) 92px;align-items:center;gap:2px 8px;padding:4px 6px 3px;border-radius:7px;border:0;background:none;width:100%;text-align:left;cursor:pointer;font-size:13px}
+.rk:hover{background:var(--bg)}
+.rk.ar{background:color-mix(in srgb,var(--ar) 12%,transparent)}
+.rk.ar .nm{font-weight:600}
+.rk .pos{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px;text-align:right}
+.rk .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk .nm small{color:var(--muted);font-weight:400}
+.rk .bar{grid-column:2/4;height:4px;border-radius:0 3px 3px 0;background:var(--c);opacity:.8}
+.rk .v{font-variant-numeric:tabular-nums;font-size:12px;text-align:right;color:var(--muted)}
+.rk .v b{color:var(--ink);font-weight:600}
+.gap{text-align:center;color:var(--faint);font-size:12px;letter-spacing:.2em}
+.own{display:grid;grid-template-columns:minmax(0,1fr) 56px;gap:4px 8px;align-items:center;font-size:13px}
+.own .b{grid-column:1/-1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:4px}
+.own .b i{display:block;height:100%;background:var(--c)}
+.own .p{text-align:right;font-variant-numeric:tabular-nums}
+.own button{border:0;background:none;padding:0;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}
+.dl dt{color:var(--muted)} .dl dd{margin:0}
+.src{font-size:12px;color:var(--muted)}
+.src a{color:var(--muted)}
+.pill{display:inline-block;font-size:11px;border-radius:999px;padding:1px 8px;border:1px solid var(--line);color:var(--muted)}
+.btnl{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}
+footer#pie{grid-column:1/-1}
+@media (max-width:1100px){
+  .app{grid-template-columns:1fr;height:auto}
+  main.mapbox{height:62vh}
+  aside.ctl,aside.side{max-height:none}
+  .search input{width:200px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Matriz productiva · Mundo</h1><span class="beta">beta</span>
+    <span class="sp"></span>
+    <div class="search"><input id="q" type="search" placeholder="Buscar activo, empresa o país" autocomplete="off" aria-label="Buscar activo, empresa o país"><div class="sres" id="qres" hidden></div></div>
+    <a class="back" href="index.html">← Mapa de la Argentina</a>
+  </header>
+
+  <aside class="ctl card" aria-label="Capas y filtros">
+    <div class="tabs" role="group" aria-label="Vista">
+      <button id="tAct" aria-pressed="true">Activos</button>
+      <button id="tAgro" aria-pressed="false">Agro por país</button>
+    </div>
+    <div id="ctlAct">
+      <p class="eyebrow">Capas</p>
+      <div id="tipos"></div>
+      <p class="eyebrow">Estado</p>
+      <div class="chips" id="estados"></div>
+      <p class="eyebrow">Ranking de</p>
+      <select id="foco" style="width:100%;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px"></select>
+      <p class="note" style="margin-top:12px">Tamaño del punto = tamaño del activo. Los activos de la Argentina llevan aro azul y van arriba de todo.</p>
+    </div>
+    <div id="ctlAgro" hidden>
+      <p class="eyebrow">Producto</p>
+      <div id="agroSel"></div>
+      <p class="note" style="margin-top:12px">El agro no tiene una base abierta mundial por establecimiento o empresa: se compara por país (producción, rendimiento y exportaciones).</p>
+    </div>
+  </aside>
+
+  <main class="mapbox" id="mapbox" aria-label="Mapa mundial">
+    <canvas id="cv"></canvas>
+    <div class="zoom"><button id="zIn" aria-label="Acercar">+</button><button id="zOut" aria-label="Alejar">−</button><button id="zAr" aria-label="Ir a la Argentina" title="Ir a la Argentina" style="font-size:11px">AR</button><button id="zW" aria-label="Ver el mundo" title="Ver el mundo" style="font-size:13px">⌂</button></div>
+    <div class="leg" id="leg"></div>
+  </main>
+
+  <aside class="side card" id="side" aria-live="polite"></aside>
+  <footer id="pie" data-modo="compacto"></footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="data/geo/mundo.js?v=20261117b"></script>
+<script src="data/auto/mundo.js?v=20261117b"></script>
+<script src="js/sitio.config.js?v=20261117b"></script>
+<script src="js/mundo.js?v=20261117b"></script>
+<script src="js/pie.js?v=20261117b"></script>
+</body>
+</html>
