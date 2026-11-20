@@ -41,11 +41,45 @@
 .psl input[type=range]{width:100%;accent-color:var(--ink)}
 .pctl>[data-reset]{align-self:flex-start}
 @media (max-width: 860px){ .pgrid{grid-template-columns:1fr} .acttab th.ind,.acttab td.ind{min-width:170px} }
+
+/* ficha unificada de empresa */
+.gofull{appearance:none;border:1px solid var(--c,var(--ink));background:color-mix(in srgb,var(--c,var(--ink)) 10%,var(--panel));color:var(--ink);border-radius:8px;padding:9px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-align:left}
+.gofull:hover{background:color-mix(in srgb,var(--c,var(--ink)) 18%,var(--panel))}
+.glgo{display:flex;flex-direction:column;gap:4px}.glgo span{font-size:11px;color:var(--muted)}
+.coglance{font-size:12px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.coglance .r,.vtip .r em{gap:10px}.coglance .r{display:flex;justify-content:space-between;gap:12px}.coglance .r span{color:var(--muted)}.coglance .r em{font-style:normal;text-align:right}
+.vtip .r em{font-style:normal;text-align:right}
+.hoybars{display:flex;flex-direction:column;gap:5px}
+.hb{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:13px}
+.hb .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .tr{height:12px;background:color-mix(in srgb,var(--ink) 5%,var(--panel));border-radius:3px;overflow:hidden}
+.hb .tr i{display:block;height:100%;background:color-mix(in srgb,var(--ink) 35%,var(--panel));border-radius:3px;transform-origin:left;animation:mpGrow .8s cubic-bezier(.16,1,.3,1) both}
+.hb.ar .n{font-weight:700}.hb.ar .tr i{background:var(--c)}
+.hb.rest .tr i{background:color-mix(in srgb,var(--ink) 12%,var(--panel))}.hb.rest{color:var(--muted)}
+.hb .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;display:flex;flex-direction:column;line-height:1.15}
+.hb .v small{font-weight:400;font-size:10.5px;color:var(--muted)}
+.pt-row{border-top:1px solid var(--line);padding:10px 0;display:flex;flex-direction:column;gap:6px}
+.pt-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pt-h>button{appearance:none;border:0;background:none;padding:0;font:inherit;font-weight:600;font-size:14px;color:var(--ink);cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.pt-h .pt-p{margin-left:auto;font-family:var(--f-display);font-size:22px;line-height:1;color:var(--c);font-variant-numeric:tabular-nums}
+.pt-bar{height:12px}
+.pt-s{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:12px;color:var(--muted)}
+.pt-s .me{color:var(--ink);font-weight:600}
+.pt-s button{appearance:none;border:0;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line)}
+.pt-row dl.pq{margin:0}
+.evhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+svg.evol{width:100%;height:auto;max-height:260px;overflow:visible}
+svg.evol .ev-v{font-size:12px;font-weight:700;fill:var(--ink);font-variant-numeric:tabular-nums}
+svg.evol .ev-l{font-size:12px;fill:var(--ink)}svg.evol .ev-s{font-size:10px;fill:var(--muted)}
+svg.evol rect{transform-box:fill-box;transform-origin:bottom;animation:mpGrowY .7s cubic-bezier(.16,1,.3,1) both}
+@keyframes mpGrowY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media (prefers-reduced-motion: reduce){ .hb .tr i,svg.evol rect{animation:none!important} }
+@media (max-width:620px){ .hb{grid-template-columns:minmax(0,110px) minmax(0,1fr) 78px;font-size:12px} }
 </style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/pie.css?v=20261117">
+<link rel="stylesheet" href="css/pie.css?v=20261120">
 <style>
 /* Layout: tablero de una pantalla — panel de capas a la izquierda, mapa al centro, ficha deslizable sobre el mapa. */
 :root{
@@ -871,28 +905,28 @@ body.gl-full .vtip{z-index:80}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/motion@14.4.0/dist/motion.js"></script>
-<script src="data/geo/departamentos.js?v=20261117"></script>
-<script src="data/geo/provincias.js?v=20261117"></script>
-<script src="data/manual/fuentes.js?v=20261117"></script>
-<script src="data/auto/fuentes-auto.js?v=20261117"></script>
-<script src="data/manual/empresas.js?v=20261117"></script>
-<script src="data/manual/activos.js?v=20261117"></script>
-<script src="data/auto/mercado.js?v=20261117"></script>
-<script src="data/manual/estadisticas.js?v=20261117"></script>
-<script src="data/manual/fichas.js?v=20261117"></script>
-<script src="data/manual/rigi.js?v=20261117"></script>
-<script src="data/auto/siacam.js?v=20261117"></script>
-<script src="data/auto/viz.js?v=20261117"></script>
-<script src="data/auto/produccion.js?v=20261117"></script>
-<script src="data/auto/meta.js?v=20261117"></script>
-<script src="data/geo/mundo.js?v=20261117"></script>
-<script src="data/manual/circuito.js?v=20261117"></script>
-<script src="js/app.js?v=20261117"></script>
-<script src="js/circuito.js?v=20261117"></script>
-<script src="data/auto/actividad.js?v=20261117"></script>
-<script src="data/manual/ipimin.js?v=20261117"></script>
-<script src="js/actividad.js?v=20261117"></script>
-<script src="js/sitio.config.js?v=20261117"></script>
-<script src="js/pie.js?v=20261117"></script>
+<script src="data/geo/departamentos.js?v=20261120"></script>
+<script src="data/geo/provincias.js?v=20261120"></script>
+<script src="data/manual/fuentes.js?v=20261120"></script>
+<script src="data/auto/fuentes-auto.js?v=20261120"></script>
+<script src="data/manual/empresas.js?v=20261120"></script>
+<script src="data/manual/activos.js?v=20261120"></script>
+<script src="data/auto/mercado.js?v=20261120"></script>
+<script src="data/manual/estadisticas.js?v=20261120"></script>
+<script src="data/manual/fichas.js?v=20261120"></script>
+<script src="data/manual/rigi.js?v=20261120"></script>
+<script src="data/auto/siacam.js?v=20261120"></script>
+<script src="data/auto/viz.js?v=20261120"></script>
+<script src="data/auto/produccion.js?v=20261120"></script>
+<script src="data/auto/meta.js?v=20261120"></script>
+<script src="data/geo/mundo.js?v=20261120"></script>
+<script src="data/manual/circuito.js?v=20261120"></script>
+<script src="js/app.js?v=20261120"></script>
+<script src="js/circuito.js?v=20261120"></script>
+<script src="data/auto/actividad.js?v=20261120"></script>
+<script src="data/manual/ipimin.js?v=20261120"></script>
+<script src="js/actividad.js?v=20261120"></script>
+<script src="js/sitio.config.js?v=20261120"></script>
+<script src="js/pie.js?v=20261120"></script>
 
 </body></html>

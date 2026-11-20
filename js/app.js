@@ -505,7 +505,9 @@ function openCompany(k){
   drawer.innerHTML = `
     <header><button class="close" aria-label="Cerrar ficha">×</button>
       <div class="crumb">Empresa</div><h2>${c.n}</h2></header>
-    <div class="dbody">${coCard(k)}
+    <div class="dbody">${typeof coResumenHTML==="function"?`<div class="coglance">${coResumenHTML(k,{n:4})}</div>`:""}
+      <button class="gofull" data-prof="${k}">Ver la ficha completa en Empresas →</button>
+      ${coCard(k)}
       <div><p class="eyebrow" style="margin-bottom:6px">Activos en el mapa</p>${assetList(assets)}</div>
     </div>`;
   drawer.classList.remove("has-nav");
@@ -534,8 +536,12 @@ function openProvince(f){
 function wireDrawer(){
   drawer.querySelector(".close").onclick=closeDrawer;
   drawer.querySelectorAll("[data-asset]").forEach(b=>b.onclick=()=>select(b.dataset.asset,"back"));
-  drawer.querySelectorAll("[data-goco]").forEach(b=>b.onclick=ev=>{ev.preventDefault(); openCompany(b.dataset.goco);});
-  drawer.querySelectorAll("[data-prof]").forEach(b=>b.onclick=()=>{ drawer.hidden=true; openProfile(b.dataset.prof); });
+  drawer.querySelectorAll("[data-goco]").forEach(b=>{ const k=b.dataset.goco;
+    b.onclick=ev=>{ev.preventDefault(); tipOff(); openProfile(k);};
+    b.title="";
+    b.onmousemove=ev=>tipOn(ev,`<b>${EMP[k].n}</b>${typeof coResumenHTML==="function"?coResumenHTML(k):""}<div style="color:var(--muted);margin-top:4px">Tocá para abrir su ficha en Empresas</div>`);
+    b.onmouseleave=tipOff; });
+  drawer.querySelectorAll("[data-prof]").forEach(b=>b.onclick=()=>{ drawer.hidden=true; tipOff(); openProfile(b.dataset.prof); });
   drawer.querySelectorAll("[data-co]").forEach(b=>b.onclick=()=>{
     st.company=b.dataset.co; render(); openCompany(b.dataset.co);
     const xs=ALL.filter(a=>a.emp.some(([x])=>x===st.company));
@@ -673,13 +679,16 @@ function mkBlock(k){
     ${m.mg!=null?f("Margen EBITDA",`${m.mg}%`):""}
   </div><p class="note">Foto del ${(()=>{const f=(META.pasos&&META.pasos.mercado&&META.pasos.mercado.ok&&META.pasos.mercado.fecha)||"2026-10-13";const [y,m,d]=f.split("-");return `${+d}-${MESL[+m-1]}-${y}`;})()} tomada de Yahoo Finance (fuente no oficial). No es una recomendación de inversión.${m.ev==null?" Esta empresa reporta en pesos, por eso no se muestran ratios sobre EBITDA.":""}</p></div>`;
 }
-function openProfile(k){
+function openProfile(k, opt){
   st.coSel=k; if(st.view!=="co") setView("co");
   const c=EMP[k], xs=assetsOf(k).sort((a,b)=>secOrder.indexOf(a.s)-secOrder.indexOf(b.s)||["op","con","pro"].indexOf(a.st)-["op","con","pro"].indexOf(b.st));
   const ok=xs.filter(a=>a.rigi&&a.rigi.ok).length, pr=xs.filter(a=>a.rigi&&!a.rigi.ok).length;
   const provs=[...new Set(xs.map(a=>a.prov).filter(p=>p!=="Interprovincial"))];
   const srcs=[...new Set(xs.flatMap(a=>[...a.src,...(a.proy||[]).map(p=>p.s),...(a.rigi?[a.rigi.s]:[]),...(a.pq?[a.pq.of,a.pq.act,a.pq.meta].filter(Boolean).map(x=>x.s):[])]).concat(c.pqo?["cap4"]:[],(c.proy||[]).map(p=>p.s),c.pq?[c.pq.act,c.pq.meta].filter(Boolean).map(x=>x.s):[],MK[k]?["yahoo"]:[]))];
+  const G = typeof coGlobalHTML==="function" ? coGlobalHTML(k) : {hoy:"",part:"",proy:"",srcs:[]};
+  (G.srcs||[]).forEach(x=>{ if(!srcs.includes(x)) srcs.push(x); });
   const el=document.getElementById("coProf");
+  const keepScroll = opt&&opt.keep ? el.scrollTop : 0;
   el.style.setProperty("--c", cvar(xs[0]?.s||"og"));
   el.innerHTML = `
     <button class="backbtn" id="coBack">← Todas las empresas</button>
@@ -699,8 +708,9 @@ function openProfile(k){
       <div class="stat"><b>${xs.filter(a=>a.st!=="op").length}</b><span>En construcción o proyecto</span></div>
       <div class="stat"><b>${ok}<span style="font-size:18px;color:var(--muted)">${pr?` + ${pr}`:""}</span></b><span>RIGI aprobados${pr?" + en trámite":""}</span></div>
     </div>
+    ${(c.pq||c.pqo)?pqBlock({pq:{...(c.pq||{}),...(c.pqo?{of:c.pqo}:{})}},"Situación actual · producción de la compañía"):""}
+    ${G.hoy}${G.part}${G.proy}
     ${mkBlock(k)}
-    ${(c.pq||c.pqo)?pqBlock({pq:{...(c.pq||{}),...(c.pqo?{of:c.pqo}:{})}},"Producción de la compañía"):""}
     ${c.proy?`<div class="proyblock"><p class="eyebrow">Plan y metas de la compañía</p><ul class="proy">${c.proy.map(p=>`<li>${p.t} ${srcLink(p.s)}</li>`).join("")}</ul></div>`:""}
     <div class="projs">
       <p class="eyebrow">Proyectos y activos · ${provs.join(", ")}</p>
@@ -717,11 +727,14 @@ function openProfile(k){
     <div class="proyblock"><p class="eyebrow">Fuentes</p><ul class="src">${srcs.map(x=>`<li><a href="${SRC[x].u}" target="_blank" rel="noopener">${SRC[x].t}</a></li>`).join("")}${c.w?`<li><a href="${c.w}" target="_blank" rel="noopener">${c.n} – sitio institucional</a></li>`:""}</ul></div>
     <p class="note">Los montos RIGI son los de cada resolución del Boletín Oficial para el proyecto completo, no la participación de esta empresa.</p>`;
   document.getElementById("coWrap").classList.add("has-sel");
-  el.scrollTop=0; renderCoList();
+  el.scrollTop=keepScroll; renderCoList();
   countUp(el, ".stat b");
   document.getElementById("coBack").onclick=()=>{ st.coSel=null; document.getElementById("coWrap").classList.remove("has-sel"); renderCoList(); };
   el.querySelectorAll("[data-onmap]").forEach(b=>b.onclick=()=>{ setView("map"); select(b.dataset.onmap); });
   el.querySelectorAll("[data-cop2]").forEach(b=>b.onclick=()=>openProfile(b.dataset.cop2));
+  el.querySelectorAll("[data-ppr]").forEach(b=>b.onclick=()=>{ GL.pr=b.dataset.ppr; glSave(); document.querySelectorAll("[data-gp]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.gp===GL.pr)); openProfile(k,{keep:true}); });
+  el.querySelectorAll("[data-val2]").forEach(b=>b.onclick=()=>{ setView("gl"); valOpen(b.dataset.val2); });
+  el.querySelectorAll("[data-tip]").forEach(e=>{ e.onmousemove=ev=>tipOn(ev,`<b>${e.dataset.tip}</b>`); e.onmouseleave=tipOff; });
 }
 
 // ============================================================
@@ -1349,4 +1362,15 @@ try{ if(localStorage.getItem("mp-admin")==="1") document.getElementById("btnAdmi
 window.addEventListener("hashchange",()=>{ if(location.hash==="#admin") openAdmin(); });
 if(location.hash==="#admin") openAdmin();
 if(location.hash==="#empresas") setView("co");
+// #empresa=<clave o nombre>: abre la ficha (lo usa mundo.html). Si no hay coincidencia, abre Empresas con la búsqueda.
+function openEmpresaHash(){
+  const m=location.hash.match(/^#empresa=(.+)$/); if(!m) return false;
+  const q=decodeURIComponent(m[1]);
+  const cl=t=>norm(t).replace(/\(.*?\)/g," ").replace(/\b(s\.?a\.?u?|plc|inc|corp(oration)?|ltd|limited|group|grupo|holdings?|co|company|n\.?v|ag|se|spa|energy|energia|mining|minera|the)\b/g," ").replace(/[^a-z0-9]+/g," ").trim();
+  const t=cl(q);
+  const k = EMP[q] ? q : Object.keys(EMP).find(x=>cl(EMP[x].n)===t) || Object.keys(EMP).find(x=>{ const a=cl(EMP[x].n); return a&&t&&(a.startsWith(t)||t.startsWith(a)); });
+  if(k){ openProfile(k); return true; }
+  setView("co"); const qi=document.getElementById("q"); qi.value=q; st.q=norm(q); renderCoList(); return true;
+}
+window.addEventListener("hashchange",openEmpresaHash);
 if(location.hash==="#estadisticas"||location.hash==="#actividad") setView("stats");

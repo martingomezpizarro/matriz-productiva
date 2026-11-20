@@ -309,11 +309,12 @@ function glSum(){
       ${rows.length?`<p class="gsn">Peso hoy${r?` en ${esc(metN)}`:""} → con los proyectos argentinos a régimen</p><ul>${mRows}${resto!=null&&resto>.005?`<li><span class="row0"><i class="dia" style="background:var(--line)"></i><span class="n">Resto de la empresa (operaciones no listadas)</span><span class="v">${pct(resto,1)}</span></span></li>`:""}</ul>`
         :`<p class="gsn">${c.local?"Toda su actividad productiva está en la Argentina.":"Sin otros activos cargados."}</p>`}
       ${srcs.length?`<div class="glsrc">${srcs.map(s=>`<a href="${SRC[s].u}" target="_blank" rel="noopener">${esc(SRC[s].t.split(":")[0])} ↗</a>`).join("")}</div>`:""}
-      <button class="gsgo" data-sumgo>Ver la ficha completa</button>
+      ${EMP[c.emp]?`<button class="gsgo" data-cop3="${c.emp}">Ver la ficha completa en Empresas →</button>`:`<button class="gsgo" data-sumgo>Ver el detalle</button>`}
     </div>`;
   const tg=el.querySelector(".gsx"); tg.onclick=()=>{ GL.sumOpen=!GL.sumOpen; glSum(); };
   el.querySelectorAll("[data-fly]").forEach(b=>b.onclick=()=>{ const [la,lo]=b.dataset.fly.split(",").map(Number); glGo([lo,la],Math.max(gK,3.2),900); });
-  el.querySelector("[data-sumgo]").onclick=()=>{ glFull(false); requestAnimationFrame(()=>document.getElementById("glCard")?.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"})); };
+  el.querySelectorAll("[data-cop3]").forEach(b=>b.onclick=()=>{ glFull(false); openProfile(b.dataset.cop3); });
+  if(el.querySelector("[data-sumgo]")) el.querySelector("[data-sumgo]").onclick=()=>{ glFull(false); requestAnimationFrame(()=>document.getElementById("glCard")?.scrollIntoView({behavior:REDUCED?"auto":"smooth",block:"start"})); };
 }
 // Vuelo de cámara: gira el globo para encuadrar casa matriz, proyectos y otros activos de la empresa elegida.
 function glFly(c){
@@ -393,19 +394,146 @@ function card(k){
   return `<div class="glcard" style="--c:${sc}">
     <div><p class="eyebrow">${c.sec==="mi"?"Minería":"Energía"} · casa matriz: ${esc(c.hq.c)}</p><h3>${esc(c.n)}</h3>
       <p class="sub" style="margin:6px 0 0">${esc(c.perfil||"")}</p>
-      ${emp?`<p style="margin:8px 0 0;font-size:12px"><button class="chip" data-cop3="${c.emp}">Ficha de la empresa →</button></p>`:""}</div>
+      </div>
     ${kp}
+    ${(()=>{ const hr=hoyRows(k); if(!hr) return ""; const top=hr.filter(x=>!x.rest&&x.v>0).slice(0,4); return top.length?`<p class="note" style="margin:0"><b>Dónde produce hoy:</b> ${top.map(x=>`${esc(x.n)} ${pct(x.sh,x.sh<.1?1:0)}`).join(" · ")}</p>`:""; })()}
     ${r&&!c.local?stackBar(r):r&&c.local&&r.items.some(x=>x.sh)?stackBar(r):""}
     ${r?`<p class="note" style="margin:0">Base: ${fmtMet(r.base,c.met)} (${esc(c.base.per)})${E(c.base.est)}. ${c.hoy&&c.hoy.t?`Hoy en la Argentina: ${fmtMet(r.hoy,c.met)} — ${esc(c.hoy.t)}${E(c.hoy.est)}.`:""}</p>`:`<p class="note" style="margin:0">Sin cifras públicas suficientes para calcular su peso: se muestran los proyectos y el contexto.</p>`}
     ${meta}
-    ${CIR_COSTO[k]?(()=>{ const co=CIR_COSTO[k], P=CIR_META.precios[GL.pr], px=co.pk==="cu"?P.cu/2204.62:P[co.pk], mg=co.pk==="brent"?null:(px-co.v)/px;
-      return `<p class="note" style="margin:0">Costo de producción oficial: <b>${co.u.startsWith("US$/lb")?"US$ "+nfx(co.v,2):"US$ "+nfx(co.v,co.v<100?2:0)} ${esc(co.u.replace("US$",""))}</b> — ${esc(co.t)}. ${mg!=null?`Con el precio del escenario (${co.pk==="cu"?"US$ "+nfx(px,2):"US$ "+nfx(px,px<100?2:0)}), el margen es de <b>${pct(mg)}</b> del precio.`:`Brent del escenario: US$ ${nfx(px)}.`} <a href="${SRC[co.s].u}" target="_blank" rel="noopener">Fuente ↗</a></p>`; })():""}
     ${tab}
-    ${c.claves&&c.claves.length?`<div><p class="eyebrow" style="margin-bottom:6px">Lectura</p><ul class="glclaves">${c.claves.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`:""}
-    ${c.mundo&&c.mundo.length?`<div><p class="eyebrow" style="margin-bottom:6px">El resto de su negocio en el mundo${r?` · peso hoy en ${esc(c.metN||MET[c.met].l)}`:""}</p><div class="glmundo">${mundoRows(k).map(x=>`<span title="${esc((x.d&&x.d.t)||x.nt||"")}"><b>${esc(x.n)}</b> · ${esc(x.pr)}${shTxt(x)!=="s/d"?` · <b>${esc(shTxt(x))}</b>`:""}</span>`).join("")}</div></div>`:""}
-    <div class="glsrc"><p class="eyebrow">Fuentes</p>${srcs.map(s=>`<a href="${SRC[s].u}" target="_blank" rel="noopener">${esc(SRC[s].t)} ↗</a>`).join("")}</div>
+    ${emp?`<div class="glgo"><button class="gofull" data-cop3="${c.emp}">Ver la ficha completa en Empresas →</button><span>Situación actual por mina, socios y evolución año por año</span></div>`:""}
   </div>`;
 }
+// ============================================================
+// FICHA UNIFICADA DE EMPRESA (la usan «Empresas», el mapa argentino y el globo)
+// situación actual · participaciones · evolución proyectada año por año
+// ============================================================
+const cirKeyOf = k => CIR_EMP[k] ? k : Object.keys(CIR_EMP).find(x=>CIR_EMP[x].emp===k) || null;
+// Socios de un proyecto con su %: sale de las carteras de todas las empresas cargadas en el circuito.
+function partnersOf(id){
+  const m=new Map();
+  Object.entries(CIR_EMP).forEach(([ck,c])=>{ if(c.met==="bk") return;   // Golar: % de los buques, no del proyecto
+    c.ar.filter(p=>p.id===id&&p.part!=null).forEach(p=>{ const e=c.emp||ck; if(!m.has(e)||m.get(e)<p.part) m.set(e,p.part); }); });
+  const a=byId[id]; let out=[...m].map(([e,part])=>({e,part,n:(EMP[e]||{n:CIR_EMP[e]?CIR_EMP[e].n:e}).n}));
+  const sum=out.reduce((s,x)=>s+x.part,0);
+  if(sum>100.5) out=out.sort((x,y)=>y.part-x.part).slice(0,1);
+  if(a) a.emp.forEach(([e])=>{ if(!out.some(x=>x.e===e)) out.push({e,part:null,n:EMP[e]?EMP[e].n:e}); });
+  return out.sort((x,y)=>(y.part||0)-(x.part||0));
+}
+// Activos de la empresa hoy (mundo + Argentina), con su peso en la base.
+function hoyRows(k){
+  const c=CIR_EMP[k], r=calc(k); if(!r||r.base<=0||c.local) return null;
+  const rows=mundoRows(k).filter(x=>x.d&&x.d.v!=null&&!x.d.fuera).map(x=>({n:x.n,v:x.d.v,sh:x.d.v/r.base,t:x.d.t||x.nt||x.pr,est:x.d.est,ar:false}));
+  const cero=rows.filter(x=>x.v===0).map(x=>x.n);
+  for(let i=rows.length-1;i>=0;i--) if(rows[i].v===0) rows.splice(i,1);
+  rows.cero=cero;
+  rows.push({n:"Argentina",v:r.hoy,sh:r.hoy/r.base,t:c.hoy&&c.hoy.t||"",est:c.hoy&&c.hoy.est,ar:true});
+  const listed=rows.reduce((s,x)=>s+x.v,0);
+  if(r.base-listed>r.base*.005) rows.push({n:"Resto de la empresa",v:r.base-listed,sh:(r.base-listed)/r.base,t:"Operaciones no listadas por separado",rest:true});
+  const out=rows.sort((x,y)=>(x.rest?1:0)-(y.rest?1:0)||y.v-x.v); out.cero=cero; return out;
+}
+// Columnas del gráfico de evolución: hoy, cada año en que arranca un proyecto nuevo, y todo a régimen.
+function evolCols(k){
+  const c=CIR_EMP[k], r=calc(k); if(!r||r.total<=0) return null;
+  const Y0=2025, rest=Math.max(0,r.base-r.hoy);
+  const nuevos=r.items.filter(x=>x.p.ini>Y0&&x.v>0).sort((a,b)=>a.p.ini-b.p.ini);
+  const viejos=r.items.filter(x=>!(x.p.ini>Y0)&&x.v>0);
+  const share=ar=>c.local ? null : ar/(rest+ar);
+  const cols=[{l:"Hoy",sub:c.base.per,segs:[{n:c.local?"Negocio actual":"Resto de la empresa",v:rest,cls:"rest"},{n:"Argentina hoy",v:r.hoy,cls:"arhoy"}]}];
+  [...new Set(nuevos.map(x=>x.p.ini))].filter(y=>y<=2040).forEach(y=>{
+    const xs=nuevos.filter(x=>x.p.ini<=y);
+    cols.push({l:String(y),segs:[{n:c.local?"Negocio actual":"Resto de la empresa",v:rest,cls:"rest"},{n:"Argentina hoy",v:r.hoy,cls:"arhoy"},...xs.map(x=>({n:x.p.n,v:x.v,kind:x.kind}))]});
+  });
+  cols.push({l:"A régimen",sub:"todo",segs:[{n:c.local?"Negocio actual":"Resto de la empresa",v:rest,cls:"rest"},...viejos.map(x=>({n:x.p.n+" (en operación)",v:x.v,cls:"arhoy"})),...nuevos.map(x=>({n:x.p.n,v:x.v,kind:x.kind}))]});
+  cols.forEach(col=>{ col.tot=col.segs.reduce((s,x)=>s+(x.v||0),0); const ar=col.tot-rest; col.sh=share(ar); col.crec=r.base>0?col.tot/r.base-1:null; });
+  return {cols, r, c};
+}
+function evolSVG(k){
+  const E=evolCols(k); if(!E) return "";
+  const {c}=E;
+  // empresas globales: se dibuja sólo el aporte argentino (el resto haría invisibles las barras); arriba, su peso en el total
+  const cols = c.local ? E.cols : E.cols.map(col=>({...col, segs:col.segs.filter(x=>x.cls!=="rest"), tot:col.segs.filter(x=>x.cls!=="rest").reduce((s,x)=>s+(x.v||0),0)}));
+  const W=640, H=230, m={t:26,r:8,b:34,l:8}, n=cols.length;
+  const bw=Math.min(72,(W-m.l-m.r)/n*.62), step=(W-m.l-m.r)/n, mx=Math.max(...cols.map(x=>x.tot))||1;
+  const y=v=>(H-m.t-m.b)*v/mx;
+  const bars=cols.map((col,i)=>{ let acc=0; const x=m.l+step*i+(step-bw)/2;
+    const rects=col.segs.filter(s=>s.v>0).map(s=>{ const h=y(s.v), yy=H-m.b-y(acc)-h; acc+=s.v;
+      const fill=s.cls==="rest"?"color-mix(in srgb,var(--ink) 12%,var(--panel))":s.cls==="arhoy"?"color-mix(in srgb,var(--c) 55%,var(--panel))":PCOL[s.kind];
+      return `<rect x="${x}" y="${yy}" width="${bw}" height="${Math.max(.5,h)}" fill="${fill}" data-tip="${esc(s.n)}: ${esc(fmtMet(s.v,c.met))}"/>`; }).join("");
+    const lab = col.sh!=null ? pct(col.sh,1) : col.crec!=null ? (i===0?"base":(col.crec>=0?"+":"")+pct(col.crec)) : "";
+    return `${rects}<text x="${x+bw/2}" y="${H-m.b-y(col.tot)-8}" text-anchor="middle" class="ev-v">${lab}</text>
+      <text x="${x+bw/2}" y="${H-m.b+15}" text-anchor="middle" class="ev-l">${esc(col.l)}</text>${col.sub?`<text x="${x+bw/2}" y="${H-m.b+28}" text-anchor="middle" class="ev-s">${esc(col.sub)}</text>`:""}`; }).join("");
+  return `<svg class="evol" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolución proyectada">${bars}<line x1="${m.l}" x2="${W-m.r}" y1="${H-m.b}" y2="${H-m.b}" stroke="var(--line)"/></svg>`;
+}
+// Resumen corto para el mapa (tooltip, panel del globo y cajón del mapa argentino).
+function coResumenHTML(k, opt={}){
+  const ck=cirKeyOf(k), e=EMP[k];
+  const xs=ALL.filter(a=>a.emp.some(([x])=>x===k));
+  const op=xs.filter(a=>a.st==="op").length, rg=xs.filter(a=>a.rigi).length;
+  let h="";
+  if(ck){ const c=CIR_EMP[ck], r=calc(ck), hr=hoyRows(ck);
+    if(r&&!c.local) h+=`<div class="r"><span>Argentina en su negocio</span><em>${pct(r.hoySh,1)} hoy → <b>${pct(r.proySh,1)}</b></em></div>`;
+    else if(r&&c.local) h+=`<div class="r"><span>Proyectos RIGI en su total</span><em><b>${pct(r.rigiSh)}</b></em></div>`;
+    if(hr){ const top=hr.filter(x=>!x.rest&&x.v>0).slice(0,opt.n||3); if(top.length) h+=`<div class="r"><span>Principales hoy</span><em>${top.map(x=>`${esc(x.n)} ${pct(x.sh)}`).join(" · ")}</em></div>`; }
+  }
+  if(e&&(e.pq&&e.pq.act)) h+=`<div style="color:var(--muted);margin-top:3px">${esc(e.pq.act.t)}</div>`;
+  else if(e&&e.pqo) h+=`<div style="color:var(--muted);margin-top:3px">${esc(e.pqo.t)}</div>`;
+  h+=`<div class="r"><span>En el mapa</span><em>${xs.length} activos · ${op} en operación${rg?` · ${rg} RIGI`:""}</em></div>`;
+  return h;
+}
+window.coResumenHTML=coResumenHTML;
+// Secciones de la ficha completa en «Empresas».
+function coGlobalHTML(k){
+  const ck=cirKeyOf(k);
+  const xsAr=ALL.filter(a=>a.emp.some(([x])=>x===k));
+  // participaciones: todos los proyectos argentinos de la empresa, con socios y %
+  const ids=[...new Set([...(ck?CIR_EMP[ck].ar.map(p=>p.id):[]), ...xsAr.filter(a=>a.s==="mi"||a.rigi).map(a=>a.id)])].filter(id=>byId[id]);
+  const partRows=ids.map(id=>{ const a=byId[id], ps=partnersOf(id), mine=ps.find(x=>x.e===k);
+    const known=ps.filter(x=>x.part!=null).reduce((s,x)=>s+x.part,0);
+    const segs=ps.filter(x=>x.part!=null).map((x,i)=>`<i style="width:${x.part}%;background:${x.e===k?"var(--c)":`color-mix(in srgb,var(--ink) ${30-i*6}%,var(--panel))`}" data-tip="${esc(x.n)}: ${nfx(x.part,x.part%1?1:0)}%"></i>`).join("")+(known<99.5?`<i class="rest" style="width:${100-known}%" data-tip="${known?"Resto / sin dato":"Participaciones sin dato"}"></i>`:"");
+    const hoy=a.pq&&(a.pq.of||a.pq.act), meta=a.pq&&a.pq.meta;
+    return `<div class="pt-row"><div class="pt-h"><button data-onmap="${id}">${esc(a.n)}</button><span class="pill"><span class="dot ${a.st}" style="width:8px;height:8px;border-radius:50%"></span>${ESTADO[a.st]}</span>
+        <b class="pt-p">${mine&&mine.part!=null?nfx(mine.part,mine.part%1?1:0)+"%":"s/d"}</b></div>
+      ${known>0?`<div class="glstack pt-bar">${segs}</div>`:""}
+      <div class="pt-s">${ps.map(x=>`<span ${x.e===k?'class="me"':""}>${x.e!==k&&EMP[x.e]?`<button data-cop2="${x.e}">${esc(x.n)}</button>`:esc(x.n)}${x.part!=null?" "+nfx(x.part,x.part%1?1:0)+"%":""}</span>`).join("")}</div>
+      ${hoy||meta?`<dl class="pq">${hoy?`<dt>Hoy</dt><dd>${esc(hoy.t)}</dd>`:""}${meta?`<dt>Objetivo</dt><dd>${esc(meta.t)}</dd>`:""}</dl>`:""}</div>`; }).join("");
+  if(!ck) return {hoy:"", part: partRows?`<div class="proyblock"><p class="eyebrow">Participaciones en proyectos argentinos</p>${partRows}</div>`:"", proy:""};
+  const c=CIR_EMP[ck], r=calc(ck), hr=hoyRows(ck), metN=r?(c.metN||MET[c.met].l):"";
+  const E1=x=>x?EST:"";
+  // 1. situación actual
+  let hoy="";
+  if(hr){ const mx=Math.max(...hr.map(x=>x.v))||1;
+    hoy=`<div class="proyblock"><p class="eyebrow">Situación actual · dónde genera su negocio (${esc(metN)}, ${esc(c.base.per)})</p>
+      <p class="note" style="margin:0">Base: ${fmtMet(r.base,c.met)}${E1(c.base.est)}. ${c.local?"Toda su actividad está en la Argentina.":`La Argentina aporta hoy el <b>${pct(r.hoySh,1)}</b>${E1(c.hoy&&c.hoy.est)}.`}</p>
+      <div class="hoybars">${hr.map(x=>`<div class="hb${x.ar?" ar":""}${x.rest?" rest":""}" title="${esc(x.t||"")}"><span class="n">${esc(x.n)}${x.est?" ≈":""}</span><span class="tr"><i style="width:${Math.max(.5,x.v/mx*100)}%"></i></span><span class="v">${pct(x.sh,x.sh<.1?1:0)}<small>${fmtMet(x.v,c.met)}</small></span></div>`).join("")}</div>
+      ${hr.cero&&hr.cero.length?`<p class="note" style="margin:0">Sin ${c.met==="ing"?"ingresos":"producción"} todavía (en desarrollo o arranque): ${hr.cero.map(esc).join(", ")}.</p>`:""}</div>`;
+  } else if(c.mundo&&c.mundo.length){
+    hoy=`<div class="proyblock"><p class="eyebrow">Situación actual · otros activos en el mundo</p><div class="glmundo">${c.mundo.map(([n,,pr,nt])=>`<span><b>${esc(n)}</b> · ${esc(pr)}${nt?" · "+esc(nt):""}</span>`).join("")}</div></div>`;
+  }
+  // 3. proyección
+  let proy="";
+  if(r){ const P=CIR_META.precios;
+    const kp = c.local
+      ? `<div class="glkpis"><div><b>${pct(r.rigiSh)}</b><span>pesarían sus proyectos RIGI en el total a régimen</span></div><div><b>${r.crec!=null?(r.crec>=0?"+":"")+pct(r.crec):"–"}</b><span>crecimiento sobre la base</span></div><div><b>${fmtMet(r.sum,c.met)}</b><span>aporte de los proyectos a régimen</span></div></div>`
+      : `<div class="glkpis"><div><b>${pct(r.hoySh,1)}</b><span>Argentina hoy</span></div><div><b style="color:var(--c)">${pct(r.proySh,1)}</b><span>Argentina con todo a régimen</span></div><div><b>${fmtMet(r.sum,c.met)}</b><span>aporte argentino a régimen${c.met==="ing"?" por año":""}</span></div></div>`;
+    proy=`<div class="proyblock"><div class="evhead"><p class="eyebrow">Proyección · ${c.local?"peso de los proyectos":"peso de la Argentina"} año por año</p>
+        ${c.met!=="ing"?"":`<div class="seg" role="group" aria-label="Precios de referencia">${Object.entries(P).map(([pk,p])=>`<button data-ppr="${pk}" aria-pressed="${GL.pr===pk}" title="${esc(p.t)}">${esc(p.n)}</button>`).join("")}</div>`}</div>
+      ${kp}${evolSVG(ck)}
+      <div class="glsl">${c.local?`<span><i style="background:color-mix(in srgb,var(--ink) 12%,var(--panel))"></i>Negocio actual</span>`:""}<span><i style="background:color-mix(in srgb,var(--c) 55%,var(--panel))"></i>Argentina hoy / en operación</span>${[...new Set(r.items.map(x=>x.kind))].map(kd=>`<span><i style="background:${PCOL[kd]}"></i>${esc(PNOM(kd))} (proyectos nuevos)</span>`).join("")}</div>
+      <p class="note" style="margin:0">Cada barra suma los proyectos desde el año de arranque que informa la fuente, como si llegaran a régimen ese año (en la práctica tardan 2 a 4 años). La última barra es el cálculo con todo a régimen. El resto de la empresa queda fijo en su último año: mide escala, no es un pronóstico. ${c.local?"Arriba de cada barra: crecimiento sobre la base.":`Las barras muestran sólo el aporte argentino (${esc(metN)}); arriba, el peso de la Argentina en el total de la empresa.`}</p>
+      ${c.meta?`<p class="note" style="margin:0">${esc(c.meta.t)}: los proyectos argentinos serían el <b>${pct(r.sum/c.meta.v)}</b> de esa meta.</p>`:""}
+      ${CIR_COSTO[ck]?(()=>{ const co=CIR_COSTO[ck]; return `<p class="note" style="margin:0">Costo de producción oficial: <b>US$ ${nfx(co.v,co.v<100?2:0)} ${esc(co.u.replace("US$",""))}</b> — ${esc(co.t)}. <a href="${SRC[co.s].u}" target="_blank" rel="noopener">Fuente ↗</a></p>`; })():""}
+      ${c.claves&&c.claves.length?`<ul class="glclaves">${c.claves.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`:""}
+      ${c.ar.some(p=>CIR_VAL[p.id])?`<div class="links">${[...new Set(c.ar.filter(p=>CIR_VAL[p.id]).map(p=>p.id))].map(id=>`<button data-val2="${id}">Valuar ${esc((c.ar.find(p=>p.id===id)||{}).n)} →</button>`).join("")}</div>`:""}
+    </div>`;
+  } else if(c.ar.length){
+    proy=`<div class="proyblock"><p class="eyebrow">Proyección · cronograma de sus proyectos</p><ul class="proy">${c.ar.map(p=>`<li><b>${esc(p.n)}</b>${p.ini?` · arranque ${p.ini}`:""}${p.rigi?` · ${p.rigi==="no"?"fuera del RIGI":"RIGI "+(RIGI_EST[p.rigi]||"").toLowerCase()}`:""}${p.t?` — ${esc(p.t)}`:""}</li>`).join("")}</ul><p class="note" style="margin:0">Sin cifras públicas suficientes para calcular el peso de la Argentina en la empresa.</p></div>`;
+  }
+  const part=partRows?`<div class="proyblock"><p class="eyebrow">Participaciones en la Argentina · su % y el de los socios</p>${partRows}</div>`:"";
+  const srcs=[...new Set([c.base&&c.base.s, c.hoy&&c.hoy.s, c.meta&&c.meta.s, ...c.ar.map(p=>p.s), ...(c.fuentes||[]), ...Object.values((typeof CIR_MSH!=="undefined"&&CIR_MSH[ck])||{}).map(d=>d.s)].filter(x=>x&&SRC[x]))];
+  return {hoy, part, proy, srcs};
+}
+window.coGlobalHTML=coGlobalHTML;
 function paisSec(){
   return `<div class="glsec"><h2>La Argentina en el mundo</h2>
     <p class="note">Participación del país en la producción mundial de cada producto, hoy y con la cartera de proyectos (contra el tamaño del mercado actual).</p>
@@ -723,3 +851,6 @@ function valOpen(id){ if(!CIR_VAL[id]) return; VL.id=id; VL.p=null; VL.capexF=10
 { let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(st.view!=="gl") return; glFit(); if(document.getElementById("glVal")?.querySelector(".vchart")) valUpdate(); },150); }); }
 // Si la última visita quedó en el Circuito, se dibuja recién ahora que todo está definido.
 if(st.view==="gl") renderCircuito();
+// La ficha de empresa usa funciones de este archivo: si se abrió antes de que cargara, se vuelve a dibujar.
+if(st.view==="co" && st.coSel) openProfile(st.coSel);
+if(typeof openEmpresaHash==="function") openEmpresaHash();

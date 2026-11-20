@@ -275,7 +275,9 @@ function selE(e){
   S.sel={k:"e",e};
   const mine=A.filter(a=>a.own.some(o=>o[0]===e));
   const porT=d3.groups(mine, a=>a.t);
-  let h=`<div><button class="btnl" data-back>← Volver</button></div><p class="eyebrow">Empresa</p><h2>${esc(empN(e))}</h2>`;
+  const conAr=porT.some(([t])=>{ const r=stats(t).emps.find(r=>r.e===e); return r&&r.ar>0; });
+  let h=`<div><button class="btnl" data-back>← Volver</button></div><p class="eyebrow">Empresa</p><h2>${esc(empN(e))}</h2>
+  ${conAr?`<p style="margin:4px 0 10px"><a class="btnl" href="index.html#empresa=${encodeURIComponent(empN(e))}">Ver su ficha completa en Empresas (situación actual, socios y proyección) →</a></p>`:""}`;
   porT.sort((x,y)=>ORDEN_T.indexOf(x[0])-ORDEN_T.indexOf(y[0])).forEach(([t,l])=>{
     const s=stats(t), r=s.emps.find(r=>r.e===e), c=col(t);
     h+=`<h3>${esc(T[t].n)}${r?` · puesto ${r.rank} de ${s.emps.length}`:""}</h3>`;
