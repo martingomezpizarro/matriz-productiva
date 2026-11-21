@@ -30,7 +30,7 @@ data/
   manual/             datos que se cargan a mano, cada uno con su fuente
     activos.js          plantas, puertos, ductos, áreas (PTS y LNS)
     empresas.js         directorio de empresas
-    fichas.js           fichas técnicas («Cómo funciona»)
+    fichas.js           fichas técnicas («Cómo funciona»), MCOST (costo unitario por mina: C1, AISC, VAN 0) y METAL_REF (precio del litio)
     estadisticas.js     indicadores y rankings publicados
     circuito.js         empresas del RIGI en el mundo: bases, participaciones, proyectos y cadenas
     fuentes.js          todas las fuentes citadas (SRC)
@@ -62,6 +62,7 @@ El workflow `.github/workflows/actualizar-datos.yml` corre el **día 1 de cada m
 | `emae` | INDEC – EMAE por sector (Series de Tiempo) | actividad por sector |
 | `faena` | SAGyP – faena vacuna (Series de Tiempo) | ciclo ganadero |
 | `provincias` | INDEC – exportaciones por provincia y rubro | coroplético provincial |
+| `metales` | Yahoo Finance (futuros GC=F, SI=F, HG=F) | precio de hoy del oro, la plata y el cobre para comparar con el costo de cada mina (también corre los lunes) |
 | `agricola` | MAGyP – estimaciones agrícolas | producción por departamento y totales por campaña |
 | `actividad` | Series de Tiempo (INDEC, BCRA, Secretarías de Energía, Agricultura y Hacienda, cámaras republicadas por el Ministerio de Economía) | tablero mensual de la vista Actividad, peso de cada sector en el PIB, aportes al crecimiento y base de la proyección 2030 |
 
