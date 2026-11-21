@@ -32,7 +32,7 @@ jobs:
       - run: pip install -r scripts/requirements.txt
       - name: Bajar fuentes y regenerar data/auto
         env:
-          PASOS: ${{ github.event.schedule == '0 9 * * 1' && 'actividad' || github.event.inputs.pasos }}
+          PASOS: ${{ github.event.schedule == '0 9 * * 1' && 'actividad metales' || github.event.inputs.pasos }}
         run: python scripts/actualizar.py ${PASOS:---grupo nube}
       - name: Guardar cambios en el repo
         run: |

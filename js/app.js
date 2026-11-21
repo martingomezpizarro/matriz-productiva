@@ -430,6 +430,7 @@ function openAsset(a, tab, dir){
       <dt>Operador</dt><dd>${a.emp.length?a.emp.map(([k,r])=>`<a href="#" data-goco="${k}">${EMP[k].n}</a>${r!=="Operador"?` <small style="color:var(--muted)">(${r.toLowerCase()})</small>`:""}`).join("<br>"):"—"}</dd>
     </dl>
     ${T&&T.nums?`<div class="proyblock"><p class="eyebrow">Números clave</p>${numsBlock(T.nums.slice(0,4))}${T.nums.length>4||T.proc?`<button class="tecmore" data-tab="tec">Ver proceso${T.nums.length>4?`, ${T.nums.length-4} ${T.nums.length-4===1?"número":"números"} más`:""} e hitos →</button>`:""}</div>`:T?`<button class="tecmore" data-tab="tec">Cómo se produce →</button>`:""}
+    ${costBlockAsset(a)}
     ${pqBlock(a)}
     ${proyBlock(a)}
     ${a.of?`<div class="quality ok"><b>Dato oficial.</b> Ubicación, estado y controlantes según la cartera de la Secretaría de Minería.${a.pq&&a.pq.act?" La producción proviene de prensa o de la empresa.":""}</div>`:a.pq&&a.pq.of?`<div class="quality ok"><b>Producción verificada</b> con la base oficial de la Secretaría de Energía (pozo por pozo). La ubicación en el mapa sigue siendo aproximada.</div>`:`<div class="quality"><b>Dato preliminar.</b> Carga manual del MVP. La ubicación y los atributos se van a reemplazar por la capa oficial correspondiente.</div>`}`;
@@ -455,6 +456,48 @@ function openAsset(a, tab, dir){
 }
 function numsBlock(ns){
   return `<div class="nums">${ns.map(([l,v,k])=>`<div class="r"><span>${l}</span><b>${v}${k&&SRC[k]?`<a href="${SRC[k].u}" target="_blank" rel="noopener" title="${SRC[k].t.replace(/"/g,"&quot;")}">fuente</a>`:""}</b></div>`).join("")}</div>`;
+}
+// ---------- Costo unitario frente al precio del metal (MCOST en fichas.js, precios en VIZ.metales) ----------
+const MU = { au:"US$/oz", ag:"US$/oz", cu:"US$/lb", lce:"US$/t" };
+const MN = { au:"oro", ag:"plata", cu:"cobre", lce:"carbonato de litio" };
+function metalPx(m){
+  const v = (typeof VIZ!=="undefined" && VIZ.metales && VIZ.metales[m]) || null;
+  if(v) return { v:v.v, f:v.f, t:`${v.n}: futuro ${v.tk}, cierre del ${fechaC(v.f)}`, s:"yfMet" };
+  const r = typeof METAL_REF!=="undefined" && METAL_REF[m];
+  return r ? { v:r.v, f:r.f, t:r.t, s:r.s } : null;
+}
+const cnum = (v,m) => (v<0?"−":"")+"US$ "+Math.abs(v).toLocaleString("es-AR",{minimumFractionDigits:m==="cu"||m==="ag"?2:0,maximumFractionDigits:m==="cu"||m==="ag"?2:0});
+function costRows(list){            // list: [{a, c, part}]
+  return list.map(({a,c,part})=>{
+    const p=metalPx(c.m), mg=p?(p.v-c.v)/p.v*100:null, mx=p?Math.max(p.v,c.v,0)*1.12:Math.max(c.v,1);
+    const w=Math.max(0,c.v)/mx*100, px=p?p.v/mx*100:null;
+    const tags=[c.est?"estudio":"real", c.eq?`${MN[c.m]} equivalente`:"", c.neto?"neto de subproductos":""].filter(Boolean);
+    return `<div class="cr${c.tipo==="VAN 0"?" be":""}">
+      ${a?`<div class="cn"><a href="#" data-cmap="${a.id}">${a.n}</a>${part?`<small>${part}</small>`:""}</div>`:""}
+      <div class="ct"><b>${c.tipo}</b><small>${c.per} · ${tags.join(" · ")}${SRC[c.s]?` · <a href="${SRC[c.s].u}" target="_blank" rel="noopener" title="${SRC[c.s].t.replace(/"/g,"&quot;")}">fuente</a>`:""}</small></div>
+      <div class="cv"><b>${cnum(c.v,c.m)}</b><small>${MU[c.m]} de ${MN[c.m]}</small></div>
+      <div class="cbar" title="${p?`Costo ${cnum(c.v,c.m)} frente a precio ${cnum(p.v,c.m)} ${MU[c.m]}`:"Sin precio de referencia"}"><i style="width:${w}%"></i>${px!=null?`<u style="left:${px}%"></u>`:""}</div>
+      <div class="cm ${mg==null?"":mg>=0?"pos":"neg"}">${mg==null?"–":`${mg>=0?"+":""}${nf(mg,0)}%`}<small>${p?"margen hoy":""}</small></div>
+    </div>`;}).join("");
+}
+function costPrices(ms){
+  return ms.map(m=>{ const p=metalPx(m); return p?`<span><b>${MN[m][0].toUpperCase()+MN[m].slice(1)}</b> ${cnum(p.v,m)} ${MU[m]} <small>(${p.t}${SRC[p.s]?` · <a href="${SRC[p.s].u}" target="_blank" rel="noopener">fuente</a>`:""})</small></span>`:""; }).join("");
+}
+const COST_NOTE = `<p class="note cnote"><b>Cómo leerlo.</b> Cada costo está por unidad del metal principal: onza de oro o plata, libra de cobre, tonelada de carbonato de litio. La barra es el costo; la raya vertical, el precio de hoy. <b>C1 / costo en efectivo</b>: sólo la operación. <b>AISC</b>: suma sostenimiento, regalías y gastos generales; es el precio mínimo para que la mina no pierda caja (antes de impuestos e inversión de crecimiento). <b>VAN 0</b>: precio con el que un proyecto recupera también su inversión inicial. «Equivalente»: la plata u otros metales se pasan a oro (o al revés) con la relación de precios de la empresa. «Neto de subproductos»: se descuentan las ventas de otros metales, por eso puede ser muy bajo o negativo y depende también de esos precios.</p>`;
+function costBlockAsset(a){
+  const cs=(typeof MCOST!=="undefined"&&MCOST[a.id])||null; if(!cs) return "";
+  const ms=[...new Set(cs.map(c=>c.m))];
+  return `<div class="proyblock"><p class="eyebrow">Costo frente al precio del metal</p>
+    <div class="cost">${costRows(cs.map(c=>({c})))}</div>
+    <div class="cpx">${costPrices(ms)}</div>${COST_NOTE}</div>`;
+}
+function costBlockCompany(k, xs){
+  const pct=a=>roleOf(a,k)||"";
+  const rows=xs.filter(a=>typeof MCOST!=="undefined"&&MCOST[a.id]).flatMap(a=>MCOST[a.id].map(c=>({a,c,part:pct(a)})));
+  if(!rows.length) return "";
+  const ms=[...new Set(rows.map(r=>r.c.m))];
+  const byM=ms.map(m=>`<p class="csub">${MN[m][0].toUpperCase()+MN[m].slice(1)} · ${MU[m]}</p><div class="cost withname">${costRows(rows.filter(r=>r.c.m===m))}</div>`).join("");
+  return `<div class="proyblock"><p class="eyebrow">Costos por mina frente al precio del metal</p>${byM}<div class="cpx">${costPrices(ms)}</div>${COST_NOTE}</div>`;
 }
 function tecBlock(a,T){
   const srcs=[...new Set(T.src||[])].filter(k=>SRC[k]);
@@ -711,6 +754,7 @@ function openProfile(k, opt){
     ${(c.pq||c.pqo)?pqBlock({pq:{...(c.pq||{}),...(c.pqo?{of:c.pqo}:{})}},"Situación actual · producción de la compañía"):""}
     ${G.hoy}${G.part}${G.proy}
     ${mkBlock(k)}
+    ${costBlockCompany(k, xs)}
     ${c.proy?`<div class="proyblock"><p class="eyebrow">Plan y metas de la compañía</p><ul class="proy">${c.proy.map(p=>`<li>${p.t} ${srcLink(p.s)}</li>`).join("")}</ul></div>`:""}
     <div class="projs">
       <p class="eyebrow">Proyectos y activos · ${provs.join(", ")}</p>
@@ -720,6 +764,7 @@ function openProfile(k, opt){
         <div style="font-size:13px;color:var(--muted)">${a.prod}${a.cap?` · ${a.cap}`:""}</div>
         ${a.pq?`<dl class="pq">${a.pq.of?`<dt class="oficial">Oficial</dt><dd>${a.pq.of.t}</dd>`:""}${a.pq.act?`<dt>${a.pq.of?"Prensa":"Hoy"}</dt><dd>${a.pq.act.t}</dd>`:""}${a.pq.meta?`<dt>Objetivo</dt><dd>${a.pq.meta.t}</dd>`:""}</dl>`:""}
         ${rigiLine(a)}
+        ${(()=>{ const T=tecOf(a); return T&&T.nums&&!T.auto?`<details class="tecd"><summary>Datos técnicos (${T.nums.length})</summary>${numsBlock(T.nums)}</details>`:""; })()}
         ${a.proy?`<ul class="proy">${a.proy.map(p=>`<li>${p.t} ${srcLink(p.s)}</li>`).join("")}</ul>`:""}
         <div class="links"><button data-onmap="${a.id}">Ver en el mapa</button>${a.emp.filter(([x])=>x!==k).slice(0,4).map(([x,r])=>`<button data-cop2="${x}">${EMP[x].n}</button>`).join("")}</div>
       </div>`).join("")}
@@ -731,6 +776,7 @@ function openProfile(k, opt){
   countUp(el, ".stat b");
   document.getElementById("coBack").onclick=()=>{ st.coSel=null; document.getElementById("coWrap").classList.remove("has-sel"); renderCoList(); };
   el.querySelectorAll("[data-onmap]").forEach(b=>b.onclick=()=>{ setView("map"); select(b.dataset.onmap); });
+  el.querySelectorAll("[data-cmap]").forEach(b=>b.onclick=ev=>{ ev.preventDefault(); setView("map"); select(b.dataset.cmap); });
   el.querySelectorAll("[data-cop2]").forEach(b=>b.onclick=()=>openProfile(b.dataset.cop2));
   el.querySelectorAll("[data-ppr]").forEach(b=>b.onclick=()=>{ GL.pr=b.dataset.ppr; glSave(); document.querySelectorAll("[data-gp]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.gp===GL.pr)); openProfile(k,{keep:true}); });
   el.querySelectorAll("[data-val2]").forEach(b=>b.onclick=()=>{ setView("gl"); valOpen(b.dataset.val2); });

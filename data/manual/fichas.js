@@ -820,3 +820,58 @@ const TEC = {
     nota:"El folleto provincial grafica la producción de 2021 de Córdoba y Ajedrez (45 y 312 onzas) sin que el texto permita asignar cada valor; no se carga. La distancia a Ajedrez sale de las coordenadas oficiales.",
     src:["jujFol22","smOro25","siacam"] }
 };
+
+// ============================================================
+// COSTO UNITARIO POR MINA, para compararlo con el precio del metal.
+// Cada costo está en dólares por unidad del metal principal:
+//   au / ag  → US$ por onza troy (oz) de oro o de plata
+//   cu       → US$ por libra (lb) de cobre
+//   lce      → US$ por tonelada de carbonato de litio equivalente (LCE)
+// eq:true  = la unidad es «equivalente» (la plata y otros metales pasados a oro, o al revés,
+//            con la relación de precios que usa la empresa): se compara con el precio del metal base.
+// neto:true = costo neto de subproductos (se descuentan las ventas de oro, plata o molibdeno):
+//            si suben esos precios el costo baja, por eso puede ser bajo o negativo.
+// tipo: C1 / costo en efectivo (sólo la operación) · AISC (suma sostenimiento, regalías y gastos
+//       generales: es el precio mínimo para no perder caja) · VAN 0 (precio con el que el proyecto
+//       recupera la inversión a la tasa del estudio).
+// est:true = número de un estudio técnico (proyecto); si no, dato real de la operación (per).
+// ============================================================
+const MCOST = {
+  // ---- Oro y plata en operación
+  "mi-vel":  [{tipo:"AISC", v:1360, m:"au", per:"1S 2026", s:"brkQ2ms"}, {tipo:"Costo en efectivo", v:1101, m:"au", per:"1S 2026", s:"brkQ2ms"}],
+  "mi-cn":   [{tipo:"AISC", v:2097, m:"au", per:"3T 2026", neto:true, s:"nemQ3r"}, {tipo:"Costo aplicable a ventas", v:1552, m:"au", per:"3T 2026", neto:true, s:"nemQ3r"}],
+  "mi-cv":   [{tipo:"AISC", v:1288, m:"au", per:"1S 2026", s:"agaH1"}],
+  "mi-sj":   [{tipo:"AISC", v:2944, m:"au", eq:true, per:"1S 2026", s:"hocH1r"}, {tipo:"Costo en efectivo", v:2234, m:"au", per:"1S 2026", s:"hocH1r"}],
+  "mi-lin":  [{tipo:"AISC", v:1845, m:"au", per:"3T 2026", s:"fsmQ3"}, {tipo:"Costo en efectivo", v:1449, m:"au", per:"3T 2026", s:"fsmQ3"}],
+  "mi-dn":   [{tipo:"AISC", v:1546, m:"au", eq:true, per:"3T 2026", s:"cerrQ3f"}, {tipo:"Costo en efectivo", v:1569, m:"au", per:"3T 2026", s:"cerrQ3f"}],
+  "mi-las-calandrias": [{tipo:"AISC", v:1546, m:"au", eq:true, per:"3T 2026 (Minera Don Nicolás)", s:"cerrQ3f"}],
+  "mi-cm":   [{tipo:"AISC", v:-64.87, m:"ag", neto:true, per:"1S 2026", s:"paasQ2"}],
+  "mi-puna-operation-chinchillas-pirquitas": [{tipo:"AISC", v:25.64, m:"ag", neto:true, per:"3T 2026", s:"ssrQ3"}],
+  // ---- Litio en operación
+  "mi-co":   [{tipo:"Costo operativo en efectivo", v:5801, m:"lce", per:"3T 2026", s:"larQ3"}],
+  // ---- Proyectos de cobre (estudios)
+  "mi-azules": [{tipo:"C1", v:1.71, m:"cu", est:true, per:"Factibilidad 2025", s:"azulCost"}, {tipo:"AISC", v:2.11, m:"cu", est:true, per:"Factibilidad 2025", s:"azulCost"}, {tipo:"VAN 0", v:3.10, m:"cu", est:true, per:"Factibilidad 2025 (tasa 8%)", s:"azulCost"}],
+  "mi-vicuna": [{tipo:"AISC", v:0.47, m:"cu", neto:true, est:true, per:"Estudio integrado feb-2026 (oro US$ 3.300, plata US$ 40)", s:"vicPEAr"}],
+  "mi-mara":   [{tipo:"AISC", v:1.44, m:"cu", neto:true, est:true, per:"Prefactibilidad 2020, primeros 10 años", s:"maraPFS"}],
+  "mi-taca":   [{tipo:"C1", v:0.97, m:"cu", neto:true, est:true, per:"Informe técnico dic-2025, primeros 10 años", s:"fqmTaca"}, {tipo:"AISC", v:1.60, m:"cu", neto:true, est:true, per:"Informe técnico dic-2025, vida útil", s:"fqmTaca"}],
+  "mi-altar":  [{tipo:"C1", v:1.71, m:"cu", neto:true, est:true, per:"PEA 2025, primeros 20 años", s:"aldePR25"}, {tipo:"AISC", v:2.25, m:"cu", neto:true, est:true, per:"PEA 2025, primeros 20 años", s:"aldePR25"}],
+  // ---- Proyectos de oro y plata (estudios)
+  "mi-diablillos": [{tipo:"AISC", v:19.89, m:"ag", eq:true, est:true, per:"Factibilidad definitiva 2026", s:"abraDFSn"}],
+  "mi-hualilan":   [{tipo:"AISC", v:1618, m:"au", est:true, per:"Prefactibilidad may-2026", s:"celASX26"}],
+  "mi-el-dorado-monserrat": [{tipo:"Costo en efectivo", v:1632, m:"au", eq:true, est:true, per:"PEA ago-2026", s:"frdPR26"}],
+  "mi-taguas":     [{tipo:"AISC", v:915, m:"au", neto:true, est:true, per:"PEA (oro a US$ 1.700)", s:"orvTagPEA"}],
+  // ---- Proyectos de litio (estudios)
+  "mi-hmo":     [{tipo:"Costo operativo", v:3963, m:"lce", est:true, per:"Factibilidad fase 1, 2023 (concentrado de cloruro)", s:"galanDFS"}],
+  "mi-sdv":     [{tipo:"Costo operativo", v:4529, m:"lce", est:true, per:"Estudio 2023, etapa 1", s:"sdvAkm23"}],
+  "mi-pozuelos-pastos-grandes": [{tipo:"Costo operativo", v:5000, m:"lce", est:true, per:"Supuesto del VAN (3T 2026)", s:"larQ3c"}],
+  "mi-candelas":[{tipo:"Costo operativo", v:4277, m:"lce", est:true, per:"PEA", s:"galCanPEA"}],
+  "mi-arizaro": [{tipo:"Costo operativo", v:5197, m:"lce", est:true, per:"PEA", s:"lchArzPEA"}],
+  "mi-kachi":   [{tipo:"Costo operativo", v:5895, m:"lce", est:true, per:"Factibilidad 2025", s:"lkeAR25"}],
+  "mi-rio-grande-2": [{tipo:"Costo operativo", v:5897, m:"lce", est:true, per:"PEA, etapa 1", s:"noaRGPEA"}],
+  "mi-salar-tolillar": [{tipo:"Costo en efectivo", v:5980, m:"lce", est:true, per:"PEA 2023, con transporte y regalías", s:"tolPEA23"}]
+};
+
+// Precios de referencia que no salen de Yahoo Finance (el oro, la plata y el cobre se actualizan solos en VIZ.metales).
+const METAL_REF = {
+  lce: { n:"Carbonato de litio", u:"US$/t", v:17580, f:"3T 2026", t:"Precio realizado por Cauchari-Olaroz en el 3T 2026 (no hay cotización pública diaria)", s:"larQ3" }
+};

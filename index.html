@@ -267,6 +267,32 @@ ul.proy a{color:var(--muted);font-size:12px}
 .nums .r span{color:var(--muted);font-size:12px}
 .nums .r b{font-weight:600;font-variant-numeric:tabular-nums}
 .nums .r a{color:var(--muted);font-size:11px;font-weight:400;margin-left:4px;text-decoration:none;border-bottom:1px dotted var(--muted)}
+/* Costo unitario frente al precio del metal */
+.cost{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cost .cr{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.9fr) minmax(70px,1fr) 64px;gap:10px;padding:9px 12px;align-items:center;font-size:13px}
+.cost.withname .cr{grid-template-columns:minmax(0,1.1fr) minmax(0,1.3fr) minmax(0,.9fr) minmax(70px,1fr) 64px}
+.cost .cr+.cr{border-top:1px solid var(--line)}
+.cost:not(.withname) .cr{grid-template-columns:minmax(0,1fr) auto;row-gap:6px}
+.cost:not(.withname) .cv{text-align:right}
+.cost .cr.be{background:color-mix(in srgb,var(--c,var(--ink)) 5%,transparent)}
+.cost small{display:block;color:var(--muted);font-size:11px;line-height:1.35;font-weight:400}
+.cost small a{color:var(--muted);border-bottom:1px dotted var(--muted);text-decoration:none}
+.cost .cn a{font-weight:600;color:var(--ink);text-decoration:none}
+.cost .cn a:hover{text-decoration:underline}
+.cost .cv b,.cost .cm{font-variant-numeric:tabular-nums;font-weight:600}
+.cost .cm{text-align:right}
+.cost .cm.pos{color:var(--ok,#1b8a5a)}.cost .cm.neg{color:var(--bad,#c4372b)}
+.cost .cbar{position:relative;height:10px;border-radius:5px;background:var(--line)}
+.cost .cbar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--c,var(--ink));opacity:.75}
+.cost .cbar u{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);text-decoration:none}
+.csub{margin:12px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.csub:first-of-type{margin-top:0}
+.cpx{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;font-size:12px}
+.cpx small{color:var(--muted)}.cpx a{color:var(--muted)}
+.cnote{font-size:12px;margin:8px 0 0}
+details.tecd{margin-top:8px;font-size:13px}
+details.tecd summary{cursor:pointer;color:var(--muted);font-size:12px;margin-bottom:6px}
+@media (max-width:640px){.cost .cr,.cost.withname .cr{grid-template-columns:1fr 1fr}.cost .cbar{grid-column:1/-1}}
 ol.flow{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;counter-reset:f}
 ol.flow li{counter-increment:f;position:relative;padding:6px 0 10px 32px;font-size:13px}
 ol.flow li::before{content:counter(f);position:absolute;left:0;top:4px;width:22px;height:22px;border-radius:50%;background:color-mix(in srgb,var(--c) 18%,var(--panel));border:1px solid var(--c);font-size:11px;font-weight:600;display:grid;place-items:center;color:var(--ink)}

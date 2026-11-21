@@ -226,6 +226,28 @@ def mensual(tk, desde, como="last"):
 
 COMMOD = {"Brent": "BZ=F", "Oro": "GC=F", "Cobre": "HG=F", "Soja (CBOT)": "ZS=F"}
 
+# Precios de metales para comparar con el costo de cada mina (fichas y empresas).
+METALES = {"au": ("GC=F", "US$/oz", "Oro"), "ag": ("SI=F", "US$/oz", "Plata"), "cu": ("HG=F", "US$/lb", "Cobre")}
+
+
+def paso_metales(E: Estado):
+    """Último cierre y promedio mensual (24 meses) de oro, plata y cobre."""
+    import yfinance as yf
+    v, out = E.viz, {}
+    desde = (pd.Timestamp(HOY) - pd.DateOffset(months=25)).strftime("%Y-%m-01")
+    for k, (tk, u, n) in METALES.items():
+        h = yf.Ticker(tk).history(start=desde, interval="1d", auto_adjust=True)["Close"].dropna()
+        h.index = h.index.tz_localize(None)
+        m = h.resample("MS").mean()
+        out[k] = {"n": n, "u": u, "tk": tk, "v": r1(float(h.iloc[-1]), 2), "f": h.index[-1].strftime("%Y-%m-%d"),
+                  "m": [[i.strftime("%Y-%m"), r1(float(x), 2)] for i, x in m.items()]}
+    v["metales"] = out
+    E.sucio.add("viz")
+    f = max(o["f"] for o in out.values())
+    E.fuente("yfMet", f"Yahoo Finance – Futuros de oro (GC=F), plata (SI=F) y cobre (HG=F), cierre del {f}",
+             "https://finance.yahoo.com/quote/GC=F")
+    return ", ".join(f"{o['n']} {o['v']} {o['u']}" for o in out.values()) + f" ({f})"
+
 
 def paso_precios(E: Estado):
     v = E.viz
@@ -761,7 +783,7 @@ PASOS = {
     "siacam": ("nube", paso_siacam), "mercado": ("nube", paso_mercado), "precios": ("nube", paso_precios),
     "comercio": ("nube", paso_comercio), "emae": ("nube", paso_emae), "faena": ("nube", paso_faena),
     "provincias": ("nube", paso_provincias), "agricola": ("nube", paso_agricola),
-    "actividad": ("nube", paso_actividad),
+    "actividad": ("nube", paso_actividad), "metales": ("nube", paso_metales),
     "energia": ("energia", paso_energia),
 }
 
