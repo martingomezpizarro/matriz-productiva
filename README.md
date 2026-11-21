@@ -37,6 +37,7 @@ data/
   geo/                límites provinciales y departamentales; mundo.js = países (Natural Earth 1:110m)
 docs/
   circuito-global-rigi.md  análisis escrito del circuito global (mismos números que la vista)
+  minas-costos-estructura.md  ficha por mina y proyecto avanzado: controlantes, RIGI, costos (AISC/C1), inversión y fuentes
 scripts/
   actualizar.py         baja las fuentes y regenera data/auto
   actualizar-energia.bat  corre el paso de Energía desde una PC en Argentina

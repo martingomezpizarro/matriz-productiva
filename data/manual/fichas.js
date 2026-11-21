@@ -138,15 +138,15 @@ const TEC = {
     met:"Salmuera con extracción directa por adsorción selectiva (DLE): el litio se captura con un adsorbente sin pasar por pozas largas. Es la tecnología pionera de Livent, hoy Rio Tinto.",
     proc:["Bombeo de salmuera del Salar del Hombre Muerto","Columnas de adsorción selectiva (DLE)","Pozas cortas de concentración","Planta de carbonato en el salar","Cloruro de litio a Güemes (Salta) y a conversión a hidróxido"],
     prod:"Carbonato y cloruro de litio",
-    nums:[["Fase 1A","+10.000 t/año de carbonato (terminada en 2024)","fenix1B"],["Fase 1B","+10.000 t/año LCE, primera producción 2T 2026","rtQ2"],["Inversión Fase 1B","US$ 0,7 mil M","rtQ2"]],
-    src:["rtQ2","fenix1B"]
+    nums:[["Fase 1A","+10.000 t/año de carbonato (terminada en 2024)","fenix1B"],["Fase 1B","+10.000 t/año LCE, primera producción 2T 2026","rtQ2"],["Inversión Fase 1B","US$ 0,7 mil M","rtQ2"],["Ampliación RIGI","Capacidad de 28.500 a 38.000 t/año de carbonato; US$ 251 M en activos computables (Res. ME 431/2026)","bo431_26"]],
+    src:["rtQ2","fenix1B","bo431_26"]
   },
   "mi-sdv": {
     met:"Salmuera con pozas de evaporación solar y planta de carbonato.",
     proc:["Pozos de salmuera","Pozas de evaporación","Planta de carbonato de litio","Exportación por Chile"],
     prod:"Carbonato de litio",
-    nums:[["Capacidad etapa 1","15.000 t/año LCE","rtQ2"],["Inicio","Primera producción 2T 2026; en puesta en marcha","rtQ2"],["Inversión","US$ 0,7 mil M","rtQ2"]],
-    src:["rtQ2"]
+    nums:[["Capacidad etapa 1","15.000 t/año LCE","rtQ2"],["Inicio","Primera producción 2T 2026; en puesta en marcha","rtQ2"],["Inversión","US$ 0,7 mil M","rtQ2"],["Costo operativo (estudio 2023, etapa 1)","US$ 4.529/t LCE; US$ 4.003/t con las etapas 1 y 2 (45.000 t/año)","sdvAkm23"],["Rampa 2026","Arranque más lento de lo previsto por disponibilidad de equipos: Rio Tinto espera cerrar 2026 en el piso de su guía de litio (61–64 kt LCE)","rtQ3"]],
+    src:["rtQ2","sdvAkm23","rtQ3"]
   },
   "mi-rincon-2": {
     met:"Salmuera con extracción directa de litio (DLE) en el Salar del Rincón: sin pozas de evaporación de largo plazo y con reinyección de la salmuera.",
@@ -160,22 +160,22 @@ const TEC = {
     met:"Salmuera con pozas de evaporación solar y planta de carbonato (la primera operación de litio de Jujuy).",
     proc:["Pozos de salmuera en el Salar de Olaroz","Pozas de evaporación (~12–18 meses)","Planta: purificación y precipitación con carbonato de sodio","Secado y despacho"],
     prod:"Carbonato de litio: etapa 1 grado batería; etapa 2 grado técnico (>99,0%), una parte va a la planta de hidróxido de Naraha (Japón)",
-    nums:[["Capacidad","≈ 42.500 t/año (etapa 1 17.500 + etapa 2 25.000)","olarozS2"],["Accionistas","Rio Tinto 66,5% (y JEMSE)","rtQ2"]],
-    src:["olarozS2","rtQ2"]
+    nums:[["Capacidad","≈ 42.500 t/año (etapa 1 17.500 + etapa 2 25.000)","olarozS2"],["Accionistas","Rio Tinto 66,5% (y JEMSE)","rtQ2"],["Litio de Rio Tinto 3T 2026","13,0 kt LCE en el trimestre (+4% interanual) y 40,3 kt en nueve meses, sumando sus operaciones argentinas; el clima afectó el 3T","rtQ3"],["Costo unitario","Rio Tinto no publica el costo por operación de litio","rtQ3"]],
+    src:["olarozS2","rtQ2","rtQ3"]
   },
   "mi-co": {
     met:"Salmuera con pozas de evaporación y planta de carbonato (Minera Exar). La etapa 2 suma extracción directa (DLE) modular.",
     proc:["Pozos de salmuera en Cauchari-Olaroz","Pozas de evaporación","Planta de carbonato","Exportación por Chile"],
     prod:"Carbonato de litio para baterías",
-    nums:[["Producción 2T 2026","9.280 t (con parada programada en mayo)","larQ2"],["Ritmo 1S 2026","95% de la capacidad de diseño","larQ2"],["Guía 2026","35.000–40.000 t","larQ2"],["Etapa 2","+45.000 t/año LCE; primer módulo DLE de 10.000 t/año; RIGI aprobado may-2026","larQ2"]],
-    src:["larQ2","minasLM"]
+    nums:[["Producción 2T 2026","9.280 t (con parada programada en mayo)","larQ2"],["Ritmo 1S 2026","95% de la capacidad de diseño","larQ2"],["Guía 2026","35.000–40.000 t","larQ2"],["Etapa 2","+45.000 t/año LCE; primer módulo DLE de 10.000 t/año; RIGI aprobado may-2026","larQ2"],["Producción 3T 2026","9.550 t de carbonato de litio (95% de la capacidad); 28.490 t en nueve meses","larQ3"],["Costo operativo en efectivo 3T 2026","US$ 5.801/t de carbonato vendido, con mayor costo de energía y peso más fuerte","larQ3"],["Precio y margen 3T 2026","Precio realizado US$ 17.580/t · margen operativo en efectivo de 67%","larQ3"],["Accionistas de Minera Exar","Ganfeng 46,7% · Lithium Argentina 44,8% · JEMSE 8,5%","larQ3"]],
+    src:["larQ2","minasLM","larQ3"]
   },
   "mi-cr": {
     met:"Salmuera con extracción directa (DLE) con adsorbente propio de Eramet: el primer DLE a escala industrial de una empresa europea.",
     proc:["Pozos de salmuera (Salar de Centenario)","Planta DLE","Concentración y purificación","Carbonato de litio"],
     prod:"Carbonato de litio grado batería",
-    nums:[["Ritmo","90% de la capacidad nominal en junio de 2026","eramet"],["Guía 2026","17.000–20.000 t LCE","eramet"],["Expansión","+11.000 t/año (prefactibilidad terminada; decisión posible a fines de 2027; apta para RIGI)","eramet"]],
-    src:["eramet"]
+    nums:[["Ritmo","90% de la capacidad nominal en junio de 2026","eramet"],["Guía 2026","17.000–20.000 t LCE","eramet"],["Expansión","+11.000 t/año (prefactibilidad terminada; decisión posible a fines de 2027; apta para RIGI)","eramet"],["Costo unitario","Eramet no publica el costo por tonelada de Centenario; 90% de la capacidad nominal en jun-2026","eramH1"]],
+    src:["eramet","eramH1"]
   },
   "mi-mariana": {
     met:"Salmuera con pozas de evaporación en el Salar de Llullaillaco y planta de cloruro de litio.",
@@ -202,8 +202,8 @@ const TEC = {
     met:"Salmuera con nanofiltración y pozas de evaporación (unos 3 meses) para obtener un concentrado de cloruro de litio.",
     proc:["Pozos de salmuera (0,5% Li)","Nanofiltración: separa impurezas","Pozas de evaporación finales","Concentrado de cloruro de litio al 6% Li"],
     prod:"Concentrado de cloruro de litio (6% Li)",
-    nums:[["Fase 1","4.000 t/año LCE estabilizado","galan"],["Ampliación","+5.200 t/año (1S 2027)","galan"],["Fase 2","21.000 t/año (permisos aprobados); plan de 4 fases hasta 60.000 t/año","galan"],["Offtake","Authium (EE.UU.): 45.000 t de concentrado en 6–12 años","galan"]],
-    src:["galan"]
+    nums:[["Fase 1","4.000 t/año LCE estabilizado","galan"],["Ampliación","+5.200 t/año (1S 2027)","galan"],["Fase 2","21.000 t/año (permisos aprobados); plan de 4 fases hasta 60.000 t/año","galan"],["Offtake","Authium (EE.UU.): 45.000 t de concentrado en 6–12 años","galan"],["Costo operativo (factibilidad fase 1, 2023)","US$ 3.963/t LCE; inversión US$ 104 M; VAN8 US$ 460 M y TIR 37,5%","galanDFS"],["Puesta en marcha","Primeras ventas de concentrado de cloruro de litio en el 4T 2026; ritmo de 4.000 t/año LCE en el 1S 2027 y 5.200 t/año en el 2S 2027","galSep26"]],
+    src:["galan","galanDFS","galSep26"]
   },
 
 
@@ -304,15 +304,15 @@ const TEC = {
   "mi-puna-operation-chinchillas-pirquitas": { met:"Mina de plata-plomo-zinc a cielo abierto (Chinchillas) cuyo mineral se procesa en la planta de Pirquitas, a 40 km.",
     proc:["Perforación y voladura en Chinchillas","Acarreo de 40 km a la planta de Pirquitas","Molienda y flotación","Concentrado de plata-plomo y concentrado de zinc"],
     prod:"Concentrados de plata-plomo y de zinc",
-    nums:[["Reservas (31-dic-2025)","18,1 Moz de plata con 119,6 g/t","ssrPuna"],["Recursos medidos e indicados","22,3 Moz de plata con 184,9 g/t","ssrPuna"],["Recursos inferidos","24,1 Moz de plata con 239,7 g/t","ssrPuna"]],
+    nums:[["Reservas (31-dic-2025)","18,1 Moz de plata con 119,6 g/t","ssrPuna"],["Recursos medidos e indicados","22,3 Moz de plata con 184,9 g/t","ssrPuna"],["Recursos inferidos","24,1 Moz de plata con 239,7 g/t","ssrPuna"],["Producción 3T 2026","1,70 Moz de plata (3T 2025: 2,41 Moz); 5,10 Moz en nueve meses","ssrQ3"],["Costos 3T 2026","AISC US$ 25,64/oz pagable · costo de ventas US$ 29,58/oz","ssrQ3"],["Guía 2026","6,25–7,00 Moz de plata con AISC de US$ 20–22/oz; la empresa espera cerrar el año por encima del rango de costos por la reprogramación de la mina","ssrQ1"]],
     hitos:[["2009","Producción comercial en la planta de Pirquitas"],["dic-2018","Producción comercial en Chinchillas"]],
-    src:["ssrPuna"] },
+    src:["ssrPuna","ssrQ3","ssrQ1"] },
   "mi-las-calandrias": { met:"Oro y plata epitermal a cielo abierto, procesado por lixiviación en pilas; el mineral de mayor ley va a la planta CIL de Martinetas (Minera Don Nicolás, Cerrado Gold).",
     proc:["Mina a cielo abierto","Chancado","Pila de lixiviación (mineral de baja ley)","Planta CIL de Martinetas (mineral de más de 2,5 g/t)","Doré"],
     prod:"Doré de oro y plata",
-    nums:[["Producción de Minera Don Nicolás (3T 2026)","16.685 oz de oro equivalente (9.649 de pila y 7.036 de CIL)","cerrQ3"],["Ritmo de la pila (3T 2026)","9.250 t/día","cerrQ3"],["Guía 2026","50.000–60.000 oz de oro equivalente, hacia el extremo superior","cerrQ3"]],
+    nums:[["Producción de Minera Don Nicolás (3T 2026)","16.685 oz de oro equivalente (9.649 de pila y 7.036 de CIL)","cerrQ3"],["Ritmo de la pila (3T 2026)","9.250 t/día","cerrQ3"],["Guía 2026","50.000–60.000 oz de oro equivalente, hacia el extremo superior","cerrQ3"],["Costos 3T 2026 (Minera Don Nicolás)","AISC US$ 1.546/oz · costo en efectivo US$ 1.569/oz","cerrQ3f"]],
     hitos:[["fin 1T 2027","Nueva pila de lixiviación con 12 Mt de capacidad"]],
-    src:["cerrQ3"] },
+    src:["cerrQ3","cerrQ3f"] },
   "mi-calcatreu": { met:"Oro y plata epitermal en Ingeniero Jacobacci (Río Negro), con lixiviación y recuperación a doré.",
     proc:["Mina a cielo abierto","Chancado","Lixiviación","Recuperación y fundición a doré"],
     prod:"Doré de oro y plata",
@@ -325,17 +325,17 @@ const TEC = {
     met:"Pórfido de cobre-oro-plata a cielo abierto (Josemaría y Filo del Sol), en la alta cordillera de San Juan.",
     proc:["Mina a cielo abierto (Josemaría)","Planta concentradora de sulfuros","Etapa 2: planta de óxidos de Filo del Sol (Cu, Au, Ag)","Etapa 3: ampliación del concentrador + sulfuros de Filo del Sol, planta desaladora y transporte de concentrado"],
     prod:"Concentrado de cobre con oro y plata",
-    nums:[["Producción promedio (PEA, 25 años)","395.000 t de cobre, 711.000 oz de oro y 22,2 Moz de plata por año","vicPEA"],["Procesamiento objetivo","≈ 293.000 t/día","vicPEA"],["Inversión RIGI","US$ 9.737 M totales · US$ 9.025 M computables (Res. ME 1154/2026)","bo1154_26"],["Cronograma de inversión RIGI","Etapa 1 hasta dic-2026 · etapa 2 de 2027 a 2031","bo1154_26"],["Primera producción","2030 (Josemaría, según el estudio de la empresa)","vicPEA"]],
+    nums:[["Producción promedio (PEA, 25 años)","395.000 t de cobre, 711.000 oz de oro y 22,2 Moz de plata por año","vicPEA"],["Procesamiento objetivo","≈ 293.000 t/día","vicPEA"],["Inversión RIGI","US$ 9.737 M totales · US$ 9.025 M computables (Res. ME 1154/2026)","bo1154_26"],["Cronograma de inversión RIGI","Etapa 1 hasta dic-2026 · etapa 2 de 2027 a 2031","bo1154_26"],["Primera producción","2030 (Josemaría, según el estudio de la empresa)","vicPEA"],["Costo (estudio integrado feb-2026)","AISC neto de subproductos US$ 0,47/lb de cobre (oro y plata a US$ 3.300 y 40/oz); bruto ≈ US$ 4,18/lb","vicPEAr"],["VAN / TIR","VAN8 US$ 9.500 M · TIR 14,8%; etapa 1: US$ 7.100 M de inversión","vicPEAr"]],
     hitos:[["jun-2026","Adhesión al RIGI"],["30-jul-2026","Res. ME 1154/2026 en el Boletín Oficial"],["dic-2028","Plazo para la inversión mínima RIGI"],["2030","Primera producción (Josemaría)"]],
-    src:["vicPEA","bo1154_26"]
+    src:["vicPEA","bo1154_26","vicPEAr"]
   },
   "mi-azules": {
     met:"Pórfido de cobre a cielo abierto con lixiviación en pilas y SX-EW: produce cátodos en la mina, sin fundición ni concentrado.",
     proc:["Mina a cielo abierto","Chancado","Pilas de lixiviación con ácido","Extracción por solventes (SX)","Electro-obtención (EW): cátodos"],
     prod:"Cátodos de cobre 99,99% (grado A de la LME)",
-    nums:[["Producción años 1–5","≈ 204.800 t/año de cobre","azulFS"],["Promedio vida útil","≈ 148.200 t/año","azulFS"],["Ley media","0,45% Cu total","azulFS"],["Inversión inicial","US$ 3.168 M","azulFS"],["VAN / TIR (después de impuestos)","US$ 2.940 M al 8% · 19,8%","azulFS"],["Vida útil","21 años","azulFS"]],
+    nums:[["Producción años 1–5","≈ 204.800 t/año de cobre","azulFS"],["Promedio vida útil","≈ 148.200 t/año","azulFS"],["Ley media","0,45% Cu total","azulFS"],["Inversión inicial","US$ 3.168 M","azulFS"],["VAN / TIR (después de impuestos)","US$ 2.940 M al 8% · 19,8%","azulFS"],["Vida útil","21 años","azulFS"],["Costos (factibilidad 2025)","C1 US$ 1,71/lb · AISC US$ 2,11/lb; el VAN se hace cero con cobre a US$ 3,10/lb","azulCost"]],
     hitos:[["2029","Arranque de la planta SX-EW"],["2030","Primer cobre"]],
-    src:["azulFS"]
+    src:["azulFS","azulCost"]
   },
   "mi-pachon": {
     met:"Pórfido de cobre-molibdeno a cielo abierto (Glencore).",
@@ -347,15 +347,15 @@ const TEC = {
     met:"Pórfido de cobre-oro-plata-molibdeno a cielo abierto (Agua Rica, a unos 3.300 m s. n. m.) que usará la planta concentradora y la logística de La Alumbrera.",
     proc:["Mina Agua Rica (cielo abierto)","Chancado y transporte a la planta de Alumbrera","Molienda y flotación","Concentrado de cobre con oro y plata + concentrado de molibdeno","Transporte a puerto y exportación"],
     prod:"Concentrado de cobre con oro y plata; concentrado de molibdeno",
-    nums:[["Mineral a extraer","780 Mt en 23 años de vida útil","bo1854_26"],["Producción total prevista","3,46 Mt de cobre, 2,34 Moz de oro, 41,2 Moz de plata y 99.854 t de molibdeno","bo1854_26"],["Exportaciones previstas","10,8 Mt de concentrado de cobre-oro-plata y 239.455 t de concentrado de molibdeno","bo1854_26"],["Inversión RIGI","US$ 6.394 M totales · US$ 3.311 M computables (Res. ME 1854/2026)","bo1854_26"],["Compromiso de los dos primeros años","US$ 771,5 M (111,6 + 659,9)","bo1854_26"],["Proveedores locales","54% de la inversión (mínimo exigido: 20%)","bo1854_26"],["Recursos","≈ 1.200 Mt: 0,47% Cu, 0,20 g/t Au, 3,4 g/t Ag, 0,03% Mo","glenMA"]],
+    nums:[["Mineral a extraer","780 Mt en 23 años de vida útil","bo1854_26"],["Producción total prevista","3,46 Mt de cobre, 2,34 Moz de oro, 41,2 Moz de plata y 99.854 t de molibdeno","bo1854_26"],["Exportaciones previstas","10,8 Mt de concentrado de cobre-oro-plata y 239.455 t de concentrado de molibdeno","bo1854_26"],["Inversión RIGI","US$ 6.394 M totales · US$ 3.311 M computables (Res. ME 1854/2026)","bo1854_26"],["Compromiso de los dos primeros años","US$ 771,5 M (111,6 + 659,9)","bo1854_26"],["Proveedores locales","54% de la inversión (mínimo exigido: 20%)","bo1854_26"],["Recursos","≈ 1.200 Mt: 0,47% Cu, 0,20 g/t Au, 3,4 g/t Ag, 0,03% Mo","glenMA"],["Costos (prefactibilidad 2020, Yamana)","AISC neto de subproductos US$ 1,44/lb los primeros 10 años; inversión US$ 2.780 M, VAN US$ 1.906 M y TIR 21,2% con precios de entonces","maraPFS"]],
     hitos:[["18-ago-2025","Solicitud de adhesión al RIGI"],["30-sep-2026","El Comité Evaluador recomienda aprobarlo (adhesión)"],["27-oct-2026","Res. ME 1854/2026 en el Boletín Oficial"],["nov-2027","Inicio de la construcción"],["dic-2028","Plazo para la inversión mínima RIGI"],["oct-2031","Inicio de la operación"]],
-    src:["bo1854_26","glenMA"]
+    src:["bo1854_26","glenMA","maraPFS"]
   },
   "mi-taca": {
     met:"Pórfido de cobre-oro-molibdeno a cielo abierto en la Puna salteña (First Quantum).",
     proc:TEC_GEN["mi-cu"].proc, prod:"Concentrado de cobre; oro y molibdeno como subproductos",
-    nums:[["Producción (primeros 10 años)","291.000 t/año de cobre","tacaT"],["Inversión","US$ 5.250 M (antes US$ 3.600 M)","tacaT"],["Vida útil","35 años","tacaT"]],
-    src:["tacaT"]
+    nums:[["Producción (primeros 10 años)","291.000 t/año de cobre","tacaT"],["Inversión","US$ 5.250 M (antes US$ 3.600 M)","tacaT"],["Vida útil","35 años","tacaT"],["Inversión (informe técnico, dic-2025)","US$ 4.232 M iniciales para 40 Mt/año + US$ 1.019 M para ampliar a 60 Mt/año desde el año 5","fqmTaca"],["Costos","C1 US$ 0,97/lb los primeros 10 años y US$ 1,26/lb en la vida útil · AISC US$ 1,60/lb (oro a US$ 3.000/oz y molibdeno a US$ 18/lb como subproductos)","fqmTaca"],["VAN / TIR","VAN8 US$ 5.917 M · TIR 19,3% después de impuestos, con cobre a US$ 4,50/lb; repago en 9 años","fqmTaca"],["Oro y molibdeno","133.000 oz de oro por año los primeros 10 años; ≈ 3.000 t/año de molibdeno","fqmTaca"],["RIGI","La empresa prepara la solicitud; el plazo para adherir se extendió a jul-2027","fqmTaca"]],
+    src:["tacaT","fqmTaca"]
   },
   "mi-psj": {
     met:"Yacimiento de cobre-oro en Uspallata, con flotación convencional.",
@@ -371,15 +371,15 @@ const TEC = {
     met:"Oro-plata a cielo abierto, a más de 4.000 m de altura, con lixiviación en pilas (valley fill) con solución cianurada.",
     proc:["Mina a cielo abierto","Chancado","Pila de lixiviación (fase 8 al 60%)","Recuperación del oro de la solución","Fundición: barras doré"],
     prod:"Doré de oro y plata",
-    nums:[["Producción 2025","412.000 oz de oro (100%)","pmVel"],["Producción 2024","504.000 oz","pmVel"],["Vida útil remanente","8 años","pmVel"],["Ampliación","Nuevas fases de lixiviación: +89 Mt de capacidad","pmVel"]],
-    src:["pmVel","minasLM"]
+    nums:[["Producción 2025","412.000 oz de oro (100%)","pmVel"],["Producción 2024","504.000 oz","pmVel"],["Vida útil remanente","8 años","pmVel"],["Ampliación","Nuevas fases de lixiviación: +89 Mt de capacidad","pmVel"],["Costos 1S 2026 (Barrick, 50%)","AISC US$ 1.360/oz · costo en efectivo US$ 1.101/oz · costo de ventas US$ 1.945/oz","brkQ2ms"],["Producción 1S 2026","183.000 oz de oro (100%); 91.000 oz atribuibles a Barrick","brkQ2ms"],["Inversión 1S 2026 (50%)","US$ 45 M: US$ 22 M de sostenimiento y US$ 23 M de proyectos","brkQ2ms"],["3T 2026","Producción afectada por clima extremo en la mina (Barrick no publica el costo trimestral por mina en el comunicado)","brkQ3"]],
+    src:["pmVel","minasLM","brkQ2ms","brkQ3"]
   },
   "mi-cn": {
     met:"Oro-plata en vetas epitermales, principalmente subterráneo, con planta de lixiviación por agitación.",
     proc:["Mina subterránea por vetas","Chancado y molienda","Lixiviación por agitación con cianuro","Decantación en contracorriente","Merrill-Crowe (precipitación con zinc)","Fundición: barras doré"],
     prod:"Doré de oro y plata",
-    nums:[["Producción proyectada 2026","220.000 oz de oro","pmCN"],["Promedio 2023","269.000 oz","pmCN"],["Inversión 2026","US$ 95 M sostenimiento + US$ 120 M desarrollo","pmCN"],["Vida útil remanente","10 años","pmCN"]],
-    src:["pmCN","minasLM"]
+    nums:[["Producción proyectada 2026","220.000 oz de oro","pmCN"],["Promedio 2023","269.000 oz","pmCN"],["Inversión 2026","US$ 95 M sostenimiento + US$ 120 M desarrollo","pmCN"],["Vida útil remanente","10 años","pmCN"],["Costos 3T 2026 (Newmont)","AISC US$ 2.097/oz · costo aplicable a ventas US$ 1.552/oz","nemQ3r"],["Producción 3T 2026","55.000 oz de oro","nemQ3r"],["Inversión 3T 2026","US$ 23 M de sostenimiento y US$ 6 M de desarrollo","nemQ3r"]],
+    src:["pmCN","minasLM","nemQ3r"]
   },
   "mi-cv": {
     met:"Oro-plata epitermal a cielo abierto y subterráneo.",
@@ -390,27 +390,27 @@ const TEC = {
   "mi-sj": {
     met:"Oro-plata en vetas epitermales, mina subterránea.",
     proc:TEC_GEN["mi-au"].proc, prod:"Oro y plata (doré y concentrado)",
-    nums:[["Producción 1S 2026","38.570 oz de oro y 1,56 Moz de plata (58.800 oz equivalentes)","hocH1"],["Mineral tratado 1S 2026","366.912 t","hocH1"],["Accionistas","Hochschild 51% · McEwen 49%","hocH1"]],
-    src:["hocH1"]
+    nums:[["Producción 1S 2026","38.570 oz de oro y 1,56 Moz de plata (58.800 oz equivalentes)","hocH1"],["Mineral tratado 1S 2026","366.912 t","hocH1"],["Accionistas","Hochschild 51% · McEwen 49%","hocH1"],["Costos 1S 2026 (100%)","AISC US$ 2.944/oz de oro equivalente (1S 2025: US$ 2.584) · costo en efectivo US$ 2.234/oz de oro","hocH1r"],["Guía 2026 revisada","59.000–63.000 oz equivalentes atribuibles a Hochschild, con AISC de US$ 2.705–2.955/oz","hocH1r"],["Inversión 1S 2026","US$ 15,1 M (1S 2025: US$ 22,8 M)","hocH1r"]],
+    src:["hocH1","hocH1r"]
   },
   "mi-cm": {
     met:"Plata-oro epitermal: mina subterránea y rajo a cielo abierto (Naty Condor desde 2026).",
     proc:TEC_GEN["mi-au"].proc, prod:"Doré de plata y oro",
-    nums:[["Producción 1S 2026","1,26 Moz de plata y 47.500 oz de oro","paasQ2"],["2T 2026 vs 2T 2025","Plata +22% y oro +61% por mayores leyes (zona Martina)","paasQ2"]],
+    nums:[["Producción 1S 2026","1,26 Moz de plata y 47.500 oz de oro","paasQ2"],["2T 2026 vs 2T 2025","Plata +22% y oro +61% por mayores leyes (zona Martina)","paasQ2"],["AISC 1S 2026","US$ -64,87/oz de plata: negativo porque el oro se descuenta como subproducto","paasQ2"]],
     src:["paasQ2"]
   },
   "mi-dn": {
     met:"Oro-plata epitermal en el Macizo del Deseado, con desarrollo subterráneo en rampa.",
     proc:TEC_GEN["mi-au"].proc, prod:"Doré de oro y plata",
-    nums:[["Producción 1T 2026","12.842 oz de oro equivalente","cerrado"],["Guía 2026","50.000–60.000 oz equivalentes","cerrado"]],
-    src:["cerrado"]
+    nums:[["Producción 1T 2026","12.842 oz de oro equivalente","cerrado"],["Guía 2026","50.000–60.000 oz equivalentes","cerrado"],["Costos 3T 2026 (Minera Don Nicolás)","AISC US$ 1.546/oz (3T 2025: US$ 1.915) · US$ 1.630/oz en nueve meses","cerrQ3f"],["Costo en efectivo","US$ 1.569/oz vendida en el 3T 2026; US$ 1.564/oz en nueve meses","cerrQ3f"],["Inversión","US$ 17,6 M en el 3T 2026 y US$ 57,7 M en nueve meses","cerrQ3f"],["Manantial Espejo","Cerrado compró Minera Tritón Argentina (dueña de la ex mina Manantial Espejo) a Pan American por US$ 20 M (cierre: 12-nov-2026)","cerrQ3f"]],
+    src:["cerrado","cerrQ3f"]
   },
   "mi-lin": {
     met:"Oro a cielo abierto en la Puna salteña con lixiviación en pilas.",
     proc:["Mina a cielo abierto","Chancado en tres etapas","Apilado en la pila de lixiviación","Planta de recuperación","Barras doré"],
     prod:"Doré de oro",
-    nums:[["Guía 2026","92.000–102.000 oz de oro","fortuna"],["Producción 1S 2026","42.374 oz","fortuna"],["Producción 2025","87.489 oz","fortuna"],["Inversión 2026","US$ 41 M (sostenimiento y exploración)","fortuna"]],
-    src:["fortuna"]
+    nums:[["Guía 2026","92.000–102.000 oz de oro","fortuna"],["Producción 1S 2026","42.374 oz","fortuna"],["Producción 2025","87.489 oz","fortuna"],["Inversión 2026","US$ 41 M (sostenimiento y exploración)","fortuna"],["Producción 3T 2026","26.024 oz de oro (3T 2025: 24.417 oz)","fsmQ3"],["Costos 3T 2026","AISC US$ 1.845/oz (3T 2025: US$ 1.570) · costo en efectivo US$ 1.449/oz, por la apreciación del peso, el gasoil y los explosivos","fsmQ3"]],
+    src:["fortuna","fsmQ3"]
   },
   "mi-gualca": {
     met:"Oro refractario en carbonatos profundos, mina subterránea. Requiere oxidación a presión (POX), la primera planta de ese tipo en Sudamérica.",
@@ -423,9 +423,9 @@ const TEC = {
     met:"Plata-oro a cielo abierto con lixiviación en tanques (Puna salteña-catamarqueña).",
     proc:["Mina a cielo abierto (relación estéril/mineral 5,9)","Chancado y molienda","Lixiviación en tanques: 9.000 t/día","Recuperación de plata y oro","Barras doré"],
     prod:"Doré de plata y oro",
-    nums:[["Producción años 1–5","13,9 Moz de plata y 89.000 oz de oro por año (~20 Moz AgEq)","abraDFS"],["Promedio vida útil","5,9 Moz de plata y 62.000 oz de oro por año","abraDFS"],["Inversión inicial","US$ 722 M","abraDFS"],["Inversión RIGI","US$ 482 M computables; US$ 352 M en los dos primeros años (Res. ME 562/2026)","bo562_26"],["VAN 5% / TIR","US$ 3.000 M · 41,9% (caso base)","abraDFS"],["Vida útil","25 años","abraDFS"]],
+    nums:[["Producción años 1–5","13,9 Moz de plata y 89.000 oz de oro por año (~20 Moz AgEq)","abraDFS"],["Promedio vida útil","5,9 Moz de plata y 62.000 oz de oro por año","abraDFS"],["Inversión inicial","US$ 722 M","abraDFS"],["Inversión RIGI","US$ 482 M computables; US$ 352 M en los dos primeros años (Res. ME 562/2026)","bo562_26"],["VAN 5% / TIR","US$ 3.000 M · 41,9% (caso base)","abraDFS"],["Vida útil","25 años","abraDFS"],["AISC (factibilidad definitiva)","US$ 19,89/oz de plata equivalente, promedio de la vida útil","abraDFSn"],["Calendario RIGI","Construcción desde jul-2026; operación desde jul-2029","bo562_26"]],
     hitos:[["3T 2026","Obras tempranas"],["2T 2027","Decisión de construcción"],["2029","Primera producción"]],
-    src:["abraDFS"]
+    src:["abraDFS","abraDFSn","bo562_26"]
   },
 
   "mi-casposo": {
@@ -439,17 +439,17 @@ const TEC = {
     met:"Oro-plata-zinc a cielo abierto en Ullum (San Juan): arranca con lixiviación en pilas y suma después una planta de flotación para el mineral sulfurado.",
     proc:["Mina a cielo abierto","Chancado","Lixiviación en pilas (8 Mt/año) para el mineral oxidado","Planta de flotación (1,5 Mt/año) para el sulfurado, unos dos años después","Doré de oro y concentrados"],
     prod:"Doré de oro (lixiviación) y concentrados con oro, plata y zinc (flotación)",
-    nums:[["Producción","≈ 105.000 oz AuEq/año los primeros años; ≈ 135.000 oz AuEq/año el resto de la vida útil","celPFS26"],["Producción vida útil","1,84 Moz AuEq: 1,67 Moz de oro, 6,39 Moz de plata y 74.000 t de zinc","celPFS26"],["Reservas probables","62,9 Mt a 0,75 g/t Au: 1,51 Moz de oro, 7,73 Moz de plata y 170.000 t de zinc","celPFS26"],["Inversión","US$ 267 M iniciales con contingencia; US$ 604 M en toda la vida útil","celPFS26"],["VAN 5% / TIR","US$ 1.101 M después de impuestos · 45% antes de impuestos (oro a US$ 3.500/oz)","celPFS26"],["Vida útil","14,25 años de minería","celPFS26"]],
+    nums:[["Producción","≈ 105.000 oz AuEq/año los primeros años; ≈ 135.000 oz AuEq/año el resto de la vida útil","celPFS26"],["Producción vida útil","1,84 Moz AuEq: 1,67 Moz de oro, 6,39 Moz de plata y 74.000 t de zinc","celPFS26"],["Reservas probables","62,9 Mt a 0,75 g/t Au: 1,51 Moz de oro, 7,73 Moz de plata y 170.000 t de zinc","celPFS26"],["Inversión","US$ 267 M iniciales con contingencia; US$ 604 M en toda la vida útil","celPFS26"],["VAN 5% / TIR","US$ 1.101 M después de impuestos · 45% antes de impuestos (oro a US$ 3.500/oz)","celPFS26"],["Vida útil","14,25 años de minería","celPFS26"],["AISC (prefactibilidad may-2026)","US$ 1.618/oz de oro pagable en la vida útil","celASX26"],["Inversión previa a producción","US$ 232 M según el anuncio en ASX","celASX26"]],
     hitos:[["18-may-2026","Actualización del estudio de prefactibilidad"],["≈ 18 meses de obra","Inicio de la lixiviación en pilas"],["+2 años","Arranque de la planta de flotación"]],
-    src:["celPFS26"]
+    src:["celPFS26","celASX26"]
   },
   "mi-altar": {
     met:"Pórfido de cobre-oro en Calingasta (San Juan): tajo abierto que pasa a explotación subterránea por hundimiento de bloques (block caving).",
     proc:["Tajo abierto y luego block caving","Chancado y molienda","Flotación convencional (60.000 t/día)","Espesado y filtrado","Concentrado de cobre con oro y plata"],
     prod:"Concentrado de cobre con oro y plata",
-    nums:[["Producción promedio años 1–20","108.579 t/año de cobre, 43.199 oz de oro y 570.217 oz de plata (121.445 t CuEq)","aldePEA25"],["Producción promedio vida útil","92.891 t/año de cobre (101.413 t CuEq)","aldePEA25"],["Inversión inicial","US$ 1.593 M","aldePEA25"],["VAN 8% / TIR","US$ 2.009 M · 20,5% después de impuestos (cobre a US$ 4,35/lb)","aldePEA25"],["Vida útil","48 años, incluidos 3 de construcción","aldePEA25"],["Participación","Aldebaran 80% (cifras al 100%)","aldePEA25"]],
+    nums:[["Producción promedio años 1–20","108.579 t/año de cobre, 43.199 oz de oro y 570.217 oz de plata (121.445 t CuEq)","aldePEA25"],["Producción promedio vida útil","92.891 t/año de cobre (101.413 t CuEq)","aldePEA25"],["Inversión inicial","US$ 1.593 M","aldePEA25"],["VAN 8% / TIR","US$ 2.009 M · 20,5% después de impuestos (cobre a US$ 4,35/lb)","aldePEA25"],["Vida útil","48 años, incluidos 3 de construcción","aldePEA25"],["Participación","Aldebaran 80% (cifras al 100%)","aldePEA25"],["Costos (PEA)","C1 US$ 1,71/lb y AISC US$ 2,25/lb de cobre pagable los primeros 20 años; AISC US$ 2,59/lb en la vida útil","aldePR25"]],
     hitos:[["30-oct-2025","Evaluación económica preliminar (PEA), con recursos inferidos"]],
-    src:["aldePEA25"]
+    src:["aldePEA25","aldePR25"]
   },
   "mi-navidad": {
     met:"Depósito de plata-plomo diseminado en la meseta central de Chubut, uno de los mayores recursos de plata sin desarrollar del mundo.",
@@ -462,9 +462,9 @@ const TEC = {
     met:"Litio en salmuera de los salares de Pastos Grandes y Pozuelos (Salta), con proceso híbrido: evaporación solar para concentrar y extracción directa (DLE) por solventes para purificar.",
     proc:["Pozos de bombeo de salmuera","Concentración en pozas de evaporación solar","Extracción directa (DLE) por extracción con solventes","Purificación","Precipitación de carbonato de litio"],
     prod:"Carbonato de litio (admite hidróxido o cloruro)",
-    nums:[["Capacidad","150.000 t/año de carbonato de litio equivalente, en tres etapas de 50.000 t/año","larPPG25"],["Inversión","Etapa 1: US$ 1.124 M (16% de contingencia); total: US$ 3.301 M","larPPG25"],["VAN 8% / TIR","US$ 8.100 M · 32,7% después de impuestos (carbonato a US$ 18.000/t)","larPPG25"],["Recursos medidos e indicados","15,1 Mt de carbonato de litio equivalente (más 6,7 Mt inferidos)","larPPG25"],["Vida útil","30 años","larPPG25"],["Participación","Ganfeng 67% · Lithium Argentina 33%","larPPG25"]],
+    nums:[["Capacidad","150.000 t/año de carbonato de litio equivalente, en tres etapas de 50.000 t/año","larPPG25"],["Inversión","Etapa 1: US$ 1.124 M (16% de contingencia); total: US$ 3.301 M","larPPG25"],["VAN 8% / TIR","US$ 8.100 M · 32,7% después de impuestos (carbonato a US$ 18.000/t)","larPPG25"],["Recursos medidos e indicados","15,1 Mt de carbonato de litio equivalente (más 6,7 Mt inferidos)","larPPG25"],["Vida útil","30 años","larPPG25"],["Participación","Ganfeng 67% · Lithium Argentina 33%","larPPG25"],["Costo operativo supuesto","≈ US$ 5.000/t, con el que se calcula el VAN de US$ 8.100 M","larQ3c"],["Joint venture","Lithium Argentina cerró la sociedad de PPG con Ganfeng en el 3T 2026","larQ3"]],
     hitos:[["7-nov-2025","Declaración de impacto ambiental de la etapa 1 (Salta)"],["10-nov-2025","Estudio de alcance (scoping study)"],["1S 2026","Solicitud RIGI prevista por las empresas"]],
-    src:["larPPG25"]
+    src:["larPPG25","larQ3c","larQ3"]
   },
 
   "mi-bajo-de-la-alumbrera": {
@@ -677,10 +677,10 @@ const TEC = {
     met:"Oro y plata epitermal de baja ley en el Macizo del Deseado (Santa Cruz), con un plan conceptual a cielo abierto de gran escala.",
     proc:["Mina a cielo abierto con camiones y palas","Chancado","Lixiviación del mineral","Recuperación del metal","Fundición de doré"],
     prod:"Doré de oro y plata",
-    nums:[["Producción promedio (PEA)","146.000 oz por año","frdEDM26"],["Vida útil","17 años","frdEDM26"],["Escala de mina","10 Mt/año de mineral","frdEDM26"],["Valor presente neto (10%)","US$ 1.500 M, con TIR de 65%","frdEDM26"],["Informe técnico","Fecha efectiva 17-ago-2026; presentado en SEDAR+ el 7-oct-2026","frdEDM26"]],
+    nums:[["Producción promedio (PEA)","146.000 oz por año","frdEDM26"],["Vida útil","17 años","frdEDM26"],["Escala de mina","10 Mt/año de mineral","frdEDM26"],["Valor presente neto (10%)","US$ 1.500 M, con TIR de 65%","frdEDM26"],["Informe técnico","Fecha efectiva 17-ago-2026; presentado en SEDAR+ el 7-oct-2026","frdEDM26"],["Inversión inicial (PEA)","≈ US$ 346 M","frdPR26"],["Costo en efectivo","≈ US$ 1.630/oz de oro equivalente en la vida útil (oro a US$ 3.800 y plata a US$ 45)","frdPR26"],["Con RIGI","VAN de US$ 1.800 M y TIR de 82% (escenario aparte; el caso base no lo incluye)","frdPR26"]],
     nota:"Evaluación económica preliminar (PEA) basada en parte en recursos inferidos; no demuestra viabilidad económica.",
     hitos:[["17-ago-2026","Fecha efectiva del informe técnico de la PEA"],["7-oct-2026","Presentación del informe en SEDAR+"]],
-    src:["frdEDM26"] },
+    src:["frdEDM26","frdPR26"] },
   "mi-don-otto": {
     met:"Uranio sedimentario en margas de la Formación Coloradas Inferiores (distrito del Tonco, Valles Calchaquíes), explotado por la CNEA con labores subterráneas y lixiviación en pilas.",
     proc:["Labores subterráneas (galerías, piques y chimeneas)","Extracción del mineral friable, sin molienda previa","Lixiviación en pilas con ácido sulfúrico (5 a 10 g/l, pH ≈ 2)","Precipitación del uranio con cal","Secado del preconcentrado"],
