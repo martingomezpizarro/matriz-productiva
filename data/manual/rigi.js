@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-21",
+  actualizado: "2026-11-22",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -102,7 +102,7 @@ const RIGI = {
     cap:"620 pozos y 4 plantas de tratamiento. Etapa 1 (2025–2037): 206 pozos, US$ 4.175 M, hasta 50.000 bbl/d de petróleo y 6 MMm³/d de gas",
     verif:"bo_extracto", src:["bo1808_26"] },
   "og-arglng": { st:"presentado", vpu:"Argentina LNG (YPF con Eni y XRG)", total:51000,
-    cap:"Proyecto integrado de GNL: desarrollo upstream en Neuquén (≈ US$ 5.000 M), gasoductos dedicados, plantas de tratamiento y fraccionamiento de líquidos, y dos unidades flotantes de licuefacción (FLNG) de 12 MTPA en conjunto frente a Río Negro, en el Golfo San Matías. ≈ US$ 29.000 M hasta 2031, año previsto de arranque de los FLNG; exportaciones de ≈ US$ 10.000 M por año durante unas dos décadas. Solicitud presentada el 13-ago-2026, sin resolución todavía",
+    cap:"Proyecto integrado de GNL: desarrollo upstream en Neuquén (≈ US$ 5.000 M), gasoductos dedicados, plantas de tratamiento y fraccionamiento de líquidos, y dos unidades flotantes de licuefacción (FLNG) de 12 MTPA en conjunto frente a Río Negro, en el Golfo San Matías. ≈ US$ 29.000 M hasta 2031, año previsto de arranque de los FLNG; exportaciones de ≈ US$ 10.000 M por año durante unas dos décadas. Solicitud presentada el 13-ago-2026. El 20-nov-2026 el Ministro de Economía anunció que el Comité Evaluador aprobó la adhesión; los números se cargan cuando la resolución salga en el Boletín Oficial",
     verif:"empresa", src:["ypfArgLNG"] },
   "og-tgsngl": { st:"aprobado", res:"1976/2026 y 1977/2026", bo:"2026-11-13", vpu:"Procesadora de Gas del Sur S.A. (PGS) y Midstream de Gas del Sur S.A. (MGS), vehículos de TGS", tipo:"Dos proyectos únicos aprobados por separado",
     comp:3244, adh:"2026-10-14", limite:"2027-09-30", op:"2030-02-01",
