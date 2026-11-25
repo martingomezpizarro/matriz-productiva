@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-24",
+  actualizado: "2026-11-25",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -63,6 +63,7 @@ const RIGI_SRC = {
   glc_ago25: { t: "Glencore – solicitudes RIGI de El Pachón y Agua Rica (ago-2025)", u: "https://www.glencore.com/media-and-insights/news/glencore-submits-RIGI-applications-in-respect-of-its-argentine-copper-projects" },
   ypfArgLNG: { t: "YPF – Argentina LNG presentó su solicitud de adhesión al RIGI (comunicado, 13-ago-2026)", u: "https://argentina-lng.ypf.com/assets/pdf/ENG-Argentina-LNG-Adhesion-RIGI.pdf" },
   ypfBdT:    { t: "YPF – Comunicado: solicitud de adhesión al RIGI del proyecto Bajo del Toro (30-oct-2026)", u: "https://novedades.ypf.com/noticias.html" },
+  ypfNaramb: { t: "YPF – Anuncio: solicitud de adhesión al RIGI del proyecto Narambuena (24-nov-2026)", u: "https://novedades.ypf.com/noticias.html" },
   rtQ2rigi:  { t: "Rio Tinto – reporte de operaciones 2T 2026 (Sal de Vida, solicitud RIGI)", u: "https://www.riotinto.com/en/invest/reports" },
   portalRIGI:{ t: "Ministerio de Economía – Portal oficial del RIGI", u: "https://www.argentina.gob.ar/economia/rigi" }
 };
@@ -111,6 +112,9 @@ const RIGI = {
   "og-bdt": { st:"presentado", vpu:"YPF S.A. (operador, 65%) con Vista Energy Argentina (35%)", total:8729,
     cap:"Petróleo no convencional con gas asociado en Bajo del Toro y Bajo del Toro Norte: 440 pozos en la vida del proyecto, meseta de ≈ 80.000 bbl/d de petróleo y 3 MMm³/d de gas entre 2033 y 2040, y exportaciones por ≈ US$ 25.000 M entre 2027 y 2055. Primer RIGI del «Hub Norte» de YPF; solicitud presentada el 30-oct-2026, sin resolución todavía",
     verif:"empresa", src:["ypfBdT"] },
+  "og-naramb": { st:"presentado", vpu:"YPF S.A. (operador, 50%) con Compañía de Desarrollo No Convencional S.R.L. (50%, Chevron)", total:11688,
+    cap:"Petróleo no convencional con gas asociado en el área Narambuena, norte de Vaca Muerta: ≈ 606 pozos en la vida del proyecto (21 años), meseta de ≈ 80.000 bbl/d de petróleo y ≈ 3 MMm³/d de gas entre 2035 y 2045, y exportaciones por ≈ US$ 33.000 M entre 2027 y 2059. Segundo RIGI del «Hub Norte» de YPF; solicitud presentada el 24-nov-2026, sin resolución todavía",
+    verif:"empresa", src:["ypfNaramb"] },
 
   // ---------------- MINERÍA · LITIO ----------------
   "mi-3q": { st:"aprobado", res:"1153/2026", bo:"2026-07-29", vpu:"Liex S.A. – Sucursal dedicada",

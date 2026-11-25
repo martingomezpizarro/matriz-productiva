@@ -555,6 +555,11 @@ const TEC = {
     hitos:[["30-oct-2026","YPF presenta la solicitud de adhesión al RIGI, la primera del «Hub Norte»"]],
     nota:"Áreas Bajo del Toro y Bajo del Toro Norte, en el norte de Vaca Muerta.",
     src:["seFrac","ypfBdT"] }),
+  "og-naramb": VM({ prod:OIL,
+    nums:[["Inversión total declarada","US$ 11.688 M en 21 años (solicitud RIGI)","ypfNaramb"],["Pozos","≈ 606 en la vida del proyecto","ypfNaramb"],["Meseta de producción","≈ 80.000 bbl/d de petróleo y ≈ 3 MMm³/d de gas entre 2035 y 2045","ypfNaramb"],["Exportaciones","≈ US$ 33.000 M entre 2027 y 2059","ypfNaramb"],["Socios","YPF 50% (operador) · Compañía de Desarrollo No Convencional S.R.L. (Chevron) 50%","ypfNaramb"]],
+    hitos:[["24-nov-2026","YPF presenta la solicitud de adhesión al RIGI, la segunda del «Hub Norte»"]],
+    nota:"Área Narambuena, en el norte de Vaca Muerta.",
+    src:["seFrac","ypfNaramb"] }),
   "og-arglng": {
     met:"GNL integrado: gas de Vaca Muerta tratado en tierra, llevado por gasoductos dedicados a la costa y licuado a −162 °C en buques de licuefacción flotantes (FLNG) amarrados frente a la costa.",
     proc:["Perforación y terminación de pozos no convencionales en Neuquén","Plantas de tratamiento de gas","Trenes de fraccionamiento de líquidos","Gasoductos dedicados hasta el Golfo San Matías","Pretratamiento y licuefacción a bordo de los FLNG","Almacenaje a bordo y carga de buques metaneros (transferencia barco a barco)"],
