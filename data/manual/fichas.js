@@ -564,9 +564,9 @@ const TEC = {
     met:"GNL integrado: gas de Vaca Muerta tratado en tierra, llevado por gasoductos dedicados a la costa y licuado a −162 °C en buques de licuefacción flotantes (FLNG) amarrados frente a la costa.",
     proc:["Perforación y terminación de pozos no convencionales en Neuquén","Plantas de tratamiento de gas","Trenes de fraccionamiento de líquidos","Gasoductos dedicados hasta el Golfo San Matías","Pretratamiento y licuefacción a bordo de los FLNG","Almacenaje a bordo y carga de buques metaneros (transferencia barco a barco)"],
     prod:"Gas natural licuado (GNL) para exportación; líquidos del gas natural",
-    nums:[["Capacidad","12 MTPA de GNL entre dos unidades FLNG","ypfArgLNG"],["Inversión total","US$ 51.000 M en la vida del proyecto","ypfArgLNG"],["Inversión hasta el arranque","≈ US$ 29.000 M hasta 2031 (≈ US$ 5.000 M en upstream)","ypfArgLNG"],["Exportaciones","≈ US$ 10.000 M por año durante unas dos décadas","ypfArgLNG"],["Empleo","≈ 20.000 puestos por año en construcción (2026–2030), con picos de hasta 40.000; ≈ 8.000 en operación (directos e indirectos)","ypfArgLNG"]],
-    hitos:[["13-ago-2026","Solicitud de adhesión al RIGI"],["2031","Arranque previsto de los dos FLNG"]],
-    src:["ypfArgLNG"]
+    nums:[["Capacidad","12 MTPA de GNL: dos unidades FLNG de 6 MTPA","bo2027_26"],["Inversión RIGI","US$ 50.750 M: etapa 1 (2024–2030) US$ 26.377 M y etapa 2 (2031–2050) US$ 24.372 M","bo2027_26"],["Upstream","1.416 pozos horizontales en Neuquén; hasta 200 en la etapa 1","bo2027_26"],["Transporte","Gasoducto de 48\" y poliducto de 24\", de 524 km cada uno, hasta el Golfo San Matías","bo2027_26"],["Exportaciones","≈ US$ 10.000 M por año durante unas dos décadas","ypfArgLNG"],["Empleo","≈ 20.000 puestos por año en construcción (2026–2030), con picos de hasta 40.000; ≈ 8.000 en operación (directos e indirectos)","ypfArgLNG"]],
+    hitos:[["13-ago-2026","Solicitud de adhesión al RIGI"],["19-nov-2026","Adhesión al RIGI"],["26-nov-2026","Res. ME 2027/2026 aprueba la adhesión"],["31-dic-2028","Plazo para la inversión mínima RIGI"],["30-jun-2030","Puesta en marcha comercial de la primera FLNG"],["30-jun-2031","Segunda FLNG"]],
+    src:["bo2027_26","ypfArgLNG"]
   },
   "og-co": {
     met:"Terminal marítima de despacho de crudo: el petróleo del Golfo San Jorge llega por ducto a la playa de tanques y se carga en buques tanque amarrados a una monoboya mar adentro.",

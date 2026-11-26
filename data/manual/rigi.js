@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-25",
+  actualizado: "2026-11-26",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -59,6 +59,8 @@ const RIGI_SRC = {
   bo1808_26: { t: "Boletín Oficial – Res. ME 1808/2026 (Bajo del Choique – La Invernada), 19-oct-2026", u: BO("2026-10-19") },
   bo1854_26: { t: "Boletín Oficial – Res. ME 1854/2026 (Agua Rica, Glencore), 27-oct-2026", u: BO("2026-10-27") },
   bo1976_26: { t: "Boletín Oficial – Res. ME 1976/2026 y 1977/2026 (proyecto NGL de TGS: Midstream de Gas del Sur y Procesadora de Gas del Sur), 13-nov-2026", u: BO("2026-11-13") },
+  bo1848_26: { t: "Boletín Oficial – Res. ME 1848/2026 (planta de vehículos electrificados de Toyota en Zárate), 22-oct-2026", u: BO("2026-10-22", 349428) },
+  bo2027_26: { t: "Boletín Oficial – Res. ME 2027/2026 (Argentina LNG: MIDCO ARLNG I S.A. y UPCO ARLNG I S.A.), 26-nov-2026", u: BO("2026-11-26", 350818) },
   bo1983_26: { t: "Boletín Oficial – Res. ME 1983/2026 (Parque Eólico La Rinconada, Vientos La Rinconada S.A.U.), 16-nov-2026", u: BO("2026-11-16") },
   glc_ago25: { t: "Glencore – solicitudes RIGI de El Pachón y Agua Rica (ago-2025)", u: "https://www.glencore.com/media-and-insights/news/glencore-submits-RIGI-applications-in-respect-of-its-argentine-copper-projects" },
   ypfArgLNG: { t: "YPF – Argentina LNG presentó su solicitud de adhesión al RIGI (comunicado, 13-ago-2026)", u: "https://argentina-lng.ypf.com/assets/pdf/ENG-Argentina-LNG-Adhesion-RIGI.pdf" },
@@ -102,9 +104,10 @@ const RIGI = {
     total:12240, limite:"2029-04-30",
     cap:"620 pozos y 4 plantas de tratamiento. Etapa 1 (2025–2037): 206 pozos, US$ 4.175 M, hasta 50.000 bbl/d de petróleo y 6 MMm³/d de gas",
     verif:"bo_extracto", src:["bo1808_26"] },
-  "og-arglng": { st:"presentado", vpu:"Argentina LNG (YPF con Eni y XRG)", total:51000,
-    cap:"Proyecto integrado de GNL: desarrollo upstream en Neuquén (≈ US$ 5.000 M), gasoductos dedicados, plantas de tratamiento y fraccionamiento de líquidos, y dos unidades flotantes de licuefacción (FLNG) de 12 MTPA en conjunto frente a Río Negro, en el Golfo San Matías. ≈ US$ 29.000 M hasta 2031, año previsto de arranque de los FLNG; exportaciones de ≈ US$ 10.000 M por año durante unas dos décadas. Solicitud presentada el 13-ago-2026. El 20-nov-2026 el Ministro de Economía anunció que el Comité Evaluador aprobó la adhesión; los números se cargan cuando la resolución salga en el Boletín Oficial",
-    verif:"empresa", src:["ypfArgLNG"] },
+  "og-arglng": { st:"aprobado", res:"2027/2026", bo:"2026-11-26", vpu:"MIDCO ARLNG I S.A. y UPCO ARLNG I S.A. (Argentina LNG: YPF con Eni y XRG)", tipo:"Proyecto estratégico de exportación de largo plazo",
+    total:50750, adh:"2026-11-19", min2a:14687, limite:"2028-12-31", op:"2030-06-30",
+    cap:"Proyecto integrado de GNL: 1.416 pozos horizontales en Neuquén (Complejo Neuquén), gasoducto de 48\" y poliducto de 24\" de 524 km hasta el Complejo Río Negro y dos unidades flotantes de licuefacción (FLNG) de 6 MTPA cada una en el Golfo San Matías. Etapa 1 (2024–2030): US$ 26.377 M, hasta 200 pozos y puesta en marcha comercial de la primera FLNG el 30-jun-2030; etapa 2 (2031–2050): US$ 24.372 M, segunda FLNG el 30-jun-2031. Compromiso de los dos primeros años: US$ 6.397 M y US$ 8.290 M. ≈ 45% de proveedores locales; estabilidad hasta el 30-jun-2060 (etapa 1) y el 30-jun-2061 (etapa 2). Solicitud presentada el 13-ago-2026; Comité Evaluador: acta del 20-nov-2026",
+    verif:"bo_extracto", src:["bo2027_26","ypfArgLNG"] },
   "og-tgsngl": { st:"aprobado", res:"1976/2026 y 1977/2026", bo:"2026-11-13", vpu:"Procesadora de Gas del Sur S.A. (PGS) y Midstream de Gas del Sur S.A. (MGS), vehículos de TGS", tipo:"Dos proyectos únicos aprobados por separado",
     comp:3244, adh:"2026-10-14", limite:"2027-09-30", op:"2030-02-01",
     cap:"PGS (US$ 1.394,7 M): ramales de captación de 24\" desde Sierra Chata y Fortín de Piedra que confluyen en un ducto de 30\" hasta la planta Tratayén, que llega a 1.200 MMpc/d de gas rico con la reconversión de dos módulos criogénicos y dos nuevos; obra iniciada en may-2026; plazo de inversión mínima 30-sep-2027. MGS (US$ 1.849,6 M): poliducto de 577 km y 20\" de Tratayén a General Daniel Cerri (Bahía Blanca), fraccionadora de 90.000 bbl/d de propano, butano y gasolina natural, tres ductos de transferencia de 16 km, almacenaje, despacho y conexión al puerto; plazo de inversión mínima 31-jul-2027. Ambos con 20% de proveedores locales, operación desde el 1-feb-2030 y vida útil de 30 años",
@@ -180,5 +183,13 @@ const RIGI = {
     st:"aprobado", res:"1983/2026", bo:"2026-11-16", vpu:"Vientos La Rinconada S.A.U. (Grupo Techint)",
     total:230.8, comp:218.3, adh:"2026-10-23", min2a:112.1, limite:"2027-03-31",
     cap:"94,5 MW con 21 aerogeneradores en el partido de Olavarría (a ≈ 40 km de la ciudad), conectado a la E.T. La China (Transba); prioridad de despacho de 91,5 MW. Computables: US$ 110,6 M el primer año y US$ 1,4 M el segundo. La energía abastece a la planta Siderca (Tenaris) en Campana; no pidió libre disponibilidad de divisas de exportación",
-    verif:"bo_extracto", src:["bo1983_26"] }
+    verif:"bo_extracto", src:["bo1983_26"] },
+
+  // ---------------- INDUSTRIA ----------------
+  // Sin punto en el mapa: el mapa no tiene un sector industrial/automotriz.
+  "in-toyota": { n:"Toyota – planta de vehículos electrificados (Zárate)", prov:"Buenos Aires", s:"in", e:"auto",
+    st:"aprobado", res:"1848/2026", bo:"2026-10-22", vpu:"Toyota Argentina S.A. – Sucursal Dedicada (TASA SD)", tipo:"Ampliación de proyecto existente · sector Tecnología",
+    comp:1252.9, adh:"2026-09-29", min2a:167.3, limite:"2028-09-30",
+    cap:"Planta para la producción de vehículos electrificados en Zárate: pick-up híbrida (full HEV), con posible versión SUV. Computables: US$ 19,5 M el primer año y US$ 147,8 M el segundo (40% del mínimo). US$ 669,6 M (53%) con proveedores locales. La estabilidad y los beneficios alcanzan sólo a la ampliación. Solicitud del 8-jun-2026; Comité Evaluador, acta 29 del 30-sep-2026",
+    verif:"bo_texto", src:["bo1848_26"] }
 };

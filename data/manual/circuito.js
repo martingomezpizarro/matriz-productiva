@@ -254,7 +254,7 @@ const CIR_EMP = {
     ar:[
       { id:"og-bdt", n:"Bajo del Toro (65%)", part:65, prod:{bbld:80000}, rigi:"presentado", ini:2027, t:"Meseta de ≈ 80 mil bbl/d entre 2033 y 2040", s:"ypfBdT" },
       { id:"og-lng", n:"Southern Energy – FLNG (25%)", part:25, prod:{gnl:5.95}, rigi:"aprobado", ini:2027, t:"Hilli (2,45 Mtpa) + MK II (3,5 Mtpa)", s:"sesaSoc" },
-      { id:"og-arglng", n:"Argentina LNG (con Eni y XRG)", part:null, prod:{gnl:12}, rigi:"presentado", ini:2031, t:"Participación de YPF no informada: se muestra el proyecto completo, fuera de la suma", s:"ypfArgLNG" },
+      { id:"og-arglng", n:"Argentina LNG (con Eni y XRG)", part:null, prod:{gnl:12}, rigi:"aprobado", ini:2030, t:"Participación de YPF no informada: se muestra el proyecto completo, fuera de la suma", s:"ypfArgLNG" },
       { id:"ln-vmos", n:"VMOS – oleoducto de exportación", part:null, rigi:"aprobado", ini:2027, t:"YPF es el accionista líder; el valor está en evacuar crudo, no en la tarifa", s:"bo302_25" }
     ],
     mundo:[], claves:[
@@ -325,13 +325,13 @@ const CIR_EMP = {
 
   eni: { n:"Eni", sec:"og", emp:"eni", hq:{c:"Roma / San Donato Milanese", ll:[45.42,9.27]}, met:null,
     perfil:"Petrolera italiana con experiencia en FLNG (Coral Sul en Mozambique, Congo LNG).",
-    ar:[ { id:"og-arglng", n:"Argentina LNG (con YPF y XRG)", part:null, rigi:"presentado", ini:2031, t:"12 Mtpa en dos FLNG", s:"ypfArgLNG" } ],
+    ar:[ { id:"og-arglng", n:"Argentina LNG (con YPF y XRG)", part:null, rigi:"aprobado", ini:2030, t:"12 Mtpa en dos FLNG", s:"ypfArgLNG" } ],
     mundo:[["Coral Sul FLNG",[-10.9,40.9],"GNL","Mozambique"],["Congo LNG",[-4.8,11.8],"GNL","Congo"],["Zohr",[31.9,31.5],"Gas","Egipto"]],
     claves:[ "Aporta la tecnología y la experiencia en licuefacción flotante que el proyecto necesita." ] },
 
   xrg: { n:"XRG (ADNOC)", sec:"og", emp:"xrg", hq:{c:"Abu Dabi", ll:[24.45,54.38]}, met:null,
     perfil:"Brazo inversor internacional de la petrolera estatal de Abu Dabi, enfocado en gas y química.",
-    ar:[ { id:"og-arglng", n:"Argentina LNG (con YPF y Eni)", part:null, rigi:"presentado", ini:2031, t:"", s:"ypfArgLNG" } ],
+    ar:[ { id:"og-arglng", n:"Argentina LNG (con YPF y Eni)", part:null, rigi:"aprobado", ini:2030, t:"", s:"ypfArgLNG" } ],
     mundo:[["Rio Grande LNG",[25.95,-97.3],"GNL","EE.UU."],["Área 4 de Mozambique",[-10.8,40.6],"GNL","Mozambique"]],
     claves:[ "Capital del Golfo Pérsico entrando al GNL de Vaca Muerta: diversificación del portafolio de gas de ADNOC." ] },
 

@@ -47,7 +47,7 @@ Análisis al 5-nov-2026. Los números de este documento son los que calcula la v
 | Pampa Energía | **≈ 61%** (≈ 65% con precios 2026) | Rincón de Aranda, Fértil Pampa (urea), 20% de Southern Energy |
 | Pluspetrol | ≈ 40% de lo que opera en la Argentina | Bajo del Choique – La Invernada |
 | Vista Energy | ≈ 21% (≈ 25%) | 35% de Bajo del Toro |
-| YPF | ≈ 9% (≈ 11%), sin contar Argentina LNG | 65% de Bajo del Toro, 25% de Southern Energy; Argentina LNG (US$ 51.000 M) sin participación informada |
+| YPF | ≈ 9% (≈ 11%), sin contar Argentina LNG | 65% de Bajo del Toro, 25% de Southern Energy; Argentina LNG (US$ 50.750 M, Res. ME 2027/2026) sin participación informada |
 
 - **Golar es, proporcionalmente, la empresa global más expuesta al RIGI**: la Argentina es ≈ 80% de su backlog y además cobra ≈ US$ 100 M por año por cada dólar que el GNL supere los US$ 8/MMBtu.
 - **Pampa es la empresa local más transformada**: pasa de vender electricidad y gas en el mercado interno a exportar petróleo, GNL y urea.
