@@ -25,7 +25,7 @@
 // ============================================================
 
 const RIGI_META = {
-  actualizado: "2026-11-27",
+  actualizado: "2026-11-28",
   nota: "Montos de las resoluciones del Boletín Oficial. Cuando la resolución informa activos computables y total, se muestran ambos.",
   portal: "https://www.argentina.gob.ar/economia/rigi"
 };
@@ -58,7 +58,7 @@ const RIGI_SRC = {
   bo1771_26: { t: "Boletín Oficial – Res. ME 1771/2026 (Los Toldos II Este), 9-oct-2026", u: BO("2026-10-09") },
   bo1808_26: { t: "Boletín Oficial – Res. ME 1808/2026 (Bajo del Choique – La Invernada), 19-oct-2026", u: BO("2026-10-19") },
   bo1854_26: { t: "Boletín Oficial – Res. ME 1854/2026 (Agua Rica, Glencore), 27-oct-2026", u: BO("2026-10-27") },
-  bo1976_26: { t: "Boletín Oficial – Res. ME 1976/2026 y 1977/2026 (proyecto NGL de TGS: Midstream de Gas del Sur y Procesadora de Gas del Sur), 13-nov-2026", u: BO("2026-11-13") },
+  bo1976_26: { t: "Boletín Oficial – Res. ME 1976/2026 y 1977/2026 (proyecto NGL de TGS: Midstream de Gas del Sur y Procesadora de Gas del Sur), 13-nov-2026", u: BO("2026-11-13", 350287) },
   bo1848_26: { t: "Boletín Oficial – Res. ME 1848/2026 (planta de vehículos electrificados de Toyota en Zárate), 22-oct-2026", u: BO("2026-10-22", 349428) },
   bo2027_26: { t: "Boletín Oficial – Res. ME 2027/2026 (Argentina LNG: MIDCO ARLNG I S.A. y UPCO ARLNG I S.A.), 26-nov-2026", u: BO("2026-11-26", 350818) },
   bo1983_26: { t: "Boletín Oficial – Res. ME 1983/2026 (Parque Eólico La Rinconada, Vientos La Rinconada S.A.U.), 16-nov-2026", u: BO("2026-11-16") },
